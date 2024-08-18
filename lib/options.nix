@@ -1,7 +1,8 @@
-{lib, ...}: let
-  setAttrByStrPath = strPath: value:
-    lib.setAttrByPath (lib.splitString "." strPath) value;
-
+{
+  lib,
+  attrset,
+  ...
+}: let
   mkOption = default: types:
     lib.mkOption {
       type = lib.types.oneOf (lib.toList types);
@@ -61,5 +62,5 @@ in rec {
   description = option: description: option // {inherit description;};
 
   singleEnableOption = default: {name, ...}:
-    setAttrByStrPath "${name}.enable" (boolOption default);
+    attrset.setAttrByStrPath "${name}.enable" (boolOption default);
 }

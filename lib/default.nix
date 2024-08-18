@@ -19,13 +19,14 @@ in {
   }: let
     files = umport {inherit paths exclude recursive;};
     apply = import ./apply.nix {inherit lib homeManagerUser isHomeManager myconfigName;};
+    attrset = import ./attrset.nix {inherit lib;};
 
     denixLib = config: isHomeManager: let
       apply = import ./apply.nix {inherit lib homeManagerUser isHomeManager myconfigName;};
 
       host = import ./host.nix {inherit lib apply config myconfigName options;};
-      module = import ./module.nix {inherit lib apply config myconfigName;};
-      options = import ./options.nix {inherit lib;};
+      module = import ./module.nix {inherit lib apply attrset config myconfigName;};
+      options = import ./options.nix {inherit lib attrset;};
       rice = import ./rice.nix {inherit lib myconfigName options;};
     in
       host // module // options // rice;

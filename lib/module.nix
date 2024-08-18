@@ -1,13 +1,11 @@
 {
   lib,
   apply,
+  attrset,
   config,
   myconfigName,
   ...
-}: let
-  getAttrByStrPath = strPath: attrset: default:
-    lib.attrByPath (lib.splitString "." strPath) default attrset;
-in {
+}: {
   module = {
     name,
     options ? {},
@@ -15,7 +13,7 @@ in {
     nixos ? {},
     home ? {},
   }: let
-    cfg = getAttrByStrPath name config.${myconfigName} {};
+    cfg = attrset.getAttrByStrPath name config.${myconfigName} {};
 
     wrap = x:
       if builtins.typeOf x == "lambda"
@@ -35,8 +33,8 @@ in {
     _nixos = defaults nixos;
     _home = defaults home;
 
-    enabled = getAttrByStrPath "enable" cfg false;
-    disabled = !(getAttrByStrPath "enable" cfg true);
+    enabled = attrset.getAttrByStrPath "enable" cfg false;
+    disabled = !(attrset.getAttrByStrPath "enable" cfg true);
   in {
     options.${myconfigName} = wrap options;
 
