@@ -1,7 +1,7 @@
-# Introduction
+# Introduction {#introduction}
 In this section, you will learn about what Denix is, why it is needed, who can benefit from it, and popular practices for system configuration.
 
-## What is Denix
+## What is Denix {#what-is-denix}
 Denix is a Nix library designed for creating scalable configurations for [NixOS](https://nixos.org/) and [Home Manager](https://github.com/nix-community/home-manager).
 
 It provides functions that transform input data into a module according to a specific algorithm. Thanks to this, if for any reason you need to create a module without using Denix, it will be sufficient to import the file with it, and everything will work.
@@ -13,14 +13,14 @@ The provided functions are generally divided into five categories:
 - [Hosts](#hosts)
 - [Rices](#rices)
 
-## Why and Who Needs Denix
+## Why and Who Needs Denix {#why-and-who-needs-denix}
 Denix is primarily needed to simplify the creation, editing, and readability of configuration code. It eliminates the need to create typical expressions for your own modules, hosts, rices, etc.
 
 If you plan to expand your configuration across multiple machines (hosts), want to have various system settings (rices) that can be changed with a single command, and strive to write readable and clean code, then you should consider trying Denix. Conversely, if you're creating a small configuration for a single machine and don't plan to expand it, Denix might be unnecessary.
 
 Configuration templates using Denix can be found in the `templates` directory of the GitHub repository: [github:yunfachi/denix?path=templates](https://github.com/yunfachi/denix/tree/master/templates).
 
-## Modules
+## Modules {#modules}
 Custom modules are possibly the best practice for creating scalable configurations.
 
 A module includes options, configuration, and importing other modules.
@@ -72,7 +72,7 @@ delib.module {
 ```
 You can learn more about Denix modules in [TODO](/TODO).
 
-## Hosts
+## Hosts {#hosts}
 Host is any machine, such as a personal computer, server, etc.
 
 The essence of this practice is to separate the configuration into a shared part and a unique part for each host.
@@ -96,7 +96,7 @@ delib.host {
 ```
 You can learn more about Denix hosts in [TODO](/TODO).
 
-## Rices
+## Rices {#rices}
 Rice is a slang term used to describe system settings, especially related to appearance.
 
 In our case, this is any configuration not tied to a specific host.
