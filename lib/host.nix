@@ -23,10 +23,10 @@
   in {
     config.${myconfigName}.hosts.${name} = args;
 
-    imports = with _shared; [
-      (apply.myconfig myconfig)
-      (apply.nixos nixos)
-      (apply.home home)
+    imports = [
+      (apply.myconfig _shared.myconfig)
+      (apply.nixos _shared.nixos)
+      (apply.home _shared.home)
     ];
   };
 
