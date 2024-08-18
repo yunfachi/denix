@@ -16,6 +16,7 @@ in {
     exclude ? [],
     recursive ? true,
     specialArgs ? {},
+    internalSystemExtraModule ? {nixpkgs.hostPlatform = "x86_64-linux";}, # just a plug; FIXME
   }: let
     files = umport {inherit paths exclude recursive;};
     apply = import ./apply.nix {inherit lib homeManagerUser isHomeManager myconfigName;};
@@ -70,7 +71,7 @@ in {
       host.homeManagerSystem
       isHomeManager;
 
-    inherit ((system {} "useless" false)) config;
+    inherit ((system internalSystemExtraModule "useless" false)) config;
     inherit (config.${myconfigName}) hosts rices;
   in
     (lib.concatMapAttrs (riceName: rice:
