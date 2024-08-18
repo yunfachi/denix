@@ -132,7 +132,7 @@ delib.module {
     enableLFS = boolOption true;
   };
 
-  home.always.programs.git = {myconfig, cfg, ...}: {
+  home.ifEnabled.programs.git = {myconfig, cfg, ...}: {
     enable = cfg.enable;
     lfs.enable = cfg.enableLFS;
 
@@ -149,6 +149,6 @@ delib.module {
 
   options = delib.singleEnableOption true;
 
-  home.always.home.packages = [pkgs.alejandra];
+  home.ifEnabled.home.packages = [pkgs.alejandra];
 }
 ```
