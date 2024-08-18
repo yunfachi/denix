@@ -33,7 +33,7 @@ function themeConfigEnglish() {return {
   
   themeConfig: {
     editLink: {
-      pattern: "https://github.com/yunfachi/denix/edit/master/docs/:path",
+      pattern: "https://github.com/yunfachi/denix/edit/master/docs/src/:path",
       text: "Edit this page on Github"
     },
 
@@ -60,7 +60,7 @@ function themeConfigRussian() {return {
 
   themeConfig: {
     editLink: {
-      pattern: "https://github.com/yunfachi/denix/edit/master/docs/:path",
+      pattern: "https://github.com/yunfachi/denix/edit/master/docs/src/:path",
       text: "Редактировать эту страницу на GitHub"
     },
 
