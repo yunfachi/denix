@@ -70,7 +70,7 @@ delib.module {
   };
 }
 ```
-You can learn more about Denix modules in [TODO](/TODO).
+You can learn more about Denix modules in [Modules](/modules/introduction).
 
 ## Hosts {#hosts}
 Host is any machine, such as a personal computer, server, etc.
