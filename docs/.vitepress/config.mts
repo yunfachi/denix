@@ -47,6 +47,14 @@ function themeConfigEnglish() {return {
         text: "Introduction",
         items: [{ text: "Introduction", link: "/introduction" }],
       },
+      {
+        text: "Modules",
+        items: [
+          { text: "Introduction", link: "/modules/introduction" },
+          { text: "Structure", link: "/modules/structure" },
+          { text: "Examples", link: "/modules/examples" }
+        ],
+      },
     ],
   }
 }}
@@ -73,6 +81,14 @@ function themeConfigRussian() {return {
       {
         text: "Вступление",
         items: [{ text: "Вступление", link: "/ru/introduction" }],
+      },
+      {
+        text: "Модули",
+        items: [
+          { text: "Вступление", link: "/ru/modules/introduction" },
+          { text: "Структура", link: "/ru/modules/structure" },
+          { text: "Примеры", link: "/ru/modules/examples" }
+        ],
       },
     ],
   }
