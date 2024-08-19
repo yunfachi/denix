@@ -52,21 +52,33 @@ in {
       then homeSystem
       else nixosSystem;
 
-    mkHost = host: rice:
+    mkHost = host: rice: let
+      wrap = name: cfg: x:
+        if builtins.typeOf x == "lambda"
+        then
+          x {
+            inherit name cfg;
+            myconfig = config.${myconfigName};
+          }
+        else x;
+      wrapHost = wrap host.name (config.${myconfigName}.hosts.${host.name});
+    in
       system {
         config.${myconfigName} = {inherit rice host;};
 
         imports =
           [
-            (apply.myconfig host.myconfig)
-            (apply.nixos host.nixos)
-            (apply.home host.home)
+            (apply.myconfig (wrapHost host.myconfig))
+            (apply.nixos (wrapHost host.nixos))
+            (apply.home (wrapHost host.home))
           ]
-          ++ (lib.optionals (rice != null) [
-            (apply.myconfig rice.myconfig)
-            (apply.nixos rice.nixos)
-            (apply.home rice.home)
-          ]);
+          ++ (lib.optionals (rice != null) (let
+            wrapRice = wrap rice.name (config.${myconfigName}.rices.${rice.name});
+          in [
+            (apply.myconfig (wrapRice rice.myconfig))
+            (apply.nixos (wrapRice rice.nixos))
+            (apply.home (wrapRice rice.home))
+          ]));
       }
       host.homeManagerSystem
       isHomeManager;

@@ -17,9 +17,9 @@
   riceSubmoduleOptions = with options; {
     name = strOption null;
 
-    myconfig = attrsOption {};
-    nixos = attrsOption {};
-    home = attrsOption {};
+    myconfig = allowLambdaTo attrs (attrsOption {});
+    nixos = allowLambdaTo attrs (attrsOption {});
+    home = allowLambdaTo attrs (attrsOption {});
   };
 
   riceOption = rice:

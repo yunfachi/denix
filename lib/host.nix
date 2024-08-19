@@ -20,13 +20,23 @@
       home ? {},
     }: {inherit myconfig nixos home;};
     _shared = sharedDefaults shared;
+
+    wrap = x:
+      if builtins.typeOf x == "lambda"
+      then
+        x {
+          inherit name;
+          cfg = config.${myconfigName}.hosts.${name};
+          myconfig = config.${myconfigName};
+        }
+      else x;
   in {
     config.${myconfigName}.hosts.${name} = args;
 
     imports = [
-      (apply.myconfig _shared.myconfig)
-      (apply.nixos _shared.nixos)
-      (apply.home _shared.home)
+      (apply.myconfig (wrap _shared.myconfig))
+      (apply.nixos (wrap _shared.nixos))
+      (apply.home (wrap _shared.home))
     ];
   };
 
