@@ -56,9 +56,10 @@ in rec {
   allowPath = addTypeToOption path;
   allowStr = addTypeToOption str;
 
-  readOnly = option: option // {readOnly = true;};
   noDefault = option: builtins.removeAttrs option ["default"];
+  readOnly = option: option // {readOnly = true;};
 
+  apply = option: apply: option // {inherit apply;};
   description = option: description: option // {inherit description;};
 
   singleEnableOption = default: {name, ...}:
