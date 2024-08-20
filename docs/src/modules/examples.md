@@ -127,13 +127,13 @@ With [constants](#constants):
 delib.module {
   name = "programs.git";
 
-  options = with delib; {
+  options.programs.git = with delib; {
     enable = boolOption true;
     enableLFS = boolOption true;
   };
 
   home.ifEnabled.programs.git = {myconfig, cfg, ...}: {
-    enable = cfg.enable;
+    enable = true;
     lfs.enable = cfg.enableLFS;
 
     userName = myconfig.constants.username;
