@@ -16,4 +16,12 @@
     if isHomeManager
     then home
     else {home-manager.users.${homeManagerUser} = home;};
+
+  all = myconfig: nixos: home:
+    {${myconfigName} = myconfig;}
+    // (
+      if isHomeManager
+      then home
+      else (nixos // {home-manager.users.${homeManagerUser} = home;})
+    );
 }
