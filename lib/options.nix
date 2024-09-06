@@ -19,7 +19,7 @@
   simpleOptionWithParameter = type: elemType: default:
     simpleOption (type elemType) default;
 in rec {
-  inherit (lib.types) anything attrs attrsOf bool enum float int listOf number path str submodule;
+  inherit (lib.types) anything attrs attrsOf bool enum float int listOf number package path str submodule;
   lambda = lib.types.functionTo anything;
   lambdaTo = lib.types.functionTo;
   list = listOf anything;
@@ -36,6 +36,7 @@ in rec {
   listOfOption = simpleOptionWithParameter listOf;
   listOption = simpleOption list;
   numberOption = simpleOption number;
+  packageOption = simpleOption package;
   pathOption = simpleOption path;
   strOption = simpleOption str;
   submoduleOption = simpleOptionWithParameter submodule;
@@ -53,6 +54,7 @@ in rec {
   allowListOf = addTypeWithParameterToOption listOf;
   allowNull = option: option // {type = lib.types.nullOr option.type;};
   allowNumber = addTypeToOption number;
+  allowPackage = addTypeToOption package;
   allowPath = addTypeToOption path;
   allowStr = addTypeToOption str;
 
