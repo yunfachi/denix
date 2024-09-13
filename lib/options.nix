@@ -19,7 +19,7 @@
   simpleOptionWithParameter = type: elemType: default:
     simpleOption (type elemType) default;
 in rec {
-  inherit (lib.types) anything attrs attrsOf bool enum float int listOf number package path str submodule;
+  inherit (lib.types) anything attrs attrsOf bool enum float int listOf number package path port singleLineStr str submodule;
   lambda = lib.types.functionTo anything;
   lambdaTo = lib.types.functionTo;
   list = listOf anything;
@@ -38,6 +38,8 @@ in rec {
   numberOption = simpleOption number;
   packageOption = simpleOption package;
   pathOption = simpleOption path;
+  portOption = simpleOption port;
+  singleLineStrOption = simpleOption singleLineStr;
   strOption = simpleOption str;
   submoduleOption = simpleOptionWithParameter submodule;
 
@@ -56,6 +58,8 @@ in rec {
   allowNumber = addTypeToOption number;
   allowPackage = addTypeToOption package;
   allowPath = addTypeToOption path;
+  allowPortOption = addTypeToOption port;
+  allowSingleLineStrOption = addTypeToOption singleLineStr;
   allowStr = addTypeToOption str;
 
   noDefault = option: builtins.removeAttrs option ["default"];
