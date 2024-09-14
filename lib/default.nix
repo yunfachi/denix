@@ -27,10 +27,11 @@ in {
     mkDenixLib = {
       config,
       isHomeManager,
+      currentHostName ? null,
     }: let
       apply = mkApply isHomeManager;
 
-      host = import ./host.nix {inherit lib apply config myconfigName options;};
+      host = import ./host.nix {inherit lib apply config myconfigName options currentHostName;};
       module = import ./module.nix {inherit lib apply attrset config myconfigName;};
       options = import ./options.nix {inherit lib attrset;};
       rice = import ./rice.nix {inherit lib myconfigName options;};
@@ -40,38 +41,35 @@ in {
     mkSystem = {
       isHomeManager,
       homeManagerSystem,
-      internalExtraModules ? (apply: []),
+      currentHostName,
+      internalExtraModules ? (_: []),
     }: let
-      nixosSystem = let
-        apply = mkApply false;
-      in
-        lib.nixosSystem {
-          specialArgs =
-            specialArgs
-            // {
-              ${denixLibName} = mkDenixLib {
-                config = nixosSystem.config;
-                isHomeManager = false;
-              };
+      nixosSystem = lib.nixosSystem {
+        specialArgs =
+          specialArgs
+          // {
+            ${denixLibName} = mkDenixLib {
+              config = nixosSystem.config;
+              isHomeManager = false;
+              inherit currentHostName;
             };
-          modules = (internalExtraModules apply) ++ extraModules ++ files ++ [home-manager.nixosModules.home-manager];
-        };
-      homeSystem = let
-        apply = mkApply true;
-      in
-        home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs =
-            specialArgs
-            // {
-              ${denixLibName} = mkDenixLib {
-                # FIXME: nixosSystem is used, not homeSystem, because homeManagerConfiguration causes infinite recursion (maybe I should create an issue in home-manager?)
-                config = nixosSystem.config;
-                isHomeManager = true;
-              };
+          };
+        modules = (internalExtraModules false) ++ extraModules ++ files ++ [home-manager.nixosModules.home-manager];
+      };
+      homeSystem = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs =
+          specialArgs
+          // {
+            ${denixLibName} = mkDenixLib {
+              # FIXME: nixosSystem is used, not homeSystem, because homeManagerConfiguration causes infinite recursion (maybe I should create an issue in home-manager?)
+              config = nixosSystem.config;
+              isHomeManager = true;
+              inherit currentHostName;
             };
-          pkgs = homeManagerNixpkgs.legacyPackages.${homeManagerSystem};
-          modules = (internalExtraModules apply) ++ extraModules ++ files;
-        };
+          };
+        pkgs = homeManagerNixpkgs.legacyPackages.${homeManagerSystem};
+        modules = (internalExtraModules true) ++ extraModules ++ files;
+      };
     in
       if isHomeManager
       then homeSystem
@@ -92,12 +90,11 @@ in {
       system = mkSystem {
         inherit isHomeManager;
         inherit (host) homeManagerSystem;
-        internalExtraModules = apply: [
+        currentHostName = host.name;
+        internalExtraModules = _isHomeManager: let
+          apply = mkApply _isHomeManager;
+        in [
           {config.${myconfigName} = {inherit rice host;};}
-          (apply.all
-            (wrapHost host.myconfig)
-            (wrapHost host.nixos)
-            (wrapHost host.home))
           (lib.optionalAttrs (rice != null) (let
             wrapRice = wrap rice.name (myconfig.rices.${rice.name});
           in
@@ -114,6 +111,7 @@ in {
       system = mkSystem {
         isHomeManager = false;
         homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
+        currentHostName = null;
         internalExtraModules = _: [mkConfigurationsSystemExtraModule];
       };
 

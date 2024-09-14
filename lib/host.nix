@@ -4,6 +4,7 @@
   config,
   myconfigName,
   options,
+  currentHostName,
   ...
 }: {
   host = {
@@ -33,11 +34,21 @@
   in {
     config.${myconfigName}.hosts.${name} = args;
 
-    imports = [
-      (apply.myconfig (wrap _shared.myconfig))
-      (apply.nixos (wrap _shared.nixos))
-      (apply.home (wrap _shared.home))
-    ];
+    imports =
+      [
+        (apply.myconfig (wrap _shared.myconfig))
+        (apply.nixos (wrap _shared.nixos))
+        (apply.home (wrap _shared.home))
+      ]
+      ++ (
+        if currentHostName == name
+        then [
+          (apply.myconfig (wrap myconfig))
+          (apply.nixos (wrap nixos))
+          (apply.home (wrap home))
+        ]
+        else []
+      );
   };
 
   hostSubmoduleOptions = with options; {
