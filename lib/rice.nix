@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   myconfigName,
   options,
   ...
@@ -10,8 +11,23 @@
     nixos ? {},
     home ? {},
     ...
-  } @ args: {
-    config.${myconfigName}.rices.${name} = args;
+  } @ args: let
+    wrap = x:
+      if builtins.typeOf x == "lambda"
+      then
+        x {
+          inherit name;
+          cfg = config.${myconfigName}.rices.${name};
+          myconfig = config.${myconfigName};
+        }
+      else x;
+  in {
+    config.${myconfigName}.rices.${name} = {
+      name = name;
+      myconfig = wrap myconfig;
+      nixos = wrap nixos;
+      home = wrap home;
+    };
   };
 
   riceSubmoduleOptions = with options; {

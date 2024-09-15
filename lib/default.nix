@@ -34,7 +34,7 @@ in {
       host = import ./host.nix {inherit lib apply config myconfigName options currentHostName;};
       module = import ./module.nix {inherit lib apply attrset config myconfigName;};
       options = import ./options.nix {inherit lib attrset;};
-      rice = import ./rice.nix {inherit lib myconfigName options;};
+      rice = import ./rice.nix {inherit lib config myconfigName options;};
     in
       host // module // options // rice;
 
@@ -81,12 +81,6 @@ in {
     }: let
       myconfig = system.config.${myconfigName};
 
-      wrap = name: cfg: x:
-        if builtins.typeOf x == "lambda"
-        then x {inherit name cfg myconfig;}
-        else x;
-      wrapHost = wrap host.name (myconfig.hosts.${host.name});
-
       system = mkSystem {
         inherit isHomeManager;
         inherit (host) homeManagerSystem;
@@ -95,13 +89,7 @@ in {
           apply = mkApply _isHomeManager;
         in [
           {config.${myconfigName} = {inherit rice host;};}
-          (lib.optionalAttrs (rice != null) (let
-            wrapRice = wrap rice.name (myconfig.rices.${rice.name});
-          in
-            apply.all
-            (wrapRice rice.myconfig)
-            (wrapRice rice.nixos)
-            (wrapRice rice.home)))
+          (lib.optionalAttrs (rice != null) (apply.all rice.myconfig rice.nixos rice.home))
         ];
       };
     in
