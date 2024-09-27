@@ -95,7 +95,7 @@ in {
     in
       system;
 
-    mkConfigurations = let
+    configurations = let
       system = mkSystem {
         isHomeManager = false;
         homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
@@ -105,22 +105,23 @@ in {
 
       inherit (system.config.${myconfigName}) hosts rices;
     in
-      (builtins.mapAttrs (_: host:
-        mkHost {
-          inherit host;
-          rice =
-            if host.rice == null
-            then null
-            else rices.${host.rice};
+      (lib.concatMapAttrs (hostName: host: {
+          "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}" = mkHost {
+            inherit host;
+            rice =
+              if host.rice == null
+              then null
+              else rices.${host.rice};
+          };
         })
-      hosts)
+        hosts)
       // (lib.concatMapAttrs (riceName: rice:
         lib.attrsets.mapAttrs' (hostName: host: {
-          name = "${hostName}-${riceName}";
+          name = "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}-${riceName}";
           value = mkHost {inherit host rice;};
         })
         hosts)
       rices);
   in
-    mkConfigurations;
+    configurations;
 }
