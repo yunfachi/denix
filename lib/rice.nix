@@ -7,6 +7,8 @@
 }: {
   rice = {
     name,
+    inherits ? [],
+    inheritanceOnly ? false,
     myconfig ? {},
     nixos ? {},
     home ? {},
@@ -22,16 +24,21 @@
         }
       else x;
   in {
-    config.${myconfigName}.rices.${name} = {
-      name = name;
-      myconfig = wrap myconfig;
-      nixos = wrap nixos;
-      home = wrap home;
-    };
+    config.${myconfigName}.rices.${name} =
+      {
+        inherit name;
+        myconfig = wrap myconfig;
+        nixos = wrap nixos;
+        home = wrap home;
+      }
+      // lib.optionalAttrs inheritanceOnly {inherit inheritanceOnly;}
+      // lib.optionalAttrs (inherits != []) {inherit inherits;};
   };
 
   riceSubmoduleOptions = with options; {
     name = strOption null;
+    inherits = listOfOption str [];
+    inheritanceOnly = boolOption false;
 
     myconfig = allowLambdaTo attrs (attrsOption {});
     nixos = allowLambdaTo attrs (attrsOption {});

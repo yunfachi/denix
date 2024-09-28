@@ -75,6 +75,19 @@ in {
       then homeSystem
       else nixosSystem;
 
+    inherit
+      ((mkSystem {
+          isHomeManager = false;
+          homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
+          currentHostName = null;
+          internalExtraModules = _: [mkConfigurationsSystemExtraModule];
+        })
+        .config
+        .${myconfigName})
+      hosts
+      rices
+      ;
+
     mkHost = {
       host,
       rice ? null,
@@ -87,41 +100,24 @@ in {
         currentHostName = host.name;
         internalExtraModules = _isHomeManager: let
           apply = mkApply _isHomeManager;
-        in [
-          {config.${myconfigName} = {inherit rice host;};}
-          (lib.optionalAttrs (rice != null) (apply.all rice.myconfig rice.nixos rice.home))
-        ];
+        in
+          [
+            {config.${myconfigName} = {inherit rice host;};}
+            (lib.optionalAttrs (rice != null) (apply.all rice.myconfig rice.nixos rice.home))
+          ]
+          ++ map (riceName: (apply.all rices.${riceName}.myconfig rices.${riceName}.nixos rices.${riceName}.home)) (rice.inherits or []);
       };
     in
       system;
 
     configurations = let
-      system = mkSystem {
-        isHomeManager = false;
-        homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
-        currentHostName = null;
-        internalExtraModules = _: [mkConfigurationsSystemExtraModule];
-      };
-
-      inherit (system.config.${myconfigName}) hosts rices;
+      mkHostAttrs = riceName: rice: hostName: host:
+        lib.optionalAttrs (!rice.inheritanceOnly or false) {
+          "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}${lib.optionalString (riceName != null) "-${riceName}"}" = mkHost {inherit host rice;};
+        };
     in
-      (lib.concatMapAttrs (hostName: host: {
-          "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}" = mkHost {
-            inherit host;
-            rice =
-              if host.rice == null
-              then null
-              else rices.${host.rice};
-          };
-        })
-        hosts)
-      // (lib.concatMapAttrs (riceName: rice:
-        lib.attrsets.mapAttrs' (hostName: host: {
-          name = "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}-${riceName}";
-          value = mkHost {inherit host rice;};
-        })
-        hosts)
-      rices);
+      lib.concatMapAttrs (mkHostAttrs null null) hosts
+      // lib.concatMapAttrs (riceName: rice: lib.concatMapAttrs (mkHostAttrs riceName rice) hosts) rices;
   in
     configurations;
 }
