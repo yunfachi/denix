@@ -51,22 +51,25 @@
       );
   };
 
-  hostSubmoduleOptions = with options; {
-    name = strOption null;
+  hostSubmoduleOptions = with options;
+    {
+      name = strOption null;
 
-    rice = allowNull (enumOption (builtins.attrNames config.${myconfigName}.rices) null);
-    homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
+      homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
-    myconfig = allowLambdaTo attrs (attrsOption {});
-    nixos = allowLambdaTo attrs (attrsOption {});
-    home = allowLambdaTo attrs (attrsOption {});
-
-    shared = {
       myconfig = allowLambdaTo attrs (attrsOption {});
       nixos = allowLambdaTo attrs (attrsOption {});
       home = allowLambdaTo attrs (attrsOption {});
+
+      shared = {
+        myconfig = allowLambdaTo attrs (attrsOption {});
+        nixos = allowLambdaTo attrs (attrsOption {});
+        home = allowLambdaTo attrs (attrsOption {});
+      };
+    }
+    // lib.optionalAttrs (config.${myconfigName} ? rices) {
+      rice = allowNull (enumOption (builtins.attrNames config.${myconfigName}.rices) null);
     };
-  };
 
   hostOption = host:
     with options; noDefault (submoduleOption host null);

@@ -76,7 +76,8 @@ in {
       else nixosSystem;
 
     inherit
-      ((mkSystem {
+      ({rices = {};}
+        // (mkSystem {
           isHomeManager = false;
           homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
           currentHostName = null;
@@ -102,7 +103,7 @@ in {
           apply = mkApply _isHomeManager;
         in
           [
-            {config.${myconfigName} = {inherit rice host;};}
+            ({options, ...}: {config.${myconfigName} = {inherit host;} // lib.optionalAttrs (options.${myconfigName} ? rice) {inherit rice;};})
             (lib.optionalAttrs (rice != null) (apply.all rice.myconfig rice.nixos rice.home))
           ]
           ++ map (riceName: (apply.all rices.${riceName}.myconfig rices.${riceName}.nixos rices.${riceName}.home)) (rice.inherits or []);
@@ -113,7 +114,18 @@ in {
     configurations = let
       mkHostAttrs = riceName: rice: hostName: host:
         lib.optionalAttrs (!rice.inheritanceOnly or false) {
-          "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}${lib.optionalString (riceName != null) "-${riceName}"}" = mkHost {inherit host rice;};
+          "${lib.optionalString isHomeManager "${homeManagerUser}@"}${hostName}${lib.optionalString (riceName != null) "-${riceName}"}" = mkHost {
+            inherit host;
+            rice =
+              if rice == null
+              then
+                (
+                  if host.rice == null
+                  then null
+                  else rices.${host.rice}
+                )
+              else rice;
+          };
         };
     in
       lib.concatMapAttrs (mkHostAttrs null null) hosts
