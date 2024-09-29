@@ -56,6 +56,14 @@ function themeConfigEnglish() {return {
           { text: "Examples", link: "/modules/examples" }
         ],
       },
+      {
+        text: "Hosts",
+        items: [
+          { text: "Introduction", link: "/hosts/introduction" },
+          { text: "Structure", link: "/hosts/structure" },
+          { text: "Examples", link: "/hosts/examples" }
+        ],
+      },
     ],
   }
 }}
@@ -90,6 +98,14 @@ function themeConfigRussian() {return {
           { text: "Вступление", link: "/ru/modules/introduction" },
           { text: "Структура", link: "/ru/modules/structure" },
           { text: "Примеры", link: "/ru/modules/examples" }
+        ],
+      },
+      {
+        text: "Хосты",
+        items: [
+          { text: "Вступление", link: "/ru/hosts/introduction" },
+          { text: "Структура", link: "/ru/hosts/structure" },
+          { text: "Примеры", link: "/ru/hosts/examples" }
         ],
       },
     ],
