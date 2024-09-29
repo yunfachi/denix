@@ -64,6 +64,7 @@ function themeConfigEnglish() {return {
           { text: "Examples", link: "/hosts/examples" }
         ],
       },
+      { text: "Real Configurations", link: "/real-configurations" },
     ],
   }
 }}
@@ -108,6 +109,7 @@ function themeConfigRussian() {return {
           { text: "Примеры", link: "/ru/hosts/examples" }
         ],
       },
+      { text: "Реальные конфигурации", link: "/real-configurations" },
     ],
   }
 }}
