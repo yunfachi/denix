@@ -44,5 +44,5 @@ delib.module {
   home.ifEnabled = {name, cfg, myconfig, ...}: {};
   home.ifDisabled = {name, cfg, myconfig, ...}: {};
   home.always = {name, cfg, myconfig, ...}: {};
-};
+}
 ```
