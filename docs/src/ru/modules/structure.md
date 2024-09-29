@@ -31,16 +31,16 @@ delib.module {
   myconfig.ifDisabled = {name, cfg, myconfig, ...}: {};
   myconfig.always = {name, cfg, myconfig, ...}: {};
 
-  # if isHomeManager
-  # then {}
-  # else {config = ...;}
+  # если isHomeManager
+  # то {}
+  # иначе {config = ...;}
   nixos.ifEnabled = {name, cfg, myconfig, ...}: {};
   nixos.ifDisabled = {name, cfg, myconfig, ...}: {};
   nixos.always = {name, cfg, myconfig, ...}: {};
 
-  # if isHomeManager
-  # then {config = ...;}
-  # else {config.home-manager.users.${homeManagerUser} = ...;}
+  # если isHomeManager
+  # то {config = ...;}
+  # иначе {config.home-manager.users.${homeManagerUser} = ...;}
   home.ifEnabled = {name, cfg, myconfig, ...}: {};
   home.ifDisabled = {name, cfg, myconfig, ...}: {};
   home.always = {name, cfg, myconfig, ...}: {};
