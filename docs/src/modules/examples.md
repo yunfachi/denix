@@ -109,8 +109,6 @@ delib.module {
     inherit (myconfig.constants) username;
   in {
     users = {
-      groups.${username} = {};
-
       users.${username} = {
         isNormalUser = true;
         initialPassword = username;
