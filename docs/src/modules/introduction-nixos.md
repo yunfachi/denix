@@ -101,7 +101,7 @@ delib.module {
 }
 ```
 
-For more information on Denix options, see the [Options](/options/introduction) section.
+For more information on Denix options, see the [Options](/TODO) section.
 
 ## Creating Your Own Modules (Options)
 Declaring your own options is a great practice if you want to enable or disable certain parts of the code. This can be useful if you have multiple hosts (machines) with the same configuration, and, for example, machine `foo` does not need a program that is used on machine `bar`.
