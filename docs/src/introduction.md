@@ -94,7 +94,7 @@ delib.host {
   };
 }
 ```
-You can learn more about Denix hosts in [TODO](/TODO).
+You can learn more about Denix hosts in [Hosts](/hosts/introduction).
 
 ## Rices {#rices}
 Rice is a slang term used to describe system settings, especially related to appearance.
