@@ -50,6 +50,7 @@ function themeConfigEnglish() {return {
       {
         text: "Modules",
         items: [
+          { text: "Introduction to NixOS Modules", link: "/modules/introduction-nixos" },
           { text: "Introduction", link: "/modules/introduction" },
           { text: "Structure", link: "/modules/structure" },
           { text: "Examples", link: "/modules/examples" }
@@ -85,6 +86,7 @@ function themeConfigRussian() {return {
       {
         text: "Модули",
         items: [
+          { text: "Вступление в модули NixOS", link: "/ru/modules/introduction-nixos" },
           { text: "Вступление", link: "/ru/modules/introduction" },
           { text: "Структура", link: "/ru/modules/structure" },
           { text: "Примеры", link: "/ru/modules/examples" }
