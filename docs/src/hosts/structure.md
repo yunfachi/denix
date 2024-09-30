@@ -11,7 +11,7 @@
 
 ## Passed Arguments {#passed-arguments}
 A list of arguments passed to `?(shared.)[myconfig|nixos|home]` if their type is `lambda`:
-- `name`: the same `name` as in the arguments of `delib.module`.
+- `name`: the same `name` as in the arguments of `delib.host`.
 - `myconfig`: equals `config.${myConfigName}`.
 - `cfg`: equals `config.${myConfigName}.hosts.${delib.host :: name}`.
 
@@ -19,6 +19,7 @@ A list of arguments passed to `?(shared.)[myconfig|nixos|home]` if their type is
 ```nix
 delib.host {
   name = "";
+
   # if config.${myconfigName}.host == name
   # then {config.${myConfigName} = ...;}
   # else {}

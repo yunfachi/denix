@@ -12,7 +12,7 @@
 ## Передаваемые аргументы {#passed-arguments}
 Список аргументов, которые передаются в `?(shared.)[myconfig|nixos|home]`, если их тип - `lambda`:
 
-- `name`: тот же `name`, что и в аргументах `delib.module`.
+- `name`: тот же `name`, что и в аргументах `delib.host`.
 - `myconfig`: равен `config.${myConfigName}`.
 - `cfg`: равен `config.${myConfigName}.hosts.${delib.host :: name}`.
 
