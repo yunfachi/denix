@@ -115,4 +115,4 @@ delib.rice {
   };
 }
 ```
-You can learn more about Denix rices in [TODO](/TODO).
+You can learn more about Denix rices in [Rices](/rices/introduction).
