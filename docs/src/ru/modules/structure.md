@@ -3,7 +3,7 @@
 
 ## Аргументы функции {#function-arguments}
 - `name`{#function-arguments-name}: строка. Рекомендуется, чтобы она совпадала с родительским путём опции `enable` модуля, например, `"programs.example"`, так как передаваемый аргумент `cfg` зависит именно от этого пути.
-- `options`: attrset или lambda, которая возвращает attrset (см. [Опции](/TODO)).
+- `options`: attrset или lambda, которая возвращает attrset (см. [Опции](/ru/options/introduction)).
 - `[myconfig|nixos|home].[ifEnabled|ifDisabled|always]`: attrset или lambda, которая возвращает attrset.
 - `myconfig.*`: устанавливает значения в `config.${myconfigName}`.
 - `nixos.*`: устанавливает значения в `config`, если `isHomeManager` равен `false`, иначе не выполняется.

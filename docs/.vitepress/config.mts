@@ -60,6 +60,12 @@ function themeConfigEnglish() {return {
         ],
       },
       {
+        text: "Options",
+        items: [
+          { text: "Introduction", link: "/options/introduction" },
+        ],
+      },
+      {
         text: "Hosts",
         items: [
           { text: "Introduction", link: "/hosts/introduction" },
@@ -110,6 +116,12 @@ function themeConfigRussian() {return {
           { text: "Вступление", link: "/ru/modules/introduction" },
           { text: "Структура", link: "/ru/modules/structure" },
           { text: "Примеры", link: "/ru/modules/examples" }
+        ],
+      },
+      {
+        text: "Опции",
+        items: [
+          { text: "Вступление", link: "/ru/options/introduction" },
         ],
       },
       {

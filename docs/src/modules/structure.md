@@ -3,7 +3,7 @@ This section uses the variables `myconfigName`, `isHomeManager`, and `homeManage
 
 ## Function Arguments {#function-arguments}
 - `name`{#function-arguments-name}: string. It is recommended that it matches the parent path of the module's `enable` option, such as `"programs.example"`, since the `cfg` argument depends on this path.
-- `options`: attrset or a lambda that returns an attrset (see [Options](/TODO)).
+- `options`: attrset or a lambda that returns an attrset (see [Options](/options/introduction)).
 - `[myconfig|nixos|home].[ifEnabled|ifDisabled|always]`: attrset or a lambda that returns an attrset.
 - `myconfig.*`: sets values in `config.${myconfigName}`.
 - `nixos.*`: sets values in `config` if `isHomeManager` is `false`; otherwise, it does nothing.

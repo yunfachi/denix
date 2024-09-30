@@ -31,6 +31,6 @@ This means that you can use all three types of modules simultaneously, although 
 ## Simplicity and Cleanliness {#simplicity-and-cleanliness}
 Denix modules tend to look simpler and cleaner compared to NixOS/Home Manager modules, due to the following reasons:
 
-1. Simple yet fully functional option declaration (see [Options](/TODO)).
+1. Simple yet fully functional option declaration (see [Options](/options/introduction)).
 2. Built-in logic for separating configurations based on the value of `${delib.module :: name}.enable`: always, ifEnabled, ifDisabled.
 3. Shared options but separated configurations for NixOS, Home Manager, and custom options.
