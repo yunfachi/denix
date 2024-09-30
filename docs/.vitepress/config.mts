@@ -9,6 +9,9 @@ export default defineConfig({
   ignoreDeadLinks: [
     '/TODO'
   ],
+  sitemap: {
+    hostname: 'https://yunfachi.github.io/denix/'
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     socialLinks: [
