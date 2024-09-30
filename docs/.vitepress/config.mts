@@ -64,6 +64,14 @@ function themeConfigEnglish() {return {
           { text: "Examples", link: "/hosts/examples" }
         ],
       },
+      {
+        text: "Rices",
+        items: [
+          { text: "Introduction", link: "/rices/introduction" },
+          { text: "Structure", link: "/rices/structure" },
+          { text: "Examples", link: "/rices/examples" }
+        ],
+      },
       { text: "Real Configurations", link: "/real-configurations" },
     ],
   }
@@ -107,6 +115,14 @@ function themeConfigRussian() {return {
           { text: "Вступление", link: "/ru/hosts/introduction" },
           { text: "Структура", link: "/ru/hosts/structure" },
           { text: "Примеры", link: "/ru/hosts/examples" }
+        ],
+      },
+      {
+        text: "Райсы",
+        items: [
+          { text: "Вступление", link: "/ru/rices/introduction" },
+          { text: "Структура", link: "/ru/rices/structure" },
+          { text: "Примеры", link: "/ru/rices/examples" }
         ],
       },
       { text: "Реальные конфигурации", link: "/real-configurations" },
