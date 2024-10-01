@@ -2,6 +2,7 @@
 
 ## Function Arguments {#function-arguments}
 - `name`: a string representing the host name.
+- `homeManagerSystem`: a string used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function, which is used in the [`delib.configurations`](/configurations/introduction) function as `homeManagerNixpkgs.legacyPackages.${homeManagerSystem}`.
 - `myconfig`: sets its value to `config.${myconfigName}` if `config.${myconfigName}.host` matches the current host.
 - `nixos`: sets its value to `config` if `isHomeManager` is `false` and `config.${myconfigName}.host` matches the current host.
 - `home`: sets its value to `config` if `isHomeManager` is `true` and `config.${myconfigName}.host` matches the current host. Otherwise, if `config.${myconfigName}.host` matches the current host, sets its value to `config.home-manager.users.${homeManagerUser}`.
@@ -19,6 +20,9 @@ A list of arguments passed to `?(shared.)[myconfig|nixos|home]` if their type is
 ```nix
 delib.host {
   name = "";
+
+  # homeManagerNixpkgs.legacyPackages.${homeManagerSystem}
+  homeManagerSystem = "x86_64-linux";
 
   # if config.${myconfigName}.host == name
   # then {config.${myConfigName} = ...;}

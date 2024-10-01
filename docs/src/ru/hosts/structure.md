@@ -2,6 +2,7 @@
 
 ## Аргументы функции {#function-arguments}
 - `name`: строка, представляющая имя хоста.
+- `homeManagerSystem`: строка, используемая в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration`, которая используется в функции [`delib.configurations`](/ru/configurations/introduction) в виде `homeManagerNixpkgs.legacyPackages.${homeManagerSystem}`.
 - `myconfig`: устанавливает её значение в `config.${myconfigName}`, если `config.${myconfigName}.host` соответствует текущему хосту.
 - `nixos`: устанавливает её значение в `config`, если `isHomeManager` равен `false` и `config.${myconfigName}.host` соответствует текущему хосту.
 - `home`: устанавливает её значение в `config`, если `isHomeManager` равен `true` и `config.${myconfigName}.host` соответствует текущему хосту. В противном случае, если `config.${myconfigName}.host` соответствует текущему хосту, устанавливает её значение в `config.home-manager.users.${homeManagerUser}`.
@@ -20,6 +21,9 @@
 ```nix
 delib.host {
   name = "";
+
+  # homeManagerNixpkgs.legacyPackages.${homeManagerSystem}
+  homeManagerSystem = "x86_64-linux";
 
   # если config.${myconfigName}.host == name
   # то {config.${myConfigName} = ...;}

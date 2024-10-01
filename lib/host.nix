@@ -9,6 +9,7 @@
 }: {
   host = {
     name,
+    homeManagerSystem,
     myconfig ? {},
     nixos ? {},
     home ? {},
