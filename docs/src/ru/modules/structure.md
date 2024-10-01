@@ -1,5 +1,5 @@
 # Структура {#structure}
-В этом разделе будут использованы переменные `myconfigName`, `isHomeManager` и `homeManagerUser`, поэтому рекомендуется предварительно ознакомиться с соответствующим подразделом: [Аргументы delib.system](/TODO).
+В этом разделе будут использованы переменные `myconfigName`, `isHomeManager` и `homeManagerUser`, поэтому рекомендуется предварительно ознакомиться с соответствующим подразделом: [Аргументы delib.configurations](/ru/configurations/structure#function-arguments).
 
 ## Аргументы функции {#function-arguments}
 - `name`{#function-arguments-name}: строка. Рекомендуется, чтобы она совпадала с родительским путём опции `enable` модуля, например, `"programs.example"`, так как передаваемый аргумент `cfg` зависит именно от этого пути.

@@ -74,6 +74,13 @@ function themeConfigEnglish() {return {
         ],
       },
       {
+        text: "Configurations (flakes)",
+        items: [
+          { text: "Introduction", link: "/configurations/introduction" },
+          { text: "Structure", link: "/configurations/structure" }
+        ],
+      },
+      {
         text: "Rices",
         items: [
           { text: "Introduction", link: "/rices/introduction" },
@@ -115,7 +122,7 @@ function themeConfigRussian() {return {
           { text: "Вступление в модули NixOS", link: "/ru/modules/introduction-nixos" },
           { text: "Вступление", link: "/ru/modules/introduction" },
           { text: "Структура", link: "/ru/modules/structure" },
-          { text: "Примеры", link: "/ru/modules/examples" }
+          { text: "Примеры", link: "/ru/modules/examples" },
         ],
       },
       {
@@ -129,7 +136,14 @@ function themeConfigRussian() {return {
         items: [
           { text: "Вступление", link: "/ru/hosts/introduction" },
           { text: "Структура", link: "/ru/hosts/structure" },
-          { text: "Примеры", link: "/ru/hosts/examples" }
+          { text: "Примеры", link: "/ru/hosts/examples" },
+        ],
+      },
+      {
+        text: "Конфигурации (флейки)",
+        items: [
+          { text: "Вступление", link: "/ru/configurations/introduction" },
+          { text: "Структура", link: "/ru/configurations/structure" },
         ],
       },
       {
@@ -137,7 +151,7 @@ function themeConfigRussian() {return {
         items: [
           { text: "Вступление", link: "/ru/rices/introduction" },
           { text: "Структура", link: "/ru/rices/structure" },
-          { text: "Примеры", link: "/ru/rices/examples" }
+          { text: "Примеры", link: "/ru/rices/examples" },
         ],
       },
       { text: "Реальные конфигурации", link: "/real-configurations" },

@@ -6,7 +6,7 @@ The term "rice" in slang refers to system settings, usually related to appearanc
 However, rices are not mandatory: to avoid using them, simply do not add the options `${myconfigName}.rices` and `${myconfigName}.rice`, and do not use the `delib.rice` function.
 
 ## Inheritance {#inheritance}
-A rice can inherit all configurations of another rice via the `inherits` attribute. Additionally, you can set `inheritanceOnly = true;`, which will hide the rice from being generated in [`delib.system`](/TODO), leaving it only for inheritance.
+A rice can inherit all configurations of another rice via the `inherits` attribute. Additionally, you can set `inheritanceOnly = true;`, which will hide the rice from being generated in [`delib.configurations`](/configurations/introduction), leaving it only for inheritance.
 
 Example of three rices, where the first two inherit all configurations from the "rounded" rice:
 

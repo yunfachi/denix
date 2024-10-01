@@ -1,5 +1,5 @@
 # Structure {#structure}
-This section uses the variables `myconfigName`, `isHomeManager`, and `homeManagerUser`, so it's recommended to first review the corresponding subsection: [delib.system Function Arguments](/TODO).
+This section uses the variables `myconfigName`, `isHomeManager`, and `homeManagerUser`, so it's recommended to first review the corresponding subsection: [delib.configurations Function Arguments](/configurations/structure#function-arguments).
 
 ## Function Arguments {#function-arguments}
 - `name`{#function-arguments-name}: string. It is recommended that it matches the parent path of the module's `enable` option, such as `"programs.example"`, since the `cfg` argument depends on this path.
