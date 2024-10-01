@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Введение
-      link: /ru/introduction
+      link: /ru/getting_started/introduction
     - theme: alt
       text: GitHub с шаблонами
       link: https://github.com/yunfachi/denix

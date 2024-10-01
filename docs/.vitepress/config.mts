@@ -42,13 +42,13 @@ function themeConfigEnglish() {return {
 
     nav: [
       { text: "Home", link: "/" },
-      { text: "Introduction", link: "/introduction" }
+      { text: "Introduction", link: "/getting_started/introduction" }
     ],
 
     sidebar: [
       {
-        text: "Introduction",
-        items: [{ text: "Introduction", link: "/introduction" }],
+        text: "Getting Started",
+        items: [{ text: "Introduction", link: "/getting_started/introduction" }],
       },
       {
         text: "Modules",
@@ -108,13 +108,13 @@ function themeConfigRussian() {return {
 
     nav: [
       { text: "Главная", link: "/ru/" },
-      { text: "Вступление", link: "/ru/introduction" }
+      { text: "Вступление", link: "/ru/getting_started/introduction" }
     ],
 
     sidebar: [
       {
-        text: "Вступление",
-        items: [{ text: "Вступление", link: "/ru/introduction" }],
+        text: "Начнем",
+        items: [{ text: "Вступление", link: "/ru/getting_started/introduction" }],
       },
       {
         text: "Модули",

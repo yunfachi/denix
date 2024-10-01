@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Introduction
-      link: /introduction
+      link: /getting_started/introduction
     - theme: alt
       text: GitHub with Templates
       link: https://github.com/yunfachi/denix
