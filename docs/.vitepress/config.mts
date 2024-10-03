@@ -48,7 +48,10 @@ function themeConfigEnglish() {return {
     sidebar: [
       {
         text: "Getting Started",
-        items: [{ text: "Introduction", link: "/getting_started/introduction" }],
+        items: [
+          { text: "Introduction", link: "/getting_started/introduction" },
+          { text: "Initialization", link: "/getting_started/initialization" },
+        ],
       },
       {
         text: "Modules",
@@ -114,7 +117,10 @@ function themeConfigRussian() {return {
     sidebar: [
       {
         text: "Начнем",
-        items: [{ text: "Вступление", link: "/ru/getting_started/introduction" }],
+        items: [
+          { text: "Вступление", link: "/ru/getting_started/introduction" },
+          { text: "Инициализация", link: "/ru/getting_started/initialization" },
+        ],
       },
       {
         text: "Модули",
