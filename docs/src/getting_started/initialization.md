@@ -1,4 +1,4 @@
-# Configuration Initialization
+# Configuration Initialization {#initialization}
 This section will describe creating the `minimal` template from scratch.
 
 You do not have to do this; you can simply clone the minimal configuration template with the following command:
@@ -11,7 +11,7 @@ You can also copy the minimal configuration template without the rices:
 nix flake init -t github:yunfachi/denix#minimal-no-rices
 ```
 
-## Flake
+## Flake {#flake}
 First, create a directory for your configuration and a `flake.nix` file with the following content:
 ```nix
 {
@@ -59,7 +59,7 @@ Code explanation:
 - `denix.lib.configurations` - [Configurations (flakes) - Introduction](/configurations/introduction).
 - `paths = [./hosts ./modules ./rices];` - paths to be recursively imported by Denix. Remove `./rices` if you don't want to use rices.
 
-## Hosts
+## Hosts {#hosts}
 Create a `hosts` directory, and within it, create a subdirectory with the name of your host, for example, `desktop`.
 
 In this subdirectory, create a `default.nix` file with the following content:
@@ -91,7 +91,7 @@ delib.host {
 
 The `default.nix` file will be modified later after adding modules and rices, so you can keep it open.
 
-## Rices
+## Rices {#rices}
 Skip this section if you do not wish to use rices.
 
 Create a `rices` directory, and within it, create a subdirectory with the name of your rice, for example, `dark`.
@@ -104,7 +104,7 @@ delib.rice {
 }
 ```
 
-## Modules
+## Modules {#modules}
 Create a `modules` directory, and within it, create a `config` subdirectory (typically, it contains modules that are not tied to a specific program or service).
 
 It should be mentioned that modules represent your configuration, meaning it's up to your imagination, and you are free to change the modules as you wish.
@@ -126,7 +126,7 @@ delib.module {
 
 This file is optional, as are any of its options, which are only used by you, but it is strongly recommended as good practice.
 
-### Hosts
+### Hosts {#modules-hosts}
 Also, create a `hosts.nix` file in this same directory (`modules/config`), and write any example from [Hosts - Examples](/hosts/examples).
 
 For example, we will take ["With the `type` Option"](/hosts/examples#type-option):
@@ -171,7 +171,7 @@ delib.host {
 }
 ```
 
-### Rices
+### Rices {#modules-rices}
 Skip this section if you are not using rices.
 
 In the `modules/config` directory, create a `rices.nix` file, and write any example from [Rices - Examples](/rices/examples).
@@ -208,7 +208,7 @@ delib.host {
 }
 ```
 
-### Home Manager
+### Home Manager {#modules-home-manager}
 If you created a [constants module](#modules-constants), just create a `home.nix` file with the following content:
 ```nix
 {delib, ...}:
@@ -239,7 +239,7 @@ delib.module {
 }
 ```
 
-### User
+### User {#modules-user}
 You can also create a `user.nix` file with the configuration of your NixOS user:
 ```nix
 {delib, ...}:
@@ -280,7 +280,7 @@ delib.module {
 }
 ```
 
-## Conclusion
+## Conclusion {#conclusion}
 If you have followed the instructions precisely, you will end up with the following configuration directory tree:
 ```plaintext
 hosts
