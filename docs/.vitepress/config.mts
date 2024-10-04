@@ -51,6 +51,8 @@ function themeConfigEnglish() {return {
         items: [
           { text: "Introduction", link: "/getting_started/introduction" },
           { text: "Initialization", link: "/getting_started/initialization" },
+          { text: "First Modules", link: "/getting_started/first_modules" },
+          { text: "Transfer to Denix", link: "/getting_started/transfer_to_denix" },
         ],
       },
       {
@@ -120,6 +122,8 @@ function themeConfigRussian() {return {
         items: [
           { text: "Вступление", link: "/ru/getting_started/introduction" },
           { text: "Инициализация", link: "/ru/getting_started/initialization" },
+          { text: "Первые модули", link: "/ru/getting_started/first_modules" },
+          { text: "Перенос на Denix", link: "/ru/getting_started/transfer_to_denix" },
         ],
       },
       {
