@@ -9,11 +9,12 @@
 }: {
   host = {
     name,
-    homeManagerSystem,
     myconfig ? {},
     nixos ? {},
     home ? {},
     shared ? {},
+    # to avoid overwriting
+    # homeManagerSystem ? null,
     ...
   } @ args: let
     sharedDefaults = {
