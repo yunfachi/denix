@@ -164,7 +164,7 @@ function themeConfigRussian() {return {
           { text: "Примеры", link: "/ru/rices/examples" },
         ],
       },
-      { text: "Реальные конфигурации", link: "/real-configurations" },
+      { text: "Реальные конфигурации", link: "/ru/real-configurations" },
     ],
   }
 }}
