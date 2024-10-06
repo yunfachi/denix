@@ -1,4 +1,12 @@
-# Denix
+<p align="center">
+  <a href="#">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/banner_light.svg">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/banner_dark.svg">
+      <img src="https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/banner_light.svg" width="500px" alt="Denix">
+    </picture>
+  </a>
+</p>
 
 Denix is a Nix library designed to help you build scalable configurations for [NixOS](https://nixos.org/) and [Home Manager](https://github.com/nix-community/home-manager).
 
