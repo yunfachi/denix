@@ -12,7 +12,14 @@ export default defineConfig({
   sitemap: {
     hostname: 'https://yunfachi.github.io/denix/'
   },
+  head: [
+    ["link", { rel: "icon", href: "https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg" }],
+  ],
   themeConfig: {
+    logo: {
+      light: "https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_light.svg",
+      dark: "https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg",
+    },
     // https://vitepress.dev/reference/default-theme-config
     socialLinks: [
       { icon: "github", link: "https://github.com/yunfachi/denix" }

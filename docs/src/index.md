@@ -6,6 +6,9 @@ hero:
   name: "Denix Documentation"
   text: "Nix Library for Configurations"
   tagline: "Denix provides tools for creating scalable NixOS and Home Manager configurations with modules, hosts, and rices"
+  image:
+    light: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_light.svg
+    dark: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg
   actions:
     - theme: brand
       text: Introduction

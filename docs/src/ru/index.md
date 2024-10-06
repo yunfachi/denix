@@ -6,6 +6,9 @@ hero:
   name: "Denix Документация"
   text: "Библиотека Nix для конфигураций"
   tagline: Denix предоставляет инструменты для создания масштабируемых конфигураций NixOS и Home Manager с модулями, хостами и райсами
+  image:
+    light: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_light.svg
+    dark: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg
   actions:
     - theme: brand
       text: Введение
