@@ -12,7 +12,7 @@ Denix is a Nix library designed to help you build scalable configurations for [N
 
 ## Documentation
 
-You can find the documentation here: [Denix Documentation](https://yunfachi.github.io/denix/introduction)
+You can find the documentation here: [Denix Documentation](https://yunfachi.github.io/denix/getting_started/introduction)
 
 ## Key Features
 
