@@ -85,7 +85,8 @@ optionName = lib.mkOption {
 Пример модуля с опциями в Denix:
 
 ```nix
-{denix, ...}: delib.module {
+{delib, ...}:
+delib.module {
   name = "coolmodule";
 
   options.coolmodule = with delib; {

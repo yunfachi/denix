@@ -2,6 +2,7 @@
 
 ## Constants {#constants} 
 ```nix
+{delib, ...}:
 delib.module {
   name = "constants";
 
@@ -16,6 +17,7 @@ delib.module {
 ## Hosts {#hosts}
 Without `type` option:
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -35,6 +37,7 @@ delib.module {
 ```
 With `type` option:
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -62,6 +65,7 @@ delib.module {
 
 ## Rices {#rices}
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 
@@ -83,6 +87,7 @@ delib.module {
 ## Home Manager {#home-manager}
 With [constants](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "home";
 
@@ -100,6 +105,7 @@ delib.module {
 ## User {#user}
 With [constants](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "user";
 
@@ -120,6 +126,7 @@ delib.module {
 ## Git {#git}
 With [constants](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "programs.git";
 
@@ -140,6 +147,7 @@ delib.module {
 
 ## Alejandra {#alejandra}
 ```nix
+{delib, ...}:
 delib.module {
   name = "programs.alejandra";
 

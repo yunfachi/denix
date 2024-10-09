@@ -11,6 +11,7 @@ A rice can inherit all configurations of another rice via the `inherits` attribu
 Example of three rices, where the first two inherit all configurations from the "rounded" rice:
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "black";
   inherits = ["rounded"];
@@ -19,6 +20,7 @@ delib.rice {
 ```
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "light";
   inherits = ["rounded"];
@@ -27,6 +29,7 @@ delib.rice {
 ```
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "rounded";
   inheritanceOnly = true;
@@ -40,6 +43,7 @@ For rices to work, your configuration must include the options `${myconfigName}.
 Example of a minimal recommended configuration for rices:
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 

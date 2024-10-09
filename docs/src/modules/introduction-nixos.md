@@ -86,7 +86,7 @@ Denix uses a different approach to options, although both methods can be used si
 An example of a module with options using Denix:
 
 ```nix
-{denix, ...}:
+{delib, ...}:
 delib.module {
   name = "coolmodule";
 

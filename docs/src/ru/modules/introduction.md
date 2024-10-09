@@ -6,17 +6,18 @@
 
 ### Denix модуль
 ```nix
-{delib, ...}: delib.module {
+{delib, ...}:
+delib.module {
   name = "...";
 }
 ```
 
 ### Denix модуль, дополненный NixOS/Home Manager модулем
 ```nix
-{delib, ...}: delib.module {
+{delib, ...}:
+delib.module {
   name = "...";
-}
-// {
+} // {
 
 }
 ```

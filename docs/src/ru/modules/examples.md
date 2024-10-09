@@ -2,6 +2,7 @@
 
 ## Константы {#constants} 
 ```nix
+{delib, ...}:
 delib.module {
   name = "constants";
 
@@ -16,6 +17,7 @@ delib.module {
 ## Хосты {#hosts}
 Без опции `type`:
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -35,6 +37,7 @@ delib.module {
 ```
 С опцией `type`:
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -62,6 +65,7 @@ delib.module {
 
 ## Райсы {#rices}
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 
@@ -83,6 +87,7 @@ delib.module {
 ## Home Manager {#home-manager}
 С [константами](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "home";
 
@@ -100,6 +105,7 @@ delib.module {
 ## Пользователь {#user}
 С [константами](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "user";
 
@@ -120,6 +126,7 @@ delib.module {
 ## Git {#git}
 С [константами](#constants):
 ```nix
+{delib, ...}:
 delib.module {
   name = "programs.git";
 
@@ -140,6 +147,7 @@ delib.module {
 
 ## Alejandra {#alejandra}
 ```nix
+{delib, ...}:
 delib.module {
   name = "programs.alejandra";
 

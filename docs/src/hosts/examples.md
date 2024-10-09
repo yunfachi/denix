@@ -4,6 +4,7 @@
 An example of a minimal host module configuration that serves as a baseline for all further settings:
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -26,6 +27,7 @@ delib.module {
 The `type` option **is very** useful for default values in your modules. For example, the option `enable = boolOption host.isDesktop` can be used for some GUI programs. This simplifies configuration management based on the type of device.
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -55,6 +57,7 @@ delib.module {
 This option can be useful for configuring monitors; however, it can be implemented as a separate module.
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
@@ -96,6 +99,7 @@ delib.module {
 Using `delib.hostNamesAssertions` is strongly recommended, but it can also be omitted.
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 

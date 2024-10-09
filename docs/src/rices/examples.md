@@ -4,6 +4,7 @@
 An example of a minimal rice module configuration that serves as a baseline for all further settings:
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 
@@ -26,6 +27,7 @@ delib.module {
 Using `delib.riceNamesAssertions` is strongly recommended, but it can also be omitted.
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 

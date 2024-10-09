@@ -11,6 +11,7 @@
 Пример трех райсов, где первые два наследуют все конфигурации райса "rounded":
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "black";
   inherits = ["rounded"];
@@ -19,6 +20,7 @@ delib.rice {
 ```
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "light";
   inherits = ["rounded"];
@@ -27,6 +29,7 @@ delib.rice {
 ```
 
 ```nix
+{delib, ...}:
 delib.rice {
   name = "rounded";
   inheritanceOnly = true;
@@ -40,6 +43,7 @@ delib.rice {
 Пример минимальной рекомендуемой конфигурации для райсов:
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "rices";
 

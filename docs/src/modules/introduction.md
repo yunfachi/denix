@@ -6,17 +6,18 @@ This means that you can use all three types of modules simultaneously, although 
 
 ### Denix Module
 ```nix
-{delib, ...}: delib.module {
+{delib, ...}:
+delib.module {
   name = "...";
 }
 ```
 
 ### Denix Module with NixOS/Home Manager Module
 ```nix
-{delib, ...}: delib.module {
+{delib, ...}:
+delib.module {
   name = "...";
-}
-// {
+} // {
 
 }
 ```

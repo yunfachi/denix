@@ -11,6 +11,7 @@ For hosts to work, the configuration must include the options `${myconfigName}.h
 Here is an example of a minimal recommended host configuration:
 
 ```nix
+{delib, ...}:
 delib.module {
   name = "hosts";
 
