@@ -21,11 +21,13 @@
 in rec {
   inherit (lib.types) anything attrsOf bool enum float int listOf number package path port singleLineStr str submodule;
   attrs = attrsOf anything;
+  attrsLegacy = lib.types.attrs;
   lambda = lib.types.functionTo anything;
   lambdaTo = lib.types.functionTo;
   list = listOf anything;
 
   anythingOption = simpleOption anything;
+  attrsLegacyOption = simpleOption attrsLegacy;
   attrsOfOption = simpleOptionWithParameter attrsOf;
   attrsOption = simpleOption attrs;
   boolOption = simpleOption bool;
@@ -46,6 +48,7 @@ in rec {
 
   allowAnything = addTypeToOption anything;
   allowAttrs = addTypeToOption attrs;
+  allowAttrsLegacy = addTypeToOption attrsLegacy;
   allowAttrsOf = addTypeWithParameterToOption attrsOf;
   allowBool = addTypeToOption bool;
   allowEnum = addTypeWithParameterToOption enum;
