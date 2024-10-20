@@ -1,9 +1,9 @@
 {
   lib,
   apply,
-  config,
   myconfigName,
   options,
+  config,
   currentHostName,
   ...
 }: {
@@ -16,57 +16,73 @@
     # to avoid overwriting
     # homeManagerSystem ? null,
     ...
-  } @ args: let
-    sharedDefaults = {
-      myconfig ? {},
-      nixos ? {},
-      home ? {},
-    }: {inherit myconfig nixos home;};
-    _shared = sharedDefaults shared;
+  } @ args: {
+    imports = [
+      ({config, ...}: let
+        sharedDefaults = {
+          myconfig ? {},
+          nixos ? {},
+          home ? {},
+        }: {inherit myconfig nixos home;};
+        _shared = sharedDefaults shared;
 
-    wrap = x:
-      if builtins.typeOf x == "lambda"
-      then
-        x {
-          inherit name;
-          cfg = config.${myconfigName}.hosts.${name};
-          myconfig = config.${myconfigName};
-        }
-      else x;
-  in {
-    config.${myconfigName}.hosts.${name} = args;
+        wrap = x:
+          if builtins.typeOf x == "lambda"
+          then
+            x {
+              inherit name;
+              cfg = config.${myconfigName}.hosts.${name};
+              myconfig = config.${myconfigName};
+            }
+          else x;
+      in {
+        config.${myconfigName}.hosts.${name} =
+          args
+          // {
+            myconfig = wrap myconfig;
+            nixos = wrap nixos;
+            home = wrap home;
+            shared = {
+              myconfig = wrap _shared.myconfig;
+              nixos = wrap _shared.nixos;
+              home = wrap _shared.home;
+            };
+          };
 
-    imports =
-      [
-        (apply.myconfig (wrap _shared.myconfig))
-        (apply.nixos (wrap _shared.nixos))
-        (apply.home (wrap _shared.home))
-      ]
-      ++ (
-        if currentHostName == name
-        then [
-          (apply.myconfig (wrap myconfig))
-          (apply.nixos (wrap nixos))
-          (apply.home (wrap home))
-        ]
-        else []
-      );
+        imports =
+          [
+            (apply.myconfig (wrap _shared.myconfig))
+            (apply.nixos (wrap _shared.nixos))
+            (apply.home (wrap _shared.home))
+          ]
+          ++ (
+            if currentHostName == name
+            then [
+              (apply.myconfig (wrap myconfig))
+              (apply.nixos (wrap nixos))
+              (apply.home (wrap home))
+            ]
+            else []
+          );
+      })
+    ];
   };
 
+  # TODO: get config through `hostSubmoduleOption = config: ...`
   hostSubmoduleOptions = with options;
     {
       name = strOption null;
 
       homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
-      myconfig = allowLambdaTo attrs (attrsOption {});
-      nixos = allowLambdaTo attrs (attrsOption {});
-      home = allowLambdaTo attrs (attrsOption {});
+      myconfig = attrsOption {};
+      nixos = attrsOption {};
+      home = attrsOption {};
 
       shared = {
-        myconfig = allowLambdaTo attrs (attrsOption {});
-        nixos = allowLambdaTo attrs (attrsOption {});
-        home = allowLambdaTo attrs (attrsOption {});
+        myconfig = attrsOption {};
+        nixos = attrsOption {};
+        home = attrsOption {};
       };
     }
     // lib.optionalAttrs (config.${myconfigName} ? rices) {

@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   myconfigName,
   options,
   ...
@@ -13,26 +12,28 @@
     nixos ? {},
     home ? {},
     ...
-  } @ args: let
-    wrap = x:
-      if builtins.typeOf x == "lambda"
-      then
-        x {
-          inherit name;
-          cfg = config.${myconfigName}.rices.${name};
-          myconfig = config.${myconfigName};
-        }
-      else x;
-  in {
-    config.${myconfigName}.rices.${name} =
-      {
-        inherit name;
-        myconfig = wrap myconfig;
-        nixos = wrap nixos;
-        home = wrap home;
-      }
-      // lib.optionalAttrs inheritanceOnly {inherit inheritanceOnly;}
-      // lib.optionalAttrs (inherits != []) {inherit inherits;};
+  } @ args: {
+    imports = [
+      ({config, ...}: let
+        wrap = x:
+          if builtins.typeOf x == "lambda"
+          then
+            x {
+              inherit name;
+              cfg = config.${myconfigName}.rices.${name};
+              myconfig = config.${myconfigName};
+            }
+          else x;
+      in {
+        config.${myconfigName}.rices.${name} =
+          args
+          // {
+            myconfig = wrap myconfig;
+            nixos = wrap nixos;
+            home = wrap home;
+          };
+      })
+    ];
   };
 
   riceSubmoduleOptions = with options; {
@@ -40,9 +41,9 @@
     inherits = listOfOption str [];
     inheritanceOnly = boolOption false;
 
-    myconfig = allowLambdaTo attrs (attrsOption {});
-    nixos = allowLambdaTo attrs (attrsOption {});
-    home = allowLambdaTo attrs (attrsOption {});
+    myconfig = attrsOption {};
+    nixos = attrsOption {};
+    home = attrsOption {};
   };
 
   riceOption = rice:
