@@ -32,7 +32,7 @@ in {
       apply = mkApply isHomeManager;
 
       host = import ./host.nix {inherit lib apply config myconfigName options currentHostName;};
-      module = import ./module.nix {inherit lib apply attrset config myconfigName;};
+      module = import ./module.nix {inherit lib apply attrset myconfigName;};
       options = import ./options.nix {inherit lib attrset;};
       rice = import ./rice.nix {inherit lib config myconfigName options;};
     in
