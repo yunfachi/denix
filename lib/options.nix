@@ -19,7 +19,8 @@
   simpleOptionWithParameter = type: elemType: default:
     simpleOption (type elemType) default;
 in rec {
-  inherit (lib.types) anything attrs attrsOf bool enum float int listOf number package path port singleLineStr str submodule;
+  inherit (lib.types) anything attrsOf bool enum float int listOf number package path port singleLineStr str submodule;
+  attrs = attrsOf anything;
   lambda = lib.types.functionTo anything;
   lambdaTo = lib.types.functionTo;
   list = listOf anything;
