@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "Nix library for creating scalable NixOS and Home Manager configurations with modules, hosts, and rices.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -27,6 +27,13 @@
           It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
         '';
         path = ./templates/minimal;
+      };
+      minimal-no-rices = {
+        description = ''
+          Minimal configuration with hosts, constants, home manager, and user config.
+          It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
+        '';
+        path = ./templates/minimal-no-rices;
       };
     };
   };
