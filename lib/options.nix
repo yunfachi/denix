@@ -19,7 +19,7 @@
   simpleOptionWithParameter = type: elemType: default:
     simpleOption (type elemType) default;
 in rec {
-  inherit (lib.types) anything attrsOf bool enum float int listOf number package path port singleLineStr str submodule;
+  inherit (lib.types) anything attrsOf bool coercedTo enum float int listOf number package path port singleLineStr str submodule;
   attrs = attrsOf anything;
   attrsLegacy = lib.types.attrs;
   lambda = lib.types.functionTo anything;
@@ -31,6 +31,7 @@ in rec {
   attrsOfOption = simpleOptionWithParameter attrsOf;
   attrsOption = simpleOption attrs;
   boolOption = simpleOption bool;
+  coercedToOption = coercedType: coerceFunc: finalType: simpleOption (coercedTo coercedType coerceFunc finalType);
   enumOption = simpleOptionWithParameter enum;
   floatOption = simpleOption float;
   intOption = simpleOption int;
@@ -51,6 +52,7 @@ in rec {
   allowAttrsLegacy = addTypeToOption attrsLegacy;
   allowAttrsOf = addTypeWithParameterToOption attrsOf;
   allowBool = addTypeToOption bool;
+  allowCoercedToOption = coercedType: coerceFunc: finalType: addTypeToOption (coercedTo coercedType coerceFunc finalType);
   allowEnum = addTypeWithParameterToOption enum;
   allowFloat = addTypeToOption float;
   allowInt = addTypeToOption int;
