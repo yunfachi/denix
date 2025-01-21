@@ -10,7 +10,7 @@ Let's assume you already have a constants module. Create a file `modules/program
 delib.module {
   name = "programs.git";
 
-  options = with delib; {
+  options.programs.git = with delib; {
     enable = boolOption true;
     enableLFS = boolOption true;
   };
