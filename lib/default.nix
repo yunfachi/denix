@@ -8,6 +8,7 @@
 
   attrset = import ./attrset.nix {inherit lib;};
 in {
+  inherit umport;
   configurations = {
     myconfigName ? "myconfig",
     denixLibName ? "delib",
