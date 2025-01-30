@@ -1,6 +1,6 @@
 {
+  delib,
   lib,
-  attrset,
   ...
 }: let
   mkOption = default: types:
@@ -75,5 +75,5 @@ in rec {
   description = option: description: option // {inherit description;};
 
   singleEnableOption = default: {name, ...}:
-    attrset.setAttrByStrPath "${name}.enable" (boolOption default);
+    delib.attrset.setAttrByStrPath "${name}.enable" (boolOption default);
 }

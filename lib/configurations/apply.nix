@@ -1,5 +1,4 @@
 {
-  lib,
   homeManagerUser,
   isHomeManager,
   myconfigName,

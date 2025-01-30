@@ -1,7 +1,7 @@
 {
+  delib,
   lib,
   apply,
-  attrset,
   myconfigName,
   ...
 }: {
@@ -14,7 +14,7 @@
   }: {
     imports = [
       ({config, ...}: let
-        cfg = attrset.getAttrByStrPath name config.${myconfigName} {};
+        cfg = delib.attrset.getAttrByStrPath name config.${myconfigName} {};
 
         wrap = x:
           if builtins.typeOf x == "lambda"
@@ -34,8 +34,8 @@
         _nixos = defaults nixos;
         _home = defaults home;
 
-        enabled = attrset.getAttrByStrPath "enable" cfg false;
-        disabled = !(attrset.getAttrByStrPath "enable" cfg true);
+        enabled = delib.attrset.getAttrByStrPath "enable" cfg false;
+        disabled = !(delib.attrset.getAttrByStrPath "enable" cfg true);
       in {
         options.${myconfigName} = wrap options;
 

@@ -1,8 +1,8 @@
 {
+  delib,
   lib,
   apply,
   myconfigName,
-  options,
   config,
   currentHostName,
   ...
@@ -69,7 +69,7 @@
   };
 
   # TODO: get config through `hostSubmoduleOption = config: ...`
-  hostSubmoduleOptions = with options;
+  hostSubmoduleOptions = with delib.options;
     {
       name = strOption null;
 
@@ -90,9 +90,9 @@
     };
 
   hostOption = host:
-    with options; noDefault (submoduleOption host null);
+    with delib.options; noDefault (submoduleOption host null);
   hostsOption = host:
-    with options; attrsOfOption (submodule host) {};
+    with delib.options; attrsOfOption (submodule host) {};
 
   hostNamesAssertions = hosts:
     builtins.attrValues (builtins.mapAttrs

@@ -1,7 +1,6 @@
 {
-  lib,
+  delib,
   myconfigName,
-  options,
   ...
 }: {
   rice = {
@@ -36,7 +35,7 @@
     ];
   };
 
-  riceSubmoduleOptions = with options; {
+  riceSubmoduleOptions = with delib.options; {
     name = strOption null;
     inherits = listOfOption str [];
     inheritanceOnly = boolOption false;
@@ -47,9 +46,9 @@
   };
 
   riceOption = rice:
-    with options; allowNull (submoduleOption rice null);
+    with delib.options; allowNull (submoduleOption rice null);
   ricesOption = rice:
-    with options; attrsOfOption (submodule rice) {};
+    with delib.options; attrsOfOption (submodule rice) {};
 
   riceNamesAssertions = rices:
     builtins.attrValues (builtins.mapAttrs
