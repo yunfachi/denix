@@ -31,7 +31,7 @@
         callLib = file: import file {inherit delib lib apply config myconfigName currentHostName;};
       in
         {
-          # TODO: bring back after removing `// callLib ./options.nix` in ../default.nix
+          # not really needed
           # inherit apply;
         }
         // callLib ./host.nix

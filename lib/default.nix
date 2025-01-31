@@ -15,6 +15,5 @@ lib.makeExtensible (
       options = callLib ./options.nix;
       umport = callLib ./umport.nix;
     }
-    # TODO: remove this in favor of delib.options
     // callLib ./options.nix
 )
