@@ -27,7 +27,7 @@ First, create a directory for your configuration and a `flake.nix` file with the
       inputs.home-manager.follows = "home-manager";
     };
   };
-  
+
   outputs = {
     denix,
     nixpkgs,

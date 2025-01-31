@@ -28,25 +28,25 @@ delib.host {
   # then {config.${myConfigName} = ...;}
   # else {}
   myconfig = {name, cfg, myconfig, ...}: {};
-  
+
   # if config.${myconfigName}.host == name
   # then {config = ...;}
   # else {}
   nixos = {name, cfg, myconfig, ...}: {};
-  
+
   # if config.${myconfigName}.host == name, then
   #   if isHomeManager
   #   then {config = ...;}
   #   else {config.home-manager.users.${homeManagerUser} = ...;}
   # else {}
   home = {name, cfg, myconfig, ...}: {};
-  
+
   # config.${myConfigName} = ...
   shared.myconfig = {name, cfg, myconfig, ...}: {};
-  
+
   # config = ...
   shared.nixos = {name, cfg, myconfig, ...}: {};
-  
+
   # if isHomeManager
   # then {}
   # else {config = ...;}

@@ -14,7 +14,7 @@ This section uses the variables `myconfigName`, `isHomeManager`, and `homeManage
 
 ## Passed Arguments {#passed-arguments}
 A list of arguments passed to `options` and `[myconfig|nixos|home].[ifEnabled|ifDisabled|always]`, if their type is a `lambda`:
-- `name`: the same [name](#function-arguments-name) from the `delib.module` arguments. 
+- `name`: the same [name](#function-arguments-name) from the `delib.module` arguments.
 - `myconfig`: equals `config.${myConfigName}`.
 - `cfg`{#passed-arguments-cfg}: equals the result of the expression `delib.getAttrByStrPath name config.${myConfigName} {}`, where `name` is the [argument](#function-arguments-name) from `delib.module`, and `{}` is the value returned if the attribute is not found.
 
@@ -22,7 +22,7 @@ A list of arguments passed to `options` and `[myconfig|nixos|home].[ifEnabled|if
 ```nix
 delib.module {
   name = "";
-  
+
   # options.${myConfigName} = ...
   options = {name, cfg, myconfig, ...}: {};
 

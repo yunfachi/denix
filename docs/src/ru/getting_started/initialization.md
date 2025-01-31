@@ -1,5 +1,5 @@
 # Инициализация конфигурации {#initialization}
-В этом разделе будет описано создание шаблона `minimal` с нуля. 
+В этом разделе будет описано создание шаблона `minimal` с нуля.
 
 Делать это необязательно, можно просто склонировать шаблон минимальной конфигурации с помощью команды:
 ```sh
@@ -27,7 +27,7 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
       inputs.home-manager.follows = "home-manager";
     };
   };
-  
+
   outputs = {
     denix,
     nixpkgs,

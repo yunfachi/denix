@@ -1,6 +1,6 @@
 # Примеры
 
-## Константы {#constants} 
+## Константы {#constants}
 ```nix
 {delib, ...}:
 delib.module {

@@ -1,5 +1,5 @@
 # First Modules {#first-modules}
-In this section, we will create modules for some programs. To start, create the `programs` and `services` subdirectories in the `modules` directory. 
+In this section, we will create modules for some programs. To start, create the `programs` and `services` subdirectories in the `modules` directory.
 
 Creating your own modules is almost the same as creating regular NixOS modules, so you can look for NixOS options [here](https://search.nixos.org/options?).
 

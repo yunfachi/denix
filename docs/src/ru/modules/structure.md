@@ -14,7 +14,7 @@
 
 ## Передаваемые аргументы {#passed-arguments}
 Список аргументов, которые передаются в `options` и `[myconfig|nixos|home].[ifEnabled|ifDisabled|always]`, если их тип - это `lambda`:
-- `name`: тот же [name](#function-arguments-name) из аргументов `delib.module`. 
+- `name`: тот же [name](#function-arguments-name) из аргументов `delib.module`.
 - `myconfig`: равен `config.${myConfigName}`.
 - `cfg`{#passed-arguments-cfg}: равен результату выражения `delib.getAttrByStrPath name config.${myConfigName} {}`, где `name` - это [аргумент](#function-arguments-name) `delib.module`, а `{}` - значение, которое возвращается, если атрибут не найден.
 
@@ -22,7 +22,7 @@
 ```nix
 delib.module {
   name = "";
-  
+
   # options.${myConfigName} = ...
   options = {name, cfg, myconfig, ...}: {};
 
