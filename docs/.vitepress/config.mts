@@ -40,7 +40,7 @@ function themeConfigEnglish() {return {
   link: "/",
   title: "Denix Documentation",
   description: "Nix library for creating scalable NixOS and Home Manager configurations with modules, hosts, and rices",
-  
+
   themeConfig: {
     editLink: {
       pattern: "https://github.com/yunfachi/denix/edit/master/docs/src/:path",
@@ -100,6 +100,7 @@ function themeConfigEnglish() {return {
           { text: "Examples", link: "/rices/examples" }
         ],
       },
+      { text: "Common Errors", link: "/troubleshooting" },
       { text: "Real Configurations", link: "/real-configurations" },
     ],
   }
@@ -171,6 +172,7 @@ function themeConfigRussian() {return {
           { text: "Примеры", link: "/ru/rices/examples" },
         ],
       },
+      { text: "Распространённые ошибки", link: "/ru/troubleshooting" },
       { text: "Реальные конфигурации", link: "/ru/real-configurations" },
     ],
   }
