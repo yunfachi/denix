@@ -76,4 +76,11 @@ in rec {
 
   singleEnableOption = default: {name, ...}:
     delib.attrset.setAttrByStrPath "${name}.enable" (boolOption default);
+
+  featuresEnableOption =
+    defaultEnabled: defaultFeatures: { name, ... }:
+    delib.attrset.setAttrByStrPath name {
+      enable = boolOption defaultEnabled;
+      features = listOfOption str defaultFeatures;
+    };
 }
