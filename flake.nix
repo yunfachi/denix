@@ -7,13 +7,23 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
+    self,
     nixpkgs,
     home-manager,
+    pre-commit-hooks,
     ...
-  }: {
+  }: let
+    supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+  in {
     lib = import ./lib {
       inherit (nixpkgs) lib;
       inherit home-manager;
@@ -36,5 +46,19 @@
         path = ./templates/minimal-no-rices;
       };
     };
+
+    checks = forAllSystems (system: {
+      pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        src = ./.;
+        hooks.alejandra.enable = true;
+      };
+    });
+
+    devShells = forAllSystems (system: {
+      default = nixpkgs.legacyPackages.${system}.mkShell {
+        inherit (self.checks.${system}.pre-commit-check) shellHook;
+        buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+      };
+    });
   };
 }
