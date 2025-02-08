@@ -21,7 +21,7 @@
           if builtins.typeOf x == "lambda"
           then
             x {
-              inherit name cfg;
+              inherit name cfg featured;
               myconfig = config.${myconfigName};
             }
           else x;
