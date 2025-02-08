@@ -1,4 +1,4 @@
-# Common Errorse {#troubleshooting}
+# Common Errors {#troubleshooting}
 This section lists some common errors and their possible solutions.
 
 ## Conditional Imports {#conditional-imports}
