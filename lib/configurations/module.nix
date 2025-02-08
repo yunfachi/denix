@@ -38,7 +38,7 @@
 
         enabled = delib.attrset.getAttrByStrPath "enable" cfg false;
         disabled = !(delib.attrset.getAttrByStrPath "enable" cfg true);
-        featured = enabled && lib.lists.elem feature (delib.attrset.getAttrByStrPath "features" cfg [ ]);
+        featured = enabled && lib.lists.elem feature (delib.attrset.getAttrByStrPath "features" cfg []);
       in {
         options.${myconfigName} = wrap options;
 
