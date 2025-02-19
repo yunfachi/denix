@@ -69,6 +69,11 @@ in rec {
   allowStr = addTypeToOption str;
 
   noDefault = option: builtins.removeAttrs option ["default"];
+  # This is a more convenient way to handle the presence of a default value in the option based on the condition (#18)
+  noNullDefault = option:
+    if option.default == null
+    then builtins.removeAttrs option ["default"]
+    else option;
   readOnly = option: option // {readOnly = true;};
 
   apply = option: apply: option // {inherit apply;};
