@@ -31,6 +31,7 @@ Functions related to options are divided into four main types:
 
 ### Directly Modifying the Attribute Set of an Option
 - `noDefault <option>` - removes the `default` attribute from the option. It is rarely used since options without a default value are uncommon.
+- `noNullDefault <option>` - removes the `default` attribute from the option if its value is `null`. Used for default value logic where its absence is allowed.
 - `readOnly <option>` - adds the `readOnly` attribute with the value `true`.
 - `apply <option> <apply>` - adds the `apply` attribute with the value passed to this function.
 - `description <option> <description>` - adds the `description` attribute with the given value.
@@ -46,14 +47,15 @@ The list of current options can be found in the source code: [github:yunfachi/de
 
 ## Examples {#examples}
 
-| Denix                                      | lib.mkOption                                                 |
-|--------------------------------------------|--------------------------------------------------------------|
-| `portOption 22`                            | `mkOption {type = types.port; default = 22;}`                |
-| `noDefault (portOption null)`              | `mkOption {type = types.port;}`                              |
-| `allowNull (portOption null)`              | `mkOption {type = types.nullOr types.port; default = null;}` |
-| `allowStr (portOption "22")`               | `mkOption {type = types.strOr types.port; default = "22";}`  |
-| `listOfOption port []`                     | `mkOption {type = types.listOf types.port; default = [];}`   |
-| `readOnly (noDefault (portOption null))`   | `mkOption {type = types.port; readOnly = true;}`             |
-| `singleEnableOption true {name = "git";}`  | `git.enable = mkEnableOption "git" // {default = true;}`     |
+| Denix                                                                       | lib.mkOption                                                                                             |
+|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `portOption 22`                                                             | `mkOption {type = types.port; default = 22;}`                                                            |
+| `noDefault (portOption null)`                                               | `mkOption {type = types.port;}`                                                                          |
+| `noNullDefault (if myconfig.server.enable then "127.0.0.1:4533" else null)` | `mkOption {type = types.str;} // (if myconfig.server.enable then {default = "127.0.0.1:4533";} else {})` |
+| `allowNull (portOption null)`                                               | `mkOption {type = types.nullOr types.port; default = null;}`                                             |
+| `allowStr (portOption "22")`                                                | `mkOption {type = types.strOr types.port; default = "22";}`                                              |
+| `listOfOption port []`                                                      | `mkOption {type = types.listOf types.port; default = [];}`                                               |
+| `readOnly (noDefault (portOption null))`                                    | `mkOption {type = types.port; readOnly = true;}`                                                         |
+| `singleEnableOption true {name = "git";}`                                   | `git.enable = mkEnableOption "git" // {default = true;}`                                                 |
 
 > *(Usually `{name = "git";}` is not required, as this function is mainly used in `delib.module :: options`)*
