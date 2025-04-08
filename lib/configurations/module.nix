@@ -16,25 +16,30 @@
       ({config, ...}: let
         cfg = delib.attrset.getAttrByStrPath name config.${myconfigName} {};
 
-        wrap = x:
-          if builtins.typeOf x == "lambda"
+        wrap = object:
+          if builtins.typeOf object == "lambda"
           then
-            x {
+            object {
               inherit name cfg;
               myconfig = config.${myconfigName};
             }
-          else x;
+          else object;
 
         defaults = {
           ifEnabled ? {},
           ifDisabled ? {},
           always ? {},
-        }: {inherit ifEnabled ifDisabled always;};
+        }: {
+          inherit ifEnabled ifDisabled always;
+        };
+
         _myconfig = defaults myconfig;
         _nixos = defaults nixos;
         _home = defaults home;
 
+        # If the `cfg.enable` option is missing, do not import ifEnabled or ifDisabled.
         enabled = delib.attrset.getAttrByStrPath "enable" cfg false;
+        # Not `disabled = !enabled`, because it behaves differently when the 'enable' option is missing.
         disabled = !(delib.attrset.getAttrByStrPath "enable" cfg true);
       in {
         options.${myconfigName} = wrap options;
