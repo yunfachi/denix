@@ -50,18 +50,10 @@
           };
 
         imports =
-          [
-            (apply.myconfig (wrap _shared.myconfig))
-            (apply.nixos (wrap _shared.nixos))
-            (apply.home (wrap _shared.home))
-          ]
+          (apply.listOfEverything (wrap _shared.myconfig) (wrap _shared.nixos) (wrap _shared.home))
           ++ (
             if currentHostName == name
-            then [
-              (apply.myconfig (wrap myconfig))
-              (apply.nixos (wrap nixos))
-              (apply.home (wrap home))
-            ]
+            then apply.listOfEverything (wrap myconfig) (wrap nixos) (wrap home)
             else []
           );
       })

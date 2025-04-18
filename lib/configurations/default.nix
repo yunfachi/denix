@@ -104,9 +104,9 @@
         in
           [
             ({options, ...}: {config.${myconfigName} = {inherit host;} // lib.optionalAttrs (options.${myconfigName} ? rice) {inherit rice;};})
-            (lib.optionalAttrs (rice != null) (apply.all rice.myconfig rice.nixos rice.home))
           ]
-          ++ map (riceName: (apply.all rices.${riceName}.myconfig rices.${riceName}.nixos rices.${riceName}.home)) (rice.inherits or []);
+          ++ (lib.optionalAttrs (rice != null) (apply.listOfEverything rice.myconfig rice.nixos rice.home))
+          ++ builtins.concatMap (riceName: (apply.listOfEverything rices.${riceName}.myconfig rices.${riceName}.nixos rices.${riceName}.home)) (rice.inherits or []);
       };
     in
       system;

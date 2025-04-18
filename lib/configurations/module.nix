@@ -44,11 +44,10 @@
       in {
         options.${myconfigName} = wrap options;
 
-        imports = [
-          (apply.all (wrap _myconfig.always) (wrap _nixos.always) (wrap _home.always))
-          (lib.mkIf enabled (apply.all (wrap _myconfig.ifEnabled) (wrap _nixos.ifEnabled) (wrap _home.ifEnabled)))
-          (lib.mkIf disabled (apply.all (wrap _myconfig.ifDisabled) (wrap _nixos.ifDisabled) (wrap _home.ifDisabled)))
-        ];
+        imports =
+          (apply.listOfEverything (wrap _myconfig.always) (wrap _nixos.always) (wrap _home.always))
+          ++ (apply.listOfEverything (lib.mkIf enabled (wrap _myconfig.ifEnabled)) (lib.mkIf enabled (wrap _nixos.ifEnabled)) (lib.mkIf enabled (wrap _home.ifEnabled)))
+          ++ (apply.listOfEverything (lib.mkIf disabled (wrap _myconfig.ifDisabled)) (lib.mkIf disabled (wrap _nixos.ifDisabled)) (lib.mkIf disabled (wrap _home.ifDisabled)));
       })
     ];
   };

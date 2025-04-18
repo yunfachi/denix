@@ -3,24 +3,22 @@
   isHomeManager,
   myconfigName,
   ...
-}: {
-  myconfig = myconfig: {
-    ${myconfigName} = myconfig;
+}: rec {
+  myconfig = _myconfig: {
+    ${myconfigName} = _myconfig;
   };
-  nixos = nixos:
+  nixos = _nixos:
     if !isHomeManager
-    then nixos
+    then _nixos
     else {};
-  home = home:
+  home = _home:
     if isHomeManager
-    then home
-    else {home-manager.users.${homeManagerUser} = home;};
+    then _home
+    else {home-manager.users.${homeManagerUser} = _home;};
 
-  all = myconfig: nixos: home:
-    {${myconfigName} = myconfig;}
-    // (
-      if isHomeManager
-      then home
-      else (nixos // {home-manager.users.${homeManagerUser} = home;})
-    );
+  listOfEverything = _myconfig: _nixos: _home: [
+    (myconfig _myconfig)
+    (nixos _nixos)
+    (home _home)
+  ];
 }
