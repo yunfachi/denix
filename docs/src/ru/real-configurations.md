@@ -2,7 +2,7 @@
 В этом разделе представлен список конфигураций NixOS и Home Manager, которые используют Denix и могут служить примерами хорошей практики*. Вы можете добавить свою конфигурацию в этот список через [pull request](https://github.com/yunfachi/denix/pulls) или [issue](https://github.com/yunfachi/denix/issues).
 
 ## Yunfachi - [nix-config](https://github.com/yunfachi/nix-config) {#yunfachi}
-[![](https://github.com/user-attachments/assets/fc5ab8bf-613e-496a-aec9-8418b5d06173)](https://github.com/user-attachments/assets/fc5ab8bf-613e-496a-aec9-8418b5d06173)
+[![](https://github.com/user-attachments/assets/c7406818-e906-47b0-9a31-6a2d9916e4fa)](https://github.com/user-attachments/assets/c7406818-e906-47b0-9a31-6a2d9916e4fa)
 
 **Особенности:**
 
