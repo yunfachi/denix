@@ -120,7 +120,7 @@
               if rice == null
               then
                 (
-                  if host.rice == null
+                  if (host.rice or null) == null
                   then null
                   else rices.${host.rice}
                 )
