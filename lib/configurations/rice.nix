@@ -10,6 +10,7 @@
     myconfig ? {},
     nixos ? {},
     home ? {},
+    darwin ? {},
     ...
   } @ args: {
     imports = [
@@ -30,6 +31,7 @@
             myconfig = wrap myconfig;
             nixos = wrap nixos;
             home = wrap home;
+            darwin = wrap darwin;
           };
       })
     ];
@@ -43,6 +45,7 @@
     myconfig = attrsOption {};
     nixos = attrsOption {};
     home = attrsOption {};
+    darwin = attrsOption {};
   };
 
   riceOption = rice:

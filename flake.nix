@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,6 +21,7 @@
     self,
     nixpkgs,
     home-manager,
+    nix-darwin,
     pre-commit-hooks,
     ...
   }: let
@@ -26,8 +31,7 @@
   in {
     lib = import ./lib {
       inherit (nixpkgs) lib;
-      inherit home-manager;
-      inherit nixpkgs;
+      inherit home-manager nix-darwin nixpkgs;
     };
 
     templates = {

@@ -2,11 +2,12 @@
   lib,
   nixpkgs,
   home-manager,
+  nix-darwin,
   ...
 }:
 lib.makeExtensible (
   delib: let
-    callLib = file: import file {inherit delib lib nixpkgs home-manager;};
+    callLib = file: import file {inherit delib lib nixpkgs home-manager nix-darwin;};
   in
     {
       configurations = callLib ./configurations;

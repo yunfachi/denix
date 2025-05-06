@@ -12,6 +12,7 @@
     myconfig ? {},
     nixos ? {},
     home ? {},
+    darwin ? {},
     shared ? {},
     # to avoid overwriting
     # homeManagerSystem ? null,
@@ -23,7 +24,8 @@
           myconfig ? {},
           nixos ? {},
           home ? {},
-        }: {inherit myconfig nixos home;};
+          darwin ? {},
+        }: {inherit myconfig nixos home darwin;};
         _shared = sharedDefaults shared;
 
         wrap = x:
@@ -42,18 +44,20 @@
             myconfig = wrap myconfig;
             nixos = wrap nixos;
             home = wrap home;
+            darwin = wrap darwin;
             shared = {
               myconfig = wrap _shared.myconfig;
               nixos = wrap _shared.nixos;
               home = wrap _shared.home;
+              darwin = wrap _shared.darwin;
             };
           };
 
         imports =
-          (apply.listOfEverything (wrap _shared.myconfig) (wrap _shared.nixos) (wrap _shared.home))
+          (apply.listOfEverything (wrap _shared.myconfig) (wrap _shared.nixos) (wrap _shared.home) (wrap _shared.darwin))
           ++ (
             if currentHostName == name
-            then apply.listOfEverything (wrap myconfig) (wrap nixos) (wrap home)
+            then apply.listOfEverything (wrap myconfig) (wrap nixos) (wrap home) (wrap darwin)
             else []
           );
       })
@@ -70,11 +74,13 @@
       myconfig = attrsOption {};
       nixos = attrsOption {};
       home = attrsOption {};
+      darwin = attrsOption {};
 
       shared = {
         myconfig = attrsOption {};
         nixos = attrsOption {};
         home = attrsOption {};
+        darwin = attrsOption {};
       };
     }
     // lib.optionalAttrs (config.${myconfigName} ? rices) {
