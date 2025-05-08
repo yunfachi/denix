@@ -21,7 +21,6 @@
   } @ inputs: let
     mkConfigurations = isHomeManager:
       denix.lib.configurations {
-        homeManagerNixpkgs = nixpkgs;
         homeManagerUser = "sjohn";
         inherit isHomeManager;
 

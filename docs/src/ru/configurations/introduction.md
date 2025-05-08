@@ -32,7 +32,6 @@ nixos-rebuild switch --flake .#desktop-dark --use-remote-sudo
 outputs = {denix, nixpkgs, ...} @ inputs: let
   mkConfigurations = isHomeManager:
     denix.lib.configurations rec {
-      homeManagerNixpkgs = nixpkgs;
       homeManagerUser = "sjohn";
       inherit isHomeManager;
 

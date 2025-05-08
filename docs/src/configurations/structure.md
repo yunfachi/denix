@@ -3,7 +3,7 @@
 ## Function Arguments {#function-arguments}
 - `myconfigName` (string): the category for all Denix module options, hosts, and rices. Default is `myconfig`; changes are not recommended.
 - `denixLibName` (string): the name of the Denix library in `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). Default is `delib`; changes are not recommended.
-- `homeManagerNixpkgs` (nixpkgs): used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function in the format: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. By default, it takes `nixpkgs` from the flake.
+- `homeManagerNixpkgs` (nixpkgs): used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function in the format: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. By default, it takes `nixpkgs` from the flake, so if you've set `inputs.denix.inputs.nixpkgs.follows = "nixpkgs";`, specifying `homeManagerNixpkgs` is typically unnecessary.
 - `homeManagerUser` (string): the username, used in `home-manager.users.${homeManagerUser}` and for generating the Home Manager configuration list.
 - `isHomeManager` (boolean): indicates whether to create a configuration list for Home Manager or for NixOS.
 - `paths` (listOf string): paths to be imported; add hosts, rices, and modules here. Default is `[]`.

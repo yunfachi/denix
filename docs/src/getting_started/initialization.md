@@ -35,7 +35,6 @@ First, create a directory for your configuration and a `flake.nix` file with the
   } @ inputs: let
     mkConfigurations = isHomeManager:
       denix.lib.configurations {
-        homeManagerNixpkgs = nixpkgs;
         homeManagerUser = "sjohn"; #!!! REPLACEME
         inherit isHomeManager;
 

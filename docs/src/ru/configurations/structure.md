@@ -3,7 +3,7 @@
 ## Аргументы функции {#function-arguments}
 - `myconfigName` (string): категория для всех опций модулей Denix, хостов и райсов. По умолчанию `myconfig`; изменять не рекомендуется.
 - `denixLibName` (string): имя библиотеки Denix в `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). По умолчанию `delib`; изменять не рекомендуется.
-- `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию берется `nixpkgs` из флейка.
+- `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию берется `nixpkgs` из флейка, поэтому если вы указали `inputs.denix.inputs.nixpkgs.follows = "nixpkgs";`, указывать `homeManagerNixpkgs` обычно не имеет смысла.
 - `homeManagerUser` (string): имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager.
 - `isHomeManager` (boolean): указывает, создавать ли список конфигураций для Home Manager или для NixOS.
 - `paths` (listOf string): пути, которые будут импортированы; добавьте сюда хосты, райсы и модули. По умолчанию `[]`.

@@ -32,7 +32,6 @@ An example of a flake's `outputs` for `nixosConfigurations` and `homeConfigurati
 outputs = {denix, nixpkgs, ...} @ inputs: let
   mkConfigurations = isHomeManager:
     denix.lib.configurations rec {
-      homeManagerNixpkgs = nixpkgs;
       homeManagerUser = "sjohn";
       inherit isHomeManager;
 

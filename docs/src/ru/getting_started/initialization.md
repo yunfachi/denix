@@ -35,7 +35,6 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
   } @ inputs: let
     mkConfigurations = isHomeManager:
       denix.lib.configurations {
-        homeManagerNixpkgs = nixpkgs;
         homeManagerUser = "sjohn"; #!!! REPLACEME
         inherit isHomeManager;
 
