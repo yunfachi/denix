@@ -19,10 +19,10 @@
     nixpkgs,
     ...
   } @ inputs: let
-    mkConfigurations = isHomeManager:
+    mkConfigurations = moduleSystem:
       denix.lib.configurations {
+        inherit moduleSystem;
         homeManagerUser = "sjohn";
-        inherit isHomeManager;
 
         paths = [./hosts ./modules ./rices];
 
@@ -31,7 +31,7 @@
         };
       };
   in {
-    nixosConfigurations = mkConfigurations false;
-    homeConfigurations = mkConfigurations true;
+    nixosConfigurations = mkConfigurations "nixos";
+    homeConfigurations = mkConfigurations "home";
   };
 }
