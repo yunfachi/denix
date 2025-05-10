@@ -22,7 +22,7 @@
     mkConfigurations = moduleSystem:
       denix.lib.configurations {
         inherit moduleSystem;
-        homeManagerUser = "sjohn";
+        homeManagerUser = "sjohn"; #!!! REPLACEME
 
         paths = [./hosts ./modules];
 
@@ -31,7 +31,10 @@
         };
       };
   in {
+    # If you're not using NixOS, Home Manager, or Darwin,
+    # you can safely remove the corresponding lines below.
     nixosConfigurations = mkConfigurations "nixos";
     homeConfigurations = mkConfigurations "home";
+    darwinConfigurations = mkConfigurations "darwin";
   };
 }
