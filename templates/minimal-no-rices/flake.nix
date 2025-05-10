@@ -19,10 +19,10 @@
     nixpkgs,
     ...
   } @ inputs: let
-    mkConfigurations = isHomeManager:
+    mkConfigurations = moduleSystem:
       denix.lib.configurations {
-        homeManagerUser = "sjohn";
-        inherit isHomeManager;
+        inherit moduleSystem;
+        homeManagerUser = "sjohn"; #!!! REPLACEME
 
         paths = [./hosts ./modules];
 
@@ -31,7 +31,10 @@
         };
       };
   in {
-    nixosConfigurations = mkConfigurations false;
-    homeConfigurations = mkConfigurations true;
+    # If you're not using NixOS, Home Manager, or Darwin,
+    # you can safely remove the corresponding lines below.
+    nixosConfigurations = mkConfigurations "nixos";
+    homeConfigurations = mkConfigurations "home";
+    darwinConfigurations = mkConfigurations "darwin";
   };
 }

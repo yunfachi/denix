@@ -8,7 +8,7 @@
   </a>
 </p>
 
-Denix is a Nix library designed to help you build scalable configurations for [NixOS](https://nixos.org/) and [Home Manager](https://github.com/nix-community/home-manager).
+Denix is a Nix library designed to help you build scalable configurations for [NixOS](https://nixos.org/), [Home Manager](https://github.com/nix-community/home-manager) and [Nix-Darwin](https://github.com/nix-darwin/nix-darwin).
 
 ## Documentation
 

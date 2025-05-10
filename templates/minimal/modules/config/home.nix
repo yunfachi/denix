@@ -1,4 +1,8 @@
-{delib, ...}:
+{
+  delib,
+  pkgs,
+  ...
+}:
 delib.module {
   name = "home";
 
@@ -7,7 +11,12 @@ delib.module {
   in {
     home = {
       inherit username;
-      homeDirectory = "/home/${username}";
+      # If you don't need Darwin, or if you're using it exclusively,
+      # you can keep the string here instead of the condition.
+      homeDirectory =
+        if pkgs.stdenv.isDarwin
+        then "/Users/${username}"
+        else "/home/${username}";
     };
   };
 }
