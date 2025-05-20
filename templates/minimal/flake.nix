@@ -1,5 +1,5 @@
 {
-  description = "Modular configuration of Home Manager and NixOS with Denix";
+  description = "Modular configuration of Home Manager, NixOS, and Nix-Darwin with Denix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -31,7 +31,7 @@
         };
       };
   in {
-    # If you're not using NixOS, Home Manager, or Darwin,
+    # If you're not using NixOS, Home Manager, or Nix-Darwin,
     # you can safely remove the corresponding lines below.
     nixosConfigurations = mkConfigurations "nixos";
     homeConfigurations = mkConfigurations "home";

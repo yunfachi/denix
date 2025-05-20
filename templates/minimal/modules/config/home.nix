@@ -11,7 +11,7 @@ delib.module {
   in {
     home = {
       inherit username;
-      # If you don't need Darwin, or if you're using it exclusively,
+      # If you don't need Nix-Darwin, or if you're using it exclusively,
       # you can keep the string here instead of the condition.
       homeDirectory =
         if pkgs.stdenv.isDarwin
