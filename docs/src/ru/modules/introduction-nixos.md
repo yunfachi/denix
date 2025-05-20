@@ -1,7 +1,7 @@
 # Введение в модули NixOS {#introduction-nixos}
 Модуль NixOS - это файл, содержащий Nix-выражение с определенной структурой. В нем указаны опции (options) и значения для этих опций (config). Например, файл `/etc/nixos/configuration.nix` тоже является модулем.
 
-Модули Home Manager устроены аналогично, но они могут работать не только в NixOS, но и на других системах.
+Модули Home Manager и Nix-Darwin устроены аналогично, но они могут работать не только в NixOS, но и на других системах.
 
 Это не подробный гайд по Nix-модулям, поэтому рекомендуется прочитать статью [NixOS Wiki о модулях](https://nixos.wiki/wiki/NixOS_modules).
 
@@ -110,7 +110,7 @@ delib.module {
 ```nix
 {lib, config, ...}: {
   options.programs.git = {
-    enable = lib.mkEnableOption "git";
+    enable = lib.mkEnableOption "git" // {default = true;};
   };
 
   config = lib.mkIf config.programs.git.enable {

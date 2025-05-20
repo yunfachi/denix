@@ -1,7 +1,7 @@
 # Introduction to NixOS Modules {#introduction-nixos}
 A NixOS module is a file containing a Nix expression with a specific structure. It defines options (options) and values for those options (config). For example, the `/etc/nixos/configuration.nix` file is also a module.
 
-Home Manager modules work similarly, but they can be used not only in NixOS but also on other systems.
+Home Manager and Nix-Darwin modules work similarly, but they can be used not only in NixOS but also on other systems.
 
 This is not a comprehensive guide on Nix modules, so it is recommended to read the [NixOS Wiki article on modules](https://nixos.wiki/wiki/NixOS_modules).
 
@@ -111,7 +111,7 @@ An example of a NixOS module for simple git configuration:
 ```nix
 {lib, config, ...}: {
   options.programs.git = {
-    enable = lib.mkEnableOption "git";
+    enable = lib.mkEnableOption "git" // {default = true;};
   };
 
   config = lib.mkIf config.programs.git.enable {

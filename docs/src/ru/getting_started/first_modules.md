@@ -1,7 +1,7 @@
 # Первые модули {#first-modules}
 В этом разделе мы создадим модули для некоторых программ. Для начала создайте поддиректории `programs` и `services` в директории `modules`.
 
-Создание своих модулей практически не отличается от создания обычных модулей NixOS, поэтому опции NixOS можно искать [здесь](https://search.nixos.org/options?).
+Создание своих модулей практически не отличается от создания обычных модулей NixOS, поэтому опции NixOS можно искать [здесь](https://search.nixos.org/options?), опции Home Manager - [здесь](https://home-manager-options.extranix.com/), а опции Nix-Darwin - [здесь](https://nix-darwin.github.io/nix-darwin/manual/index.html).
 
 ## Git {#git}
 Предположим, что у вас уже есть модуль констант. Создайте файл `modules/programs/git.nix` со следующим содержанием:
