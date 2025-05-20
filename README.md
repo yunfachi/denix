@@ -8,7 +8,7 @@
   </a>
 </p>
 
-Denix is a Nix library designed to help you build scalable configurations for [NixOS](https://nixos.org/), [Home Manager](https://github.com/nix-community/home-manager) and [Nix-Darwin](https://github.com/nix-darwin/nix-darwin).
+Denix is a Nix library designed to help you build scalable configurations for [NixOS](https://nixos.org/), [Home Manager](https://github.com/nix-community/home-manager), and [Nix-Darwin](https://github.com/nix-darwin/nix-darwin).
 
 ## Documentation
 
@@ -23,8 +23,8 @@ Custom modules allow you to define options and related configurations in a flexi
 * **Hosts**: Unique configurations tailored for each machine.
 * **Rices**: Customizations that can be applied to all hosts.
 
-### Unified NixOS and Home Manager Configurations
-Write your NixOS and Home Manager configurations in a single file*, and Denix will automatically handle the separation for you.
+### Unified NixOS, Home Manager, and Nix-Darwin Configurations
+Write your NixOS, Home Manager, and Nix-Darwin configurations in a single file*, and Denix will automatically handle the separation for you.
 
 ## Templates
 
