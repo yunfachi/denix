@@ -14,12 +14,9 @@ delib.host {
     # other generated code here...
   };
 
-  # If you're not using Darwin, you can remove this entire block.
+  # If you're not using Nix-Darwin, you can remove this entire block.
   darwin = {
     nixpkgs.hostPlatform = "aarch64-darwin"; #!!! REPLACEME
     system.stateVersion = "6"; #!!! REPLACEME
-
-    # nixos-generate-config --show-hardware-config
-    # other generated code here...
   };
 }
