@@ -14,80 +14,10 @@ delib.module {
 }
 ```
 
-## Hosts {#hosts}
-Without `type` option:
-```nix
-{delib, ...}:
-delib.module {
-  name = "hosts";
-
-  options = with delib; let
-    host = {
-      options = hostSubmoduleOptions;
-    };
-  in {
-    host = hostOption host;
-    hosts = hostsOption host;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.hostNamesAssertions myconfig.hosts;
-  };
-}
-```
-With `type` option:
-```nix
-{delib, ...}:
-delib.module {
-  name = "hosts";
-
-  options = with delib; let
-    host = {config, ...}: {
-      options =
-        hostSubmoduleOptions
-        // {
-          type = noDefault (enumOption ["desktop" "server"] null);
-
-          isDesktop = boolOption (config.type == "desktop");
-          isServer = boolOption (config.type == "server");
-        };
-    };
-  in {
-    host = hostOption host;
-    hosts = hostsOption host;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.hostNamesAssertions myconfig.hosts;
-  };
-}
-```
-
-## Rices {#rices}
-```nix
-{delib, ...}:
-delib.module {
-  name = "rices";
-
-  options = with delib; let
-    rice = {
-      options = riceSubmoduleOptions;
-    };
-  in {
-    rice = riceOption rice;
-    rices = ricesOption rice;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.riceNamesAssertions myconfig.rices;
-  };
-}
-```
-
 ## Home Manager {#home-manager}
 With [constants](#constants):
 ```nix
-{delib, ...}:
+{delib, pkgs, ...}:
 delib.module {
   name = "home";
 
@@ -96,7 +26,12 @@ delib.module {
   in {
     home = {
       inherit username;
-      homeDirectory = "/home/${username}";
+      # If you don't need Nix-Darwin, or if you're using it exclusively,
+      # you can keep the string here instead of the condition.
+      homeDirectory =
+        if pkgs.stdenv.isDarwin
+        then "/Users/${username}"
+        else "/home/${username}";
     };
   };
 }
@@ -109,15 +44,28 @@ With [constants](#constants):
 delib.module {
   name = "user";
 
+  # If you're not using NixOS, you can remove this entire block.
   nixos.always = {myconfig, ...}: let
     inherit (myconfig.constants) username;
   in {
     users = {
+      groups.${username} = {};
+
       users.${username} = {
         isNormalUser = true;
         initialPassword = username;
         extraGroups = ["wheel"];
       };
+    };
+  };
+
+  # If you're not using Nix-Darwin, you can remove this entire block.
+  darwin.always = {myconfig, ...}: let
+    inherit (myconfig.constants) username;
+  in {
+    users.users.${username} = {
+      name = username;
+      home = "/Users/${username}";
     };
   };
 }

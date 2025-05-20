@@ -1,5 +1,5 @@
 # Введение в модули Denix {#introduction}
-Модуль Denix - это тот же самый модуль NixOS или Home Manager, но его attribute set обёрнут в функцию [`delib.module`](/ru/modules/structure).
+Модуль Denix - это тот же самый модуль NixOS, Home Manager или Nix-Darwin, но его attribute set обёрнут в функцию [`delib.module`](/ru/modules/structure).
 
 ## Отсутствие ограничений {#no-limitations}
 Это означает, что вы можете использовать все три варианта модулей одновременно, хотя маловероятно, что вам понадобятся другие варианты, кроме первого:
@@ -12,7 +12,7 @@ delib.module {
 }
 ```
 
-### Denix модуль, дополненный NixOS/Home Manager модулем
+### Denix модуль, дополненный NixOS/Home Manager/Nix-Darwin модулем
 ```nix
 {delib, ...}:
 delib.module {
@@ -22,7 +22,7 @@ delib.module {
 }
 ```
 
-### Только NixOS/Home Manager модуль
+### Только NixOS/Home Manager/Nix-Darwin модуль
 ```nix
 {
 
@@ -34,4 +34,4 @@ delib.module {
 
 1. Простое, но при этом полноценное декларирование опций (см. [Опции](/ru/options/introduction)).
 2. Встроенная логика разделения конфигураций в зависимости от значения опции `${delib.module :: name}.enable`: always, ifEnabled, ifDisabled.
-3. Общие опции, но разделённые конфигурации для NixOS, Home Manager и собственных опций.
+3. Общие опции, но разделённые конфигурации для NixOS, Home Manager, Nix-Darwin и собственных опций.

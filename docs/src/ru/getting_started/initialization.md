@@ -15,6 +15,8 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 Первым делом создайте директорию под вашу конфигурацию и файл `flake.nix` со следующим содержанием:
 ```nix
 {
+  description = "Modular configuration of Home Manager, NixOS, and Nix-Darwin with Denix";
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -33,10 +35,10 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
     nixpkgs,
     ...
   } @ inputs: let
-    mkConfigurations = isHomeManager:
+    mkConfigurations = moduleSystem:
       denix.lib.configurations {
+        inherit moduleSystem;
         homeManagerUser = "sjohn"; #!!! REPLACEME
-        inherit isHomeManager;
 
         paths = [./hosts ./modules ./rices];
 
@@ -45,8 +47,11 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
         };
       };
   in {
-    nixosConfigurations = mkConfigurations false;
-    homeConfigurations = mkConfigurations true;
+    # Если вы не используете NixOS, Home Manager или Nix-Darwin,
+    # можете спокойно удалить соответствующие строки ниже.
+    nixosConfigurations = mkConfigurations "nixos";
+    homeConfigurations = mkConfigurations "home";
+    darwinConfigurations = mkConfigurations "darwin";
   };
 }
 ```
@@ -54,9 +59,9 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 Если вы не знаете про `inputs` и `outputs`, то прочитайте [NixOS Wiki Flakes](https://nixos.wiki/wiki/Flakes).
 
 Объяснение кода:
-- `mkConfigurations` - функция для сокращения кода, которая принимает `isHomeManager` и передает его в `denix.lib.configurations`.
+- `mkConfigurations` - функция для сокращения кода, которая принимает `moduleSystem` и передает его в `denix.lib.configurations`.
 - `denix.lib.configurations` - [Конфигурации (флейки) - Вступление](/ru/configurations/introduction).
-- `paths = [./hosts ./modules ./rices];` - пути, которые будут рекурсивно импортированы Denix. Удалите `./rices`, если не хотите использовать райсы.
+- `paths = [./hosts ./modules ./rices];` - пути, которые будут рекурсивно импортированы Denix как модули. Удалите `./rices`, если не планируете использовать райсы.
 
 ## Хосты {#hosts}
 Создайте директорию `hosts`, а в ней поддиректорию с названием вашего хоста, например, `desktop`.
@@ -78,12 +83,19 @@ delib.host {
   homeManagerSystem = "x86_64-linux"; #!!! REPLACEME
   home.home.stateVersion = "24.05"; #!!! REPLACEME
 
+  # Если вы не используете NixOS, можете полностью удалить этот блок.
   nixos = {
     nixpkgs.hostPlatform = "x86_64-linux"; #!!! REPLACEME
     system.stateVersion = "24.05"; #!!! REPLACEME
 
     # nixos-generate-config --show-hardware-config
     # остальной сгенерированный код здесь...
+  };
+
+  # Если вы не используете Nix-Darwin, можете полностью удалить этот блок.
+  darwin = {
+    nixpkgs.hostPlatform = "aarch64-darwin"; #!!! REPLACEME
+    system.stateVersion = "6"; #!!! REPLACEME
   };
 }
 ```
@@ -123,7 +135,7 @@ delib.module {
 }
 ```
 
-Этот файл необязателен, так же как и любая из его опций, которые используются лишь вами, но он настоятельно рекомендуется как хорошая практика.
+Этот файл необязателен, так же как и любая из его опций, которые используются лишь вами, но он рекомендуется как хорошая практика.
 
 ### Хосты {#modules-hosts}
 Также создайте файл `hosts.nix` в этой же директории (`modules/config`), а в него запишите любой пример из [Хосты - Примеры](/ru/hosts/examples).
@@ -164,7 +176,7 @@ delib.module {
 delib.host {
   name = "desktop"; #!!! REPLACEME
 
-  type = "desktop" #!!! REPLACEME (desktop/server)
+  type = "desktop" #!!! REPLACEME ["desktop"|"server"]
 
   # ...
 }
@@ -210,7 +222,7 @@ delib.host {
 ### Home Manager {#modules-home-manager}
 Если вы создали [модуль констант](#modules-constants), то просто создайте файл `home.nix` с таким содержанием:
 ```nix
-{delib, ...}:
+{delib, pkgs, ...}:
 delib.module {
   name = "home";
 
@@ -219,7 +231,12 @@ delib.module {
   in {
     home = {
       inherit username;
-      homeDirectory = "/home/${username}";
+      # Если вам не нужен Nix-Darwin или вы используете только его,
+      # можете оставить здесь строку вместо условия.
+      homeDirectory =
+        if pkgs.stdenv.isDarwin
+        then "/Users/${username}"
+        else "/home/${username}";
     };
   };
 }
@@ -227,24 +244,30 @@ delib.module {
 
 Если вы не использовали [модуль констант](#modules-constants), то содержание файла будет таким:
 ```nix
-{delib, ...}:
+{delib, pkgs, ...}:
 delib.module {
   name = "home";
 
   home.always.home = {
     username = "sjohn"; #!!! REPLACEME
-    homeDirectory = "/home/sjohn"; #!!! REPLACEME
+    # Если вам не нужен Nix-Darwin или вы используете только его,
+    # можете оставить здесь строку вместо условия.
+    homeDirectory =
+      if pkgs.stdenv.isDarwin
+      then "/Users/sjohn" #!!! REPLACEME
+      else "/home/sjohn"; #!!! REPLACEME
   };
 }
 ```
 
 ### Пользователь {#modules-user}
-Также можно создать файл `user.nix` с конфигурацией вашего пользователя NixOS:
+Также можно создать файл `user.nix` с конфигурацией пользователя NixOS и Nix-Darwin:
 ```nix
 {delib, ...}:
 delib.module {
   name = "user";
 
+  # Если вы не используете NixOS, можете полностью удалить этот блок.
   nixos.always = {myconfig, ...}: let
     inherit (myconfig.constants) username;
   in {
@@ -258,6 +281,16 @@ delib.module {
       };
     };
   };
+
+  # Если вы не используете Nix-Darwin, можете полностью удалить этот блок.
+  darwin.always = {myconfig, ...}: let
+    inherit (myconfig.constants) username;
+  in {
+    users.users.${username} = {
+      name = username;
+      home = "/Users/${username}";
+    };
+  };
 }
 ```
 
@@ -267,6 +300,7 @@ delib.module {
 delib.module {
   name = "user";
 
+  # Если вы не используете NixOS, можете полностью удалить этот блок.
   nixos.always.users = {
     groups.sjohn = {}; #!!! REPLACEME
 
@@ -275,6 +309,12 @@ delib.module {
       initialPassword = "sjohn"; #!!! REPLACEME
       extraGroups = ["wheel"];
     };
+  };
+
+  # Если вы не используете Nix-Darwin, можете полностью удалить этот блок.
+  darwin.always.users.users."sjohn" = { #!!! REPLACEME
+    name = "sjohn"; #!!! REPLACEME
+    home = "/Users/sjohn"; #!!! REPLACEME
   };
 }
 ```

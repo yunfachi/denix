@@ -1,7 +1,7 @@
 # First Modules {#first-modules}
 In this section, we will create modules for some programs. To start, create the `programs` and `services` subdirectories in the `modules` directory.
 
-Creating your own modules is almost the same as creating regular NixOS modules, so you can look for NixOS options [here](https://search.nixos.org/options?).
+Creating your own modules is almost the same as creating regular NixOS modules, so you can look for NixOS options [here](https://search.nixos.org/options?), Home Manager options [here](https://home-manager-options.extranix.com/), and Nix-Darwin options [here](https://nix-darwin.github.io/nix-darwin/manual/index.html).
 
 ## Git {#git}
 Let's assume you already have a constants module. Create a file `modules/programs/git.nix` with the following content:

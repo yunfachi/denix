@@ -2,12 +2,12 @@
 In this section, you will learn about what Denix is, why it is needed, who can benefit from it, and popular practices for system configuration.
 
 ## What is Denix {#what-is-denix}
-Denix is a Nix library designed for creating scalable configurations for [NixOS](https://nixos.org/) and [Home Manager](https://github.com/nix-community/home-manager).
+Denix is a Nix library designed for creating scalable configurations for [NixOS](https://nixos.org/), [Home Manager](https://github.com/nix-community/home-manager), and [Nix-Darwin](https://github.com/nix-darwin/nix-darwin).
 
 It provides functions that transform input data into a module according to a specific algorithm. Thanks to this, if for any reason you need to create a module without using Denix, it will be sufficient to import the file with it, and everything will work.
 
 The provided functions are generally divided into five categories:
-- Creating configurations for Flake ([NixOS](https://nixos.org/) or [Home Manager](https://github.com/nix-community/home-manager))
+- Creating configurations for Flake ([NixOS](https://nixos.org/), [Home Manager](https://github.com/nix-community/home-manager), or [Nix-Darwin](https://github.com/nix-darwin/nix-darwin))
 - Options - an analogue of types and functions for creating options from [Nixpkgs](https://github.com/NixOS/nixpkgs)
 - [Modules](#modules)
 - [Hosts](#hosts)
@@ -31,6 +31,7 @@ A module includes options, configuration, and importing other modules.
 NixOS and Home Manager have their own modules, which you have likely already worked with. You can search for options on these sites:
 - NixOS: https://search.nixos.org/options
 - Home Manager: https://home-manager-options.extranix.com/
+- Nix-Darwin: https://nix-darwin.github.io/nix-darwin/manual/
 
 Example of custom NixOS module code without using Denix:
 ```nix

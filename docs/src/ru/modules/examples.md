@@ -14,80 +14,10 @@ delib.module {
 }
 ```
 
-## Хосты {#hosts}
-Без опции `type`:
-```nix
-{delib, ...}:
-delib.module {
-  name = "hosts";
-
-  options = with delib; let
-    host = {
-      options = hostSubmoduleOptions;
-    };
-  in {
-    host = hostOption host;
-    hosts = hostsOption host;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.hostNamesAssertions myconfig.hosts;
-  };
-}
-```
-С опцией `type`:
-```nix
-{delib, ...}:
-delib.module {
-  name = "hosts";
-
-  options = with delib; let
-    host = {config, ...}: {
-      options =
-        hostSubmoduleOptions
-        // {
-          type = noDefault (enumOption ["desktop" "server"] null);
-
-          isDesktop = boolOption (config.type == "desktop");
-          isServer = boolOption (config.type == "server");
-        };
-    };
-  in {
-    host = hostOption host;
-    hosts = hostsOption host;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.hostNamesAssertions myconfig.hosts;
-  };
-}
-```
-
-## Райсы {#rices}
-```nix
-{delib, ...}:
-delib.module {
-  name = "rices";
-
-  options = with delib; let
-    rice = {
-      options = riceSubmoduleOptions;
-    };
-  in {
-    rice = riceOption rice;
-    rices = ricesOption rice;
-  };
-
-  home.always = {myconfig, ...}: {
-    assertions = delib.riceNamesAssertions myconfig.rices;
-  };
-}
-```
-
 ## Home Manager {#home-manager}
 С [константами](#constants):
 ```nix
-{delib, ...}:
+{delib, pkgs, ...}:
 delib.module {
   name = "home";
 
@@ -96,7 +26,12 @@ delib.module {
   in {
     home = {
       inherit username;
-      homeDirectory = "/home/${username}";
+      # Если вам не нужен Nix-Darwin или вы используете только его,
+      # можете оставить здесь строку вместо условия.
+      homeDirectory =
+        if pkgs.stdenv.isDarwin
+        then "/Users/${username}"
+        else "/home/${username}";
     };
   };
 }
@@ -109,15 +44,28 @@ delib.module {
 delib.module {
   name = "user";
 
+  # Если вы не используете NixOS, можете полностью удалить этот блок.
   nixos.always = {myconfig, ...}: let
     inherit (myconfig.constants) username;
   in {
     users = {
+      groups.${username} = {};
+
       users.${username} = {
         isNormalUser = true;
         initialPassword = username;
         extraGroups = ["wheel"];
       };
+    };
+  };
+
+  # Если вы не используете Nix-Darwin, можете полностью удалить этот блок.
+  darwin.always = {myconfig, ...}: let
+    inherit (myconfig.constants) username;
+  in {
+    users.users.${username} = {
+      name = username;
+      home = "/Users/${username}";
     };
   };
 }

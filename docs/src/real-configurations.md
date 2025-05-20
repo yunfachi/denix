@@ -1,7 +1,7 @@
 # Real Configurations {#real-configurations}
-This section presents a list of NixOS and Home Manager configurations that use Denix and can serve as examples of good practice*. You can add your configuration to this list via a [pull request](https://github.com/yunfachi/denix/pulls) or an [issue](https://github.com/yunfachi/denix/issues).
+This section presents a list of NixOS, Home Manager, and Nix-Darwin configurations that use Denix and can serve as examples of good practice*. You can add your configuration to this list via a [pull request](https://github.com/yunfachi/denix/pulls) or an [issue](https://github.com/yunfachi/denix/issues).
 
-## Yunfachi - [nix-config](https://github.com/yunfachi/nix-config) {#yunfachi}
+## Yunfachi - [nix-config](https://github.com/yunfachi/nix-config) (NixOS, Home Manager) {#yunfachi}
 [![](https://github.com/user-attachments/assets/c7406818-e906-47b0-9a31-6a2d9916e4fa)](https://github.com/user-attachments/assets/c7406818-e906-47b0-9a31-6a2d9916e4fa)
 
 **Features:**
