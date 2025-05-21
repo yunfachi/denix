@@ -147,7 +147,7 @@
             [
               ({options, ...}: {config.${myconfigName} = {inherit host;} // lib.optionalAttrs (options.${myconfigName} ? rice) {inherit rice;};})
             ]
-            ++ (lib.optionalAttrs (rice != null) (apply.listOfEverything rice.myconfig rice.nixos rice.home rice.darwin))
+            ++ (lib.optionals (rice != null) (apply.listOfEverything rice.myconfig rice.nixos rice.home rice.darwin))
             ++ builtins.concatMap (riceName: (apply.listOfEverything rices.${riceName}.myconfig rices.${riceName}.nixos rices.${riceName}.home) rices.${riceName}.darwin) (rice.inherits or []);
         };
       in
