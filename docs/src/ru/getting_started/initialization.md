@@ -95,7 +95,7 @@ delib.host {
   # Если вы не используете Nix-Darwin, можете полностью удалить этот блок.
   darwin = {
     nixpkgs.hostPlatform = "aarch64-darwin"; #!!! REPLACEME
-    system.stateVersion = "6"; #!!! REPLACEME
+    system.stateVersion = 6; #!!! REPLACEME
   };
 }
 ```
