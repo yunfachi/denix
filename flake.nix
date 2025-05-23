@@ -1,5 +1,5 @@
 {
-  description = "Nix library for creating scalable NixOS and Home Manager configurations with modules, hosts, and rices.";
+  description = "Nix library for creating scalable NixOS, Home Manager, and Nix-Darwin configurations with modules, hosts, and rices.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
