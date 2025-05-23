@@ -11,3 +11,12 @@ This section presents a list of NixOS, Home Manager, and Nix-Darwin configuratio
 - [Modules](https://github.com/yunfachi/nix-config/tree/master/modules/infras) for different infrastructures
 - Shared and host-specific secrets using [SOPS](https://github.com/getsops/sops)
 - Color scheme-based rices inheriting general configuration settings
+
+## Conneroisu - [dotfiles](https://github.com/conneroisu/dotfiles) (NixOS, Home Manager, Nix-Darwin) {#conneroisu}
+[![image](https://github.com/user-attachments/assets/a4f1091c-081e-4c76-b308-ca85080a1011)](https://github.com/user-attachments/assets/aba0e56d-4543-47d4-a5df-b5ed537a2568)
+
+**Features:**
+
+- NixOS and Nix-Darwin configurations
+- Custom packages
+- Determinate Nix support
