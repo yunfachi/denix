@@ -30,7 +30,7 @@ delib.module {
 ```
 
 ## Простота и чистота {#simplicity-and-cleanliness}
-Модули Denix в большинстве случаев выглядят проще и чище, чем модули NixOS/Home Manager, по следующим причинам:
+Модули Denix в большинстве случаев выглядят проще и чище, чем модули NixOS/Home Manager/Nix-Darwin, по следующим причинам:
 
 1. Простое, но при этом полноценное декларирование опций (см. [Опции](/ru/options/introduction)).
 2. Встроенная логика разделения конфигураций в зависимости от значения опции `${delib.module :: name}.enable`: always, ifEnabled, ifDisabled.

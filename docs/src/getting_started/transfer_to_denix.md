@@ -9,7 +9,7 @@ However, you will need to create the following from scratch:
 The main part of the configuration can be fully reused from your old setup. The key is to separate the hardware configuration from the general configuration. See the section [How Does It Work?](#how-it-works).
 
 ## How Does It Work? {#how-it-works}
-All Denix modules are standard Home Manager, NixOS, or Nix-Darwin modules but with additional logic for enabling and disabling configurations.
+All Denix modules are standard NixOS, Home Manager, or Nix-Darwin modules but with additional logic for enabling and disabling configurations.
 
 This means that you can add code or files from the old configuration into the new one, so they are imported through [`delib.configurations`](/configurations/introduction). You can place this code in the `modules` directory or create a new one, for example, `modules_nixos_old` for older configurations.
 

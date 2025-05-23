@@ -6,7 +6,7 @@
 nix flake init -t github:yunfachi/denix#minimal
 ```
 
-Также можно скопировать шаблон минимальной конфигурации, но без райсов:
+Также можно склонировать шаблон минимальной конфигурации, но без райсов:
 ```sh
 nix flake init -t github:yunfachi/denix#minimal-no-rices
 ```
@@ -15,7 +15,7 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 Первым делом создайте директорию под вашу конфигурацию и файл `flake.nix` со следующим содержанием:
 ```nix
 {
-  description = "Modular configuration of Home Manager, NixOS, and Nix-Darwin with Denix";
+  description = "Modular configuration of NixOS, Home Manager, and Nix-Darwin with Denix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

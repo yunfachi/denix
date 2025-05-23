@@ -6,7 +6,7 @@ You do not have to do this; you can simply clone the minimal configuration templ
 nix flake init -t github:yunfachi/denix#minimal
 ```
 
-You can also copy the minimal configuration template without the rices:
+You can also clone the minimal configuration template without the rices:
 ```sh
 nix flake init -t github:yunfachi/denix#minimal-no-rices
 ```
@@ -15,7 +15,7 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 First, create a directory for your configuration and a `flake.nix` file with the following content:
 ```nix
 {
-  description = "Modular configuration of Home Manager, NixOS, and Nix-Darwin with Denix";
+  description = "Modular configuration of NixOS, Home Manager, and Nix-Darwin with Denix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

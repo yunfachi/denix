@@ -28,7 +28,7 @@ A module includes options, configuration, and importing other modules.
 - `config = {};`: Similar to initializing variables, but here it's about specifying values for options.
 - `imports = [];`: A list of paths to modules or just module code (attrset or lambda that returns attrset).
 
-NixOS and Home Manager have their own modules, which you have likely already worked with. You can search for options on these sites:
+NixOS, Home Manager, and Nix-Darwin have their own modules, which you have likely already worked with. You can search for options on these sites:
 - NixOS: https://search.nixos.org/options
 - Home Manager: https://home-manager-options.extranix.com/
 - Nix-Darwin: https://nix-darwin.github.io/nix-darwin/manual/

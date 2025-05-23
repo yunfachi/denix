@@ -28,7 +28,7 @@ Denix в первую очередь нужен для упрощения соз
 - `config = {};`: Аналогично инициализации переменных, но здесь это указание значений для опций.
 - `imports = [];`: Список путей к модулям или просто код модуля (attrset или lambda, которая возвращает attrset).
 
-NixOS и Home Manager имеют свои собственные модули, с которыми вы, скорее всего, уже работали. Поиск опций можно выполнить на этих сайтах:
+NixOS, Home Manager и Nix-Darwin имеют свои собственные модули, с которыми вы, скорее всего, уже работали. Поиск опций можно выполнить на этих сайтах:
 - NixOS: https://search.nixos.org/options
 - Home Manager: https://home-manager-options.extranix.com/
 - Nix-Darwin: https://nix-darwin.github.io/nix-darwin/manual/
