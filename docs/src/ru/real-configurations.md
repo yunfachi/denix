@@ -11,3 +11,12 @@
 - [Модули](https://github.com/yunfachi/nix-config/tree/master/modules/infras) для различных инфраструктур
 - Общие и уникальные для каждого хоста секреты с использованием [SOPS](https://github.com/getsops/sops)
 - Райсы под цветовые схемы, наследующие общие конфигурации
+
+## Conneroisu - [dotfiles](https://github.com/conneroisu/dotfiles) (NixOS, Home Manager, Nix-Darwin) {#conneroisu}
+[![image](https://github.com/user-attachments/assets/a4f1091c-081e-4c76-b308-ca85080a1011)](https://github.com/user-attachments/assets/aba0e56d-4543-47d4-a5df-b5ed537a2568)
+
+**Особенности:**
+
+- Конфигурации NixOS и Nix-Darwin
+- Кастомные пакеты
+- Поддержка Determinate Nix
