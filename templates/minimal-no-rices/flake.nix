@@ -1,5 +1,5 @@
 {
-  description = "Modular configuration of Home Manager, NixOS, and Nix-Darwin with Denix";
+  description = "Modular configuration of NixOS, Home Manager, and Nix-Darwin with Denix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
