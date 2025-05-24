@@ -39,7 +39,7 @@ function themeConfigEnglish() {return {
   lang: "en",
   link: "/",
   title: "Denix Documentation",
-  description: "Nix library for creating scalable NixOS and Home Manager configurations with modules, hosts, and rices",
+  description: "Nix library for creating scalable NixOS, Home Manager, and Nix-Darwin configurations with modules, hosts, and rices",
 
   themeConfig: {
     editLink: {
@@ -111,7 +111,7 @@ function themeConfigRussian() {return {
   lang: "ru",
   link: "/ru/",
   title: "Denix Документация",
-  description: "Библиотека Nix для создания масштабируемых конфигураций NixOS и Home Manager с модулями, хостами и райсами",
+  description: "Библиотека Nix для создания масштабируемых конфигураций NixOS, Home Manager и Nix-Darwin с модулями, хостами и райсами",
 
   themeConfig: {
     editLink: {
