@@ -67,7 +67,7 @@
   # TODO: get config through `hostSubmoduleOption = config: ...`
   hostSubmoduleOptions = with delib.options;
     {
-      name = strOption null;
+      name = noDefault (strOption null);
 
       homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
