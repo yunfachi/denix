@@ -16,6 +16,7 @@
     shared ? {},
     # to avoid overwriting
     # homeManagerSystem ? null,
+    # rice ? null,
     ...
   } @ args: {
     imports = [
@@ -65,27 +66,33 @@
   };
 
   # TODO: get config through `hostSubmoduleOption = config: ...`
-  hostSubmoduleOptions = with delib.options;
-    {
-      name = noDefault (strOption null);
+  hostSubmoduleOptions = with delib.options; {
+    name = noDefault (strOption null);
 
-      homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
+    homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
+    myconfig = attrsOption {};
+    nixos = attrsOption {};
+    home = attrsOption {};
+    darwin = attrsOption {};
+
+    shared = {
       myconfig = attrsOption {};
       nixos = attrsOption {};
       home = attrsOption {};
       darwin = attrsOption {};
-
-      shared = {
-        myconfig = attrsOption {};
-        nixos = attrsOption {};
-        home = attrsOption {};
-        darwin = attrsOption {};
-      };
-    }
-    // lib.optionalAttrs (config.${myconfigName} ? rices) {
-      rice = allowNull (enumOption (builtins.attrNames config.${myconfigName}.rices) null);
     };
+
+    rice = allowNull (enumOption (
+        let
+          rices = config.${myconfigName}.rices or null;
+        in
+          if rices == null
+          then []
+          else builtins.attrNames rices
+      )
+      null);
+  };
 
   hostOption = host:
     with delib.options; noDefault (submoduleOption host null);

@@ -81,8 +81,7 @@
             specialArgs
             // {
               ${denixLibName} = mkDenixLib {
-                # FIXME: nixosSystem is used, not homeSystem, because homeManagerConfiguration causes infinite recursion (maybe I should create an issue in home-manager?)
-                config = nixosSystem.config; # darwinSystem.config ?
+                config = homeSystem.config;
                 moduleSystem = "home";
                 inherit currentHostName;
               };
