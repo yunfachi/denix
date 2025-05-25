@@ -19,6 +19,7 @@
   simpleOptionWithParameter = type: elemType: default:
     simpleOption (type elemType) default;
 in rec {
+  # Types
   inherit (lib.types) anything attrsOf bool coercedTo enum float int listOf number package path port singleLineStr str submodule;
   attrs = attrsOf anything;
   attrsLegacy = lib.types.attrs;
@@ -26,6 +27,7 @@ in rec {
   lambdaTo = lib.types.functionTo;
   list = listOf anything;
 
+  # Options
   anythingOption = simpleOption anything;
   attrsLegacyOption = simpleOption attrsLegacy;
   attrsOfOption = simpleOptionWithParameter attrsOf;
@@ -47,6 +49,7 @@ in rec {
   strOption = simpleOption str;
   submoduleOption = simpleOptionWithParameter submodule;
 
+  # Option type extensions
   allowAnything = addTypeToOption anything;
   allowAttrs = addTypeToOption attrs;
   allowAttrsLegacy = addTypeToOption attrsLegacy;
@@ -68,6 +71,7 @@ in rec {
   allowSingleLineStrOption = addTypeToOption singleLineStr;
   allowStr = addTypeToOption str;
 
+  # Option modifiers
   noDefault = option: builtins.removeAttrs option ["default"];
   # This is a more convenient way to handle the presence of a default value in the option based on the condition (#18)
   noNullDefault = option:
@@ -75,10 +79,10 @@ in rec {
     then builtins.removeAttrs option ["default"]
     else option;
   readOnly = option: option // {readOnly = true;};
-
   apply = option: apply: option // {inherit apply;};
   description = option: description: option // {inherit description;};
 
+  # Predefined option patterns
   singleEnableOption = default: {name, ...}:
     delib.attrset.setAttrByStrPath "${name}.enable" (boolOption default);
 }
