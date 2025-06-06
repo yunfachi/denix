@@ -95,7 +95,7 @@ delib.module {
 
 ## Alejandra {#alejandra}
 ```nix
-{delib, ...}:
+{delib, pkgs, ...}:
 delib.module {
   name = "programs.alejandra";
 
