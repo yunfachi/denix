@@ -83,15 +83,7 @@
       darwin = attrsOption {};
     };
 
-    rice = allowNull (enumOption (
-        let
-          rices = config.${myconfigName}.rices or null;
-        in
-          if rices == null
-          then []
-          else builtins.attrNames rices
-      )
-      null);
+    rice = allowNull (enumOption (builtins.attrsNames (config.${myconfigName}.rices or {})));
   };
 
   hostOption = host:
