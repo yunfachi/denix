@@ -1,6 +1,5 @@
 {
   delib,
-  lib,
   apply,
   myconfigName,
   config,
@@ -83,7 +82,11 @@
       darwin = attrsOption {};
     };
 
-    rice = allowNull (enumOption (builtins.attrsNames (config.${myconfigName}.rices or {})));
+    rice = allowNull (
+      enumOption
+      (builtins.attrNames (config.${myconfigName}.rices or {}))
+      null
+    );
   };
 
   hostOption = host:
