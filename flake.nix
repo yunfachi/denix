@@ -2,6 +2,11 @@
   description = "Nix library for creating scalable NixOS, Home Manager, and Nix-Darwin configurations with modules, hosts, and rices.";
 
   inputs = {
+    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+    };
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -11,26 +16,23 @@
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {
     self,
+    nixpkgs-lib,
+    pre-commit-hooks,
     nixpkgs,
     home-manager,
     nix-darwin,
-    pre-commit-hooks,
     ...
   }: let
     supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    forAllSystems = nixpkgs-lib.lib.genAttrs supportedSystems;
   in {
     lib = import ./lib {
-      inherit (nixpkgs) lib;
+      inherit (nixpkgs-lib) lib;
       inherit home-manager nix-darwin nixpkgs;
     };
 

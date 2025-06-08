@@ -5,10 +5,13 @@
   home-manager,
   nix-darwin,
   ...
-}: let
+} @ args: let
   configurations = {
     myconfigName ? "myconfig",
     denixLibName ? "delib",
+    nixpkgs ? args.nixpkgs,
+    home-manager ? args.home-manager,
+    nix-darwin ? args.nix-darwin,
     homeManagerNixpkgs ? nixpkgs,
     homeManagerUser,
     moduleSystem ? null, # TODO: remove the default value once the deprecated isHomeManager is removed
@@ -64,7 +67,7 @@
         currentHostName,
         internalExtraModules ? (moduleSystem_: []),
       }: let
-        nixosSystem = lib.nixosSystem {
+        nixosSystem = nixpkgs.lib.nixosSystem {
           specialArgs =
             specialArgs
             // {
