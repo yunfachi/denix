@@ -1,24 +1,30 @@
 # Structure {#structure}
 
 ## Function Arguments {#function-arguments}
-- `myconfigName` (string): the category for all Denix module options, hosts, and rices. Default is `myconfig`; changes are not recommended.
-- `denixLibName` (string): the name of the Denix library in `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). Default is `delib`; changes are not recommended.
-- `homeManagerNixpkgs` (nixpkgs): used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function in the format: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. By default, it takes `nixpkgs` from the flake, so if you've set `inputs.denix.inputs.nixpkgs.follows = "nixpkgs";`, specifying `homeManagerNixpkgs` is typically unnecessary.
+- `myconfigName` (string): the category for all Denix module options, hosts, and rices. Defaults to `myconfig`; changes are not recommended.
+- `denixLibName` (string): the name of the Denix library in `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). Defaults to `delib`; changes are not recommended.
+- `nixpkgs` (nixpkgs): used to override nixpkgs in your configuration, equivalent to `inputs.denix.inputs.nixpkgs.follows`. Defaults to `inputs.nixpkgs`.
+- `home-manager` (home-manager): used to override home-manager in your configuration, equivalent to `inputs.denix.inputs.home-manager.follows`. Defaults to `inputs.home-manager`.
+- `nix-darwin` (nix-darwin): used to override nix-darwin in your configuration, equivalent to `inputs.denix.inputs.nix-darwin.follows`. Defaults to `inputs.nix-darwin`.
+- `homeManagerNixpkgs` (nixpkgs): used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function in the format: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. Defaults to the `nixpkgs` provided in the function arguments.
 - `homeManagerUser` (string): the username, used in `home-manager.users.${homeManagerUser}` and for generating the Home Manager configuration list.
 - `moduleSystem` ("nixos", "home", and "darwin"): specifies which module system the configuration list should be generated for - NixOS, Home Manager, or Nix-Darwin.
-- `paths` (listOf string): paths to be imported; add hosts, rices, and modules here. Default is `[]`.
-- `exclude` (listOf string): paths to be excluded from importing. Default is `[]`.
-- `recursive` (boolean): determines whether to recursively search for paths to import. Default is `true`.
-- `specialArgs` (attrset): `specialArgs` to be passed to `lib.nixosSystem`, `home-manager.lib.homeManagerConfiguration`, and `nix-darwin.lib.darwinSystem`. Default is `{}`.
-- **EXPERIMENTAL** `extraModules` (list): default is `[]`.
-- **EXPERIMENTAL** `mkConfigurationsSystemExtraModule` (attrset): a module used in the internal NixOS configuration that receives the list of hosts and rices to generate the configuration list. Default is `{nixpkgs.hostPlatform = "x86_64-linux";}`.
+- `paths` (listOf string): paths to be imported; add hosts, rices, and modules here. Defaults to `[]`.
+- `exclude` (listOf string): paths to be excluded from importing. Defaults to `[]`.
+- `recursive` (boolean): determines whether to recursively search for paths to import. Defaults to `true`.
+- `specialArgs` (attrset): `specialArgs` to be passed to `lib.nixosSystem`, `home-manager.lib.homeManagerConfiguration`, and `nix-darwin.lib.darwinSystem`. Defaults to `{}`.
+- **EXPERIMENTAL** `extraModules` (list): defaults to `[]`.
+- **EXPERIMENTAL** `mkConfigurationsSystemExtraModule` (attrset): a module used in the internal NixOS configuration that receives the list of hosts and rices to generate the configuration list. Defaults to `{nixpkgs.hostPlatform = "x86_64-linux";}`.
 
 ## Pseudocode {#pseudocode}
 ```nix
-delib.configurations {
+delib.configurations rec {
   myconfigName = "myconfig";
   denixLibName = "delib";
-  homeManagerNixpkgs = inputs.nixpkgs;
+  nixpkgs = inputs.nixpkgs;
+  home-manager = inputs.home-manager;
+  nix-darwin = inputs.nix-darwin;
+  homeManagerNixpkgs = nixpkgs;
   homeManagerUser = "sjohn";
   moduleSystem = "nixos";
   paths = [./modules ./hosts ./rices];
@@ -28,3 +34,4 @@ delib.configurations {
     inherit inputs;
   };
 }
+```
