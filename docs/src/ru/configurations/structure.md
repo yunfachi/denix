@@ -3,7 +3,10 @@
 ## Аргументы функции {#function-arguments}
 - `myconfigName` (string): категория для всех опций модулей Denix, хостов и райсов. По умолчанию `myconfig`; изменять не рекомендуется.
 - `denixLibName` (string): имя библиотеки Denix в `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). По умолчанию `delib`; изменять не рекомендуется.
-- `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию берется `nixpkgs` из флейка, поэтому если вы указали `inputs.denix.inputs.nixpkgs.follows = "nixpkgs";`, указывать `homeManagerNixpkgs` обычно не имеет смысла.
+- `nixpkgs` (nixpkgs): используется для переопределения nixpkgs в вашей конфигурации, аналогично `inputs.denix.inputs.nixpkgs.follows`. По умолчанию `inputs.nixpkgs`.
+- `home-manager` (home-manager): используется для переопределения home-manager в вашей конфигурации, аналогично `inputs.denix.inputs.home-manager.follows`. По умолчанию `inputs.home-manager`.
+- `nix-darwin` (nix-darwin): используется для переопределения nix-darwin в вашей конфигурации, аналогично `inputs.denix.inputs.nix-darwin.follows`. По умолчанию `inputs.nix-darwin`.
+- `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию используется `nixpkgs` из аргументов этой функции.
 - `homeManagerUser` (string): имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager.
 - `moduleSystem` (`"nixos"`, `"home"` и `"darwin"`): указывает, для какой модульной системы должен быть создан список конфигураций - NixOS, Home Manager или Nix-Darwin.
 - `paths` (listOf string): пути, которые будут импортированы; добавьте сюда хосты, райсы и модули. По умолчанию `[]`.
@@ -15,10 +18,13 @@
 
 ## Псевдокод {#pseudocode}
 ```nix
-delib.configurations {
+delib.configurations rec {
   myconfigName = "myconfig";
   denixLibName = "delib";
-  homeManagerNixpkgs = inputs.nixpkgs;
+  nixpkgs = inputs.nixpkgs;
+  home-manager = inputs.home-manager;
+  nix-darwin = inputs.nix-darwin;
+  homeManagerNixpkgs = nixpkgs;
   homeManagerUser = "sjohn";
   moduleSystem = "nixos";
   paths = [./modules ./hosts ./rices];
