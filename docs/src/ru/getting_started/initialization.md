@@ -23,18 +23,19 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     denix = {
       url = "github:yunfachi/denix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
+      inputs.nix-darwin.follows = "nix-darwin";
     };
   };
 
-  outputs = {
-    denix,
-    nixpkgs,
-    ...
-  } @ inputs: let
+  outputs = {denix, ...} @ inputs: let
     mkConfigurations = moduleSystem:
       denix.lib.configurations {
         inherit moduleSystem;

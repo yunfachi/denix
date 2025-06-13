@@ -29,7 +29,7 @@ If `moduleSystem` from the [function arguments](/configurations/structure#functi
 An example of a flake's `outputs` for `nixosConfigurations`, `homeConfigurations`, and `darwinConfigurations`:
 
 ```nix
-outputs = {denix, nixpkgs, ...} @ inputs: let
+outputs = {denix, ...} @ inputs: let
   mkConfigurations = moduleSystem:
     denix.lib.configurations rec {
       inherit moduleSystem;

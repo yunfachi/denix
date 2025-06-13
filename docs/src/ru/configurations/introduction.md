@@ -29,7 +29,7 @@ nixos-rebuild switch --flake .#desktop-dark --use-remote-sudo
 Пример `outputs` флейка для `nixosConfigurations`, `homeConfigurations` и `darwinConfigurations`:
 
 ```nix
-outputs = {denix, nixpkgs, ...} @ inputs: let
+outputs = {denix, ...} @ inputs: let
   mkConfigurations = moduleSystem:
     denix.lib.configurations rec {
       inherit moduleSystem;
