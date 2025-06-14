@@ -3,3 +3,4 @@ node_modules
 **/.vitepress/dist
 /.pre-commit-config.yaml
 .direnv
+/templates/**/flake.lock
