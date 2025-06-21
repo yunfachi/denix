@@ -12,8 +12,9 @@
     nixpkgs ? args.nixpkgs,
     home-manager ? args.home-manager,
     nix-darwin ? args.nix-darwin,
+    useHomeManagerModule ? true,
     homeManagerNixpkgs ? nixpkgs,
-    homeManagerUser,
+    homeManagerUser ? null,
     moduleSystem ? null, # TODO: remove the default value once the deprecated isHomeManager is removed
     isHomeManager ? null, # TODO: DEPRECATED since 2025/05/05
     paths ? [],
@@ -43,7 +44,7 @@
 
       files = delib.umport {inherit paths exclude recursive;};
 
-      mkApply = moduleSystem: import ./apply.nix {inherit lib homeManagerUser moduleSystem myconfigName;};
+      mkApply = moduleSystem: import ./apply.nix {inherit useHomeManagerModule homeManagerUser moduleSystem myconfigName;};
       mkDenixLib = {
         config,
         moduleSystem,
@@ -77,7 +78,7 @@
                 inherit currentHostName;
               };
             };
-          modules = (internalExtraModules "nixos") ++ extraModules ++ files ++ [home-manager.nixosModules.home-manager];
+          modules = (internalExtraModules "nixos") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.nixosModules.home-manager]);
         };
         homeSystem = home-manager.lib.homeManagerConfiguration {
           extraSpecialArgs =
@@ -104,7 +105,7 @@
             };
           # FIXME: is this really necessary?
           # pkgs = ...;
-          modules = (internalExtraModules "darwin") ++ extraModules ++ files ++ [home-manager.darwinModules.home-manager];
+          modules = (internalExtraModules "darwin") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.darwinModules.home-manager]);
         };
       in
         {
