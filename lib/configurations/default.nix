@@ -12,9 +12,8 @@
     nixpkgs ? args.nixpkgs,
     home-manager ? args.home-manager,
     nix-darwin ? args.nix-darwin,
-    useHomeManagerModule ? true,
     homeManagerNixpkgs ? nixpkgs,
-    homeManagerUser ? null,
+    homeManagerUser ? null, # not default value!
     moduleSystem ? null, # TODO: remove the default value once the deprecated isHomeManager is removed
     isHomeManager ? null, # TODO: DEPRECATED since 2025/05/05
     paths ? [],
@@ -44,14 +43,15 @@
 
       files = delib.umport {inherit paths exclude recursive;};
 
-      mkApply = moduleSystem: import ./apply.nix {inherit useHomeManagerModule homeManagerUser moduleSystem myconfigName;};
+      mkApply = moduleSystem: useHomeManagerModule: import ./apply.nix {inherit useHomeManagerModule homeManagerUser moduleSystem myconfigName;};
       mkDenixLib = {
         config,
         moduleSystem,
+        useHomeManagerModule,
         currentHostName ? null,
       }:
         delib.extend (delib: _: let
-          apply = mkApply moduleSystem;
+          apply = mkApply moduleSystem useHomeManagerModule;
           callLib = file: import file {inherit delib lib apply config myconfigName currentHostName;};
         in
           {
@@ -64,64 +64,72 @@
 
       mkSystem = {
         moduleSystem,
+        useHomeManagerModule,
         homeManagerSystem,
         currentHostName,
         internalExtraModules ? (moduleSystem_: []),
-      }: let
-        nixosSystem = nixpkgs.lib.nixosSystem {
-          specialArgs =
-            specialArgs
-            // {
-              ${denixLibName} = mkDenixLib {
-                config = nixosSystem.config;
-                moduleSystem = "nixos";
-                inherit currentHostName;
+      }:
+        if !topArgs ? homeManagerUser && useHomeManagerModule
+        then abort "Please specify 'delib.configurations :: useHomeManagerModule'. Valid values are true and false."
+        else let
+          nixosSystem = nixpkgs.lib.nixosSystem {
+            specialArgs =
+              specialArgs
+              // {
+                ${denixLibName} = mkDenixLib {
+                  config = nixosSystem.config;
+                  moduleSystem = "nixos";
+                  inherit currentHostName useHomeManagerModule;
+                };
+                inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
               };
-            };
-          modules = (internalExtraModules "nixos") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.nixosModules.home-manager]);
-        };
-        homeSystem = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs =
-            specialArgs
-            // {
-              ${denixLibName} = mkDenixLib {
-                config = homeSystem.config;
-                moduleSystem = "home";
-                inherit currentHostName;
+            modules = (internalExtraModules "nixos") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.nixosModules.home-manager]);
+          };
+          homeSystem = home-manager.lib.homeManagerConfiguration {
+            extraSpecialArgs =
+              specialArgs
+              // {
+                ${denixLibName} = mkDenixLib {
+                  config = homeSystem.config;
+                  moduleSystem = "home";
+                  inherit currentHostName useHomeManagerModule;
+                };
+                inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
               };
-            };
-          pkgs = homeManagerNixpkgs.legacyPackages.${homeManagerSystem};
-          modules = (internalExtraModules "home") ++ extraModules ++ files;
-        };
-        darwinSystem = nix-darwin.lib.darwinSystem {
-          specialArgs =
-            specialArgs
-            // {
-              ${denixLibName} = mkDenixLib {
-                config = darwinSystem.config;
-                moduleSystem = "darwin";
-                inherit currentHostName;
+            pkgs = homeManagerNixpkgs.legacyPackages.${homeManagerSystem};
+            modules = (internalExtraModules "home") ++ extraModules ++ files;
+          };
+          darwinSystem = nix-darwin.lib.darwinSystem {
+            specialArgs =
+              specialArgs
+              // {
+                ${denixLibName} = mkDenixLib {
+                  config = darwinSystem.config;
+                  moduleSystem = "darwin";
+                  inherit currentHostName useHomeManagerModule;
+                };
+                inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
               };
-            };
-          # FIXME: is this really necessary?
-          # pkgs = ...;
-          modules = (internalExtraModules "darwin") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.darwinModules.home-manager]);
-        };
-      in
-        {
-          nixos = nixosSystem;
-          home = homeSystem;
-          darwin = darwinSystem;
-        }
-        .${
-          moduleSystem
-        };
+            # FIXME: is this really necessary?
+            # pkgs = ...;
+            modules = (internalExtraModules "darwin") ++ extraModules ++ files ++ (lib.optionals useHomeManagerModule [home-manager.darwinModules.home-manager]);
+          };
+        in
+          {
+            nixos = nixosSystem;
+            home = homeSystem;
+            darwin = darwinSystem;
+          }
+          .${
+            moduleSystem
+          };
 
       inherit
         ({rices = {};}
           // (mkSystem {
             # TODO: maybe add moduleSystem = "empty", which "apply" would skip entirely*?
             moduleSystem = "nixos";
+            useHomeManagerModule = true; # FIXME
             homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
             currentHostName = null;
             internalExtraModules = _: [mkConfigurationsSystemExtraModule];
@@ -142,10 +150,10 @@
 
         system = mkSystem {
           inherit moduleSystem;
-          inherit (host) homeManagerSystem;
+          inherit (host) useHomeManagerModule homeManagerSystem;
           currentHostName = host.name;
           internalExtraModules = moduleSystem: let
-            apply = mkApply moduleSystem;
+            apply = mkApply moduleSystem host.useHomeManagerModule;
           in
             [
               ({options, ...}: {config.${myconfigName} = {inherit host;} // lib.optionalAttrs (options.${myconfigName} ? rice) {inherit rice;};})

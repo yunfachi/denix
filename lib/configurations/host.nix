@@ -14,6 +14,7 @@
     darwin ? {},
     shared ? {},
     # to avoid overwriting
+    # useHomeManagerModule ? true,
     # homeManagerSystem ? null,
     # rice ? null,
     ...
@@ -68,6 +69,7 @@
   hostSubmoduleOptions = with delib.options; {
     name = noDefault (strOption null);
 
+    useHomeManagerModule = boolOption true;
     homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
     myconfig = attrsOption {};
