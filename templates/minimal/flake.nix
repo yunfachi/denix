@@ -23,6 +23,7 @@
     mkConfigurations = moduleSystem:
       denix.lib.configurations {
         inherit moduleSystem;
+        # useHomeManagerModule = false;
         homeManagerUser = "sjohn"; #!!! REPLACEME
 
         paths = [./hosts ./modules ./rices];
