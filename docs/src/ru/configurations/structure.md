@@ -6,6 +6,7 @@
 - `nixpkgs` (nixpkgs): используется для переопределения nixpkgs в вашей конфигурации, аналогично `inputs.denix.inputs.nixpkgs.follows`. По умолчанию `inputs.nixpkgs`.
 - `home-manager` (home-manager): используется для переопределения home-manager в вашей конфигурации, аналогично `inputs.denix.inputs.home-manager.follows`. По умолчанию `inputs.home-manager`.
 - `nix-darwin` (nix-darwin): используется для переопределения nix-darwin в вашей конфигурации, аналогично `inputs.denix.inputs.nix-darwin.follows`. По умолчанию `inputs.nix-darwin`.
+- `useHomeManagerModule` (bool): добавлять ли модуль Home Manager в ваши конфигурации NixOS и Nix-Darwin. По умолчанию `true`.
 - `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию используется `nixpkgs` из аргументов этой функции.
 - `homeManagerUser` (string): имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager.
 - `moduleSystem` (`"nixos"`, `"home"` и `"darwin"`): указывает, для какой модульной системы должен быть создан список конфигураций - NixOS, Home Manager или Nix-Darwin.

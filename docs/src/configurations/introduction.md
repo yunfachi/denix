@@ -17,6 +17,8 @@ In this case, the host remains "desktop", but the rice changes to "dark".
 
 It is important to note that when switching rice in this way, only the value of the `${myConfigName}.rice` option changes, while the value of `${myConfigName}.hosts.${hostName}.rice` remains the same.
 
+It is also worth mentioning that, by default, the Home Manager module is automatically included in your NixOS and Nix-Darwin configurations. If you do not want to use the Home Manager module, simply add `useHomeManagerModule = false;` to the arguments of the `delib.configurations` function.
+
 ## Principle of Configuration List Generation {#principle}
 The configuration list is generated based on the following principle:
 

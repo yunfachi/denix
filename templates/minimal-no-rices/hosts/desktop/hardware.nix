@@ -2,6 +2,7 @@
 delib.host {
   name = "desktop";
 
+  # useHomeManagerModule = false;
   homeManagerSystem = "x86_64-linux"; #!!! REPLACEME
   home.home.stateVersion = "24.05"; #!!! REPLACEME
 

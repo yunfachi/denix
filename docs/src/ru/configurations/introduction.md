@@ -17,6 +17,8 @@ nixos-rebuild switch --flake .#desktop-dark --use-remote-sudo
 
 Важно отметить, что при смене райса таким образом меняется только значение опции `${myConfigName}.rice`, при этом значение `${myconfigName}.hosts.${hostName}.rice` остаётся прежним.
 
+Также стоит упомянуть, что по умолчанию модуль Home Manager автоматически включён в ваши конфигурации NixOS и Nix-Darwin. Если вы не хотите использовать модуль Home Manager, просто добавьте `useHomeManagerModule = false;` в аргументы функции `delib.configurations`.
+
 ## Принцип генерации списка конфигураций {#principle}
 Список конфигураций генерируется по следующему принципу:
 
