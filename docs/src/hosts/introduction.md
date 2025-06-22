@@ -5,6 +5,8 @@ In simple terms, this allows you to separate the NixOS, Home Manager, Nix-Darwin
 
 A host can also be compared to a module, because all hosts are imported regardless of which one is active, but the applied configurations depend on the active host.
 
+It is also worth mentioning that, by default, the Home Manager module is automatically included in the NixOS and Nix-Darwin configurations of each host. If you do not want to use the Home Manager module for a particular host, simply add `useHomeManagerModule = false;` to the arguments of the `delib.host` function.
+
 ## Options {#options}
 For hosts to work, the configuration must include the options `${myconfigName}.host` and `${myconfigName}.hosts`, which **you define yourself** in one of the modules.
 

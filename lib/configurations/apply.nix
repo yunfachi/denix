@@ -1,4 +1,5 @@
 {
+  useHomeManagerModule,
   homeManagerUser,
   moduleSystem,
   myconfigName,
@@ -23,9 +24,15 @@
     };
   home = _home:
     configForModuleSystem {
-      nixos.home-manager.users.${homeManagerUser} = _home;
+      nixos =
+        if useHomeManagerModule
+        then {home-manager.users.${homeManagerUser} = _home;}
+        else {};
       home = _home;
-      darwin.home-manager.users.${homeManagerUser} = _home;
+      darwin =
+        if useHomeManagerModule
+        then {home-manager.users.${homeManagerUser} = _home;}
+        else {};
     };
   darwin = _darwin:
     configForModuleSystem {
