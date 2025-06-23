@@ -13,6 +13,7 @@ lib.makeExtensible (
       configurations = callLib ./configurations;
 
       attrset = callLib ./attrset.nix;
+      maintainers = callLib ./maintainers.nix;
       options = callLib ./options.nix;
       umport = callLib ./umport.nix;
     }
