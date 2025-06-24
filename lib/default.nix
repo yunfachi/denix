@@ -7,15 +7,37 @@
 }:
 lib.makeExtensible (
   delib: let
-    callLib = file: import file {inherit delib lib nixpkgs home-manager nix-darwin;};
+    inherit (delib) _callLib;
   in
     {
-      configurations = callLib ./configurations;
+      _callLib = file: import file delib._callLibArgs;
 
-      attrset = callLib ./attrset.nix;
-      maintainers = callLib ./maintainers.nix;
-      options = callLib ./options.nix;
-      umport = callLib ./umport.nix;
+      _callLibArgs = {
+        inherit
+          delib
+          lib
+          nixpkgs
+          home-manager
+          nix-darwin
+          ;
+      };
+
+      configurations = _callLib ./configurations;
+
+      attrset = _callLib ./attrset.nix;
+      inherit (delib.attrset) getAttrByStrPath setAttrByStrPath hasAttrs;
+      maintainers = _callLib ./maintainers.nix;
+      options = _callLib ./options.nix;
+      inherit
+        (_callLib ./extension.nix)
+        extension
+        callExtension
+        callExtensions
+        extensions
+        mergeExtensions
+        ;
+      umport = _callLib ./umport.nix;
     }
-    // callLib ./options.nix
+    // (import ./options.nix {inherit delib lib;})
+  # After implementing https://github.com/NixOS/nix/issues/4090 it will be possible to use `// callLib` (to inherit all)
 )
