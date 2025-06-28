@@ -23,6 +23,9 @@ Custom modules allow you to define options and related configurations in a flexi
 * **Hosts**: Unique configurations tailored for each machine.
 * **Rices**: Customizations that can be applied to all hosts.
 
+### Extensions 
+Write your own extensions for the Denix or use existing ones that add new functions and modules.
+
 ### Unified NixOS, Home Manager, and Nix-Darwin Configurations
 Write your NixOS, Home Manager, and Nix-Darwin configurations in a single file*, and Denix will automatically handle the separation for you.
 
