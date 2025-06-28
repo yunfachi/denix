@@ -1,4 +1,4 @@
-# Real Configurations {#real-configurations}
+# Showcase {#showcase}
 This section presents a list of NixOS, Home Manager, and Nix-Darwin configurations that use Denix and can serve as examples of good practice*. You can add your configuration to this list via a [pull request](https://github.com/yunfachi/denix/pulls) or an [issue](https://github.com/yunfachi/denix/issues).
 
 ## Yunfachi - [nix-config](https://github.com/yunfachi/nix-config) (NixOS, Home Manager) {#yunfachi}
