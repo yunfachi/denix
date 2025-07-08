@@ -27,7 +27,12 @@
     nix-darwin,
     ...
   }: let
-    supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+    supportedSystems = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
 
     forAllSystems = nixpkgs-lib.lib.genAttrs supportedSystems;
   in {
@@ -50,6 +55,12 @@
           It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
         '';
         path = ./templates/minimal-no-rices;
+      };
+      extensions-collection = {
+        description = ''
+          Flake for creating your own collection of Denix extensions.
+        '';
+        path = ./templates/extensions-collection;
       };
     };
 

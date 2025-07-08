@@ -42,3 +42,9 @@ Hosts and initial modules without rices:
 ```sh
 nix flake init -t github:yunfachi/denix#minimal-no-rices
 ```
+
+### [extensions-collection](./templates/extensions-collection/)
+Flake for creating your own collection of Denix extensions:
+```sh
+nix flake init -t github:yunfachi/denix#extensions-collection
+```
