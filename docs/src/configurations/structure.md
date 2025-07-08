@@ -3,6 +3,7 @@
 ## Function Arguments {#function-arguments}
 - `myconfigName` (string): the category for all Denix module options, hosts, and rices. Defaults to `myconfig`; changes are not recommended.
 - `denixLibName` (string): the name of the Denix library in `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). Defaults to `delib`; changes are not recommended.
+- `extensions` (listOf delib.extension): a list of extensions to be applied to the configuration. Defaults to `[]`.
 - `nixpkgs` (nixpkgs): used to override nixpkgs in your configuration, equivalent to `inputs.denix.inputs.nixpkgs.follows`. Defaults to `inputs.nixpkgs`.
 - `home-manager` (home-manager): used to override home-manager in your configuration, equivalent to `inputs.denix.inputs.home-manager.follows`. Defaults to `inputs.home-manager`.
 - `nix-darwin` (nix-darwin): used to override nix-darwin in your configuration, equivalent to `inputs.denix.inputs.nix-darwin.follows`. Defaults to `inputs.nix-darwin`.
@@ -21,6 +22,7 @@
 delib.configurations rec {
   myconfigName = "myconfig";
   denixLibName = "delib";
+  extensions = with delib.extensions; [];
   nixpkgs = inputs.nixpkgs;
   home-manager = inputs.home-manager;
   nix-darwin = inputs.nix-darwin;
