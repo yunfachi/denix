@@ -10,20 +10,6 @@
     }
     value
   ));
-  recursivelyExtends = overlay: f: (
-    final: let
-      prev = f final;
-    in
-      lib.recursiveUpdate prev (overlay final prev)
-  );
-  recursivelyComposeExtensions = f: g: final: prev: let
-    fApplied = f final prev;
-    prev' = prev // fApplied;
-  in
-    lib.recursiveUpdate fApplied (g final prev');
-  recursivelyComposeManyExtensions = lib.foldr (x: y: recursivelyComposeExtensions x y) (
-    final: prev: {}
-  );
   toExtensionWithConfig = f:
     if lib.isFunction f
     then
@@ -70,8 +56,8 @@ in {
         if _initialConfig == null || lib.isFunction _initialConfig
         then _initialConfig
         else _: _initialConfig;
-      fixedConfig = lib.fix (
-        recursivelyExtends config (
+      fixedConfig = delib.fix (
+        delib.recursivelyExtends config (
           if initialConfig != null
           then initialConfig
           else _: {}
@@ -96,10 +82,12 @@ in {
       __unfix__ = f;
       __unfixConfig__ = config;
       config = fixedConfig;
-      withConfig = configOverlay: f (recursivelyComposeExtensions config (lib.toExtension configOverlay));
+      withConfig = configOverlay: f (delib.recursivelyComposeExtensions config (lib.toExtension configOverlay));
     };
   in
     f config;
+
+  extensions = delib.callExtensions {paths = [./extensions];};
 
   callExtension = file: delib._callLib file // {_file = file;};
 
@@ -114,7 +102,7 @@ in {
   in
     lib.mapAttrs delib.mergeExtensions groupedByName;
 
-  extensions = delib.callExtensions {paths = [./extensions];};
+  withExtensions = lib.foldl (acc: extension: delib.recursivelyExtend extension.libExtension) delib;
 
   mergeExtensions = name: extensions: let
     totalExtensions = builtins.length extensions;
@@ -128,7 +116,7 @@ in {
         sorted = builtins.sort (q: p: q.configOrder < p.configOrder) extensions;
         configs = builtins.map (x: x.__unfixConfig__) sorted;
       in
-        recursivelyComposeManyExtensions configs;
+        delib.recursivelyComposeManyExtensions configs;
     in
       delib.extension {
         inherit name;
@@ -183,7 +171,7 @@ in {
           sorted = builtins.sort (q: p: q.libExtensionOrder < p.libExtensionOrder) extensions;
           libExtensions = config: builtins.map (extension: (extension.__unfix__ config).libExtension) sorted;
         in
-          config: recursivelyComposeManyExtensions (libExtensions config);
+          config: delib.recursivelyComposeManyExtensions (libExtensions config);
         modules = config: builtins.concatMap (extension: (extension.__unfix__ config).modules) extensions;
       };
 }

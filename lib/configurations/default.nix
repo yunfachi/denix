@@ -5,7 +5,7 @@
   home-manager,
   nix-darwin,
   ...
-} @ args: let
+} @ args: {
   configurations = {
     # Denix
     myconfigName ? "myconfig",
@@ -68,7 +68,7 @@
           useHomeManagerModule,
           currentHostName ? null,
         }: let
-          extendedDelib = delib.extend (
+          extendedDelib = delib.recursivelyExtend (
             final: prev: let
               apply = mkApply moduleSystem useHomeManagerModule;
               inherit (final) _callLib;
@@ -92,7 +92,9 @@
                 hostsOption
                 hostNamesAssertions
                 ;
+
               inherit (_callLib ./module.nix) module;
+
               inherit
                 (_callLib ./rice.nix)
                 rice
@@ -104,9 +106,7 @@
             }
           );
         in
-          lib.pipe extendedDelib (
-            builtins.map (extension: lib: lib.extend extension.libExtension) extensions
-          );
+          extendedDelib.withExtensions extensions;
 
         mkSystem = {
           moduleSystem,
@@ -261,5 +261,4 @@
       in
         configurations
     );
-in
-  configurations
+}
