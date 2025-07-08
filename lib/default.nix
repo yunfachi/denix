@@ -4,40 +4,61 @@
   home-manager,
   nix-darwin,
   ...
-}:
-lib.makeExtensible (
-  delib: let
-    inherit (delib) _callLib;
-  in
-    {
-      _callLib = file: import file delib._callLibArgs;
+}: let
+  inherit
+    (lib.fix (delib: import ./fixed-points.nix {inherit delib lib;}))
+    makeRecursivelyExtensible
+    ;
+in
+  makeRecursivelyExtensible (
+    delib: let
+      inherit (delib) _callLib;
+    in
+      {
+        _callLib = file: import file delib._callLibArgs;
 
-      _callLibArgs = {
+        _callLibArgs = {
+          inherit
+            delib
+            lib
+            nixpkgs
+            home-manager
+            nix-darwin
+            ;
+        };
+
+        attrset = _callLib ./attrset.nix;
+        inherit (delib.attrset) getAttrByStrPath setAttrByStrPath hasAttrs;
+
+        inherit (_callLib ./configurations) configurations;
+
         inherit
-          delib
-          lib
-          nixpkgs
-          home-manager
-          nix-darwin
+          (_callLib ./fixed-points.nix)
+          fix
+          fixWithUnfix
+          recursivelyExtends
+          recursivelyComposeExtensions
+          recursivelyComposeManyExtensions
+          makeRecursivelyExtensible
+          makeRecursivelyExtensibleWithCustomName
           ;
-      };
 
-      configurations = _callLib ./configurations;
+        inherit (_callLib ./maintainers.nix) maintainers;
 
-      attrset = _callLib ./attrset.nix;
-      inherit (delib.attrset) getAttrByStrPath setAttrByStrPath hasAttrs;
-      maintainers = _callLib ./maintainers.nix;
-      options = _callLib ./options.nix;
-      inherit
-        (_callLib ./extension.nix)
-        extension
-        callExtension
-        callExtensions
-        extensions
-        mergeExtensions
-        ;
-      umport = _callLib ./umport.nix;
-    }
-    // (import ./options.nix {inherit delib lib;})
-  # After implementing https://github.com/NixOS/nix/issues/4090 it will be possible to use `// callLib` (to inherit all)
-)
+        options = _callLib ./options.nix;
+
+        inherit
+          (_callLib ./extension.nix)
+          extension
+          extensions
+          callExtension
+          callExtensions
+          withExtensions
+          mergeExtensions
+          ;
+
+        inherit (_callLib ./umport.nix) umport;
+      }
+      // (import ./options.nix {inherit delib lib;})
+    # After implementing https://github.com/NixOS/nix/issues/4090 it will be possible to use `// callLib` (to inherit all)
+  )
