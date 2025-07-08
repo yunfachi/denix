@@ -13,49 +13,9 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 
 ## Flake {#flake}
 First, create a directory for your configuration and a `flake.nix` file with the following content:
-```nix
-{
-  description = "Modular configuration of NixOS, Home Manager, and Nix-Darwin with Denix";
-
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    denix = {
-      url = "github:yunfachi/denix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.nix-darwin.follows = "nix-darwin";
-    };
-  };
-
-  outputs = {denix, ...} @ inputs: let
-    mkConfigurations = moduleSystem:
-      denix.lib.configurations {
-        inherit moduleSystem;
-        homeManagerUser = "sjohn"; #!!! REPLACEME
-
-        paths = [./hosts ./modules ./rices];
-
-        specialArgs = {
-          inherit inputs;
-        };
-      };
-  in {
-    # If you're not using NixOS, Home Manager, or Nix-Darwin,
-    # you can safely remove the corresponding lines below.
-    nixosConfigurations = mkConfigurations "nixos";
-    homeConfigurations = mkConfigurations "home";
-    darwinConfigurations = mkConfigurations "darwin";
-  };
-}
-```
+::: code-group
+<<< @/../../templates/minimal/flake.nix {26,30-35 nix:line-numbers}
+:::
 
 If you are not familiar with `inputs` and `outputs`, read [NixOS Wiki Flakes](https://nixos.wiki/wiki/Flakes).
 
@@ -63,6 +23,15 @@ Code explanation:
 - `mkConfigurations` - a function to reduce code repetition, which takes `moduleSystem` and passes it to `denix.lib.configurations`.
 - `denix.lib.configurations` - [Configurations (flakes) - Introduction](/configurations/introduction).
 - `paths = [./hosts ./modules ./rices];` - paths that will be recursively imported by Denix as modules. Remove `./rices` if you don't plan to use rices.
+- `extensions` - Denix extensions that can add new functions, modules, and more (see [Extensions - Introduction](/extensions/introduction)). For example, `args` simplifies adding arguments to modules, while `base` automatically generates template modules for host and rice options. The full list of official extensions and their configuration options can be found in [All Extensions](/en/extensions/all-extensions).
+
+::: info
+If you do not plan to use rices, add `rices.enable = false;` to the `base` extension configuration (after line 37).
+:::
+
+::: tip
+You can also choose not to use any extensions at all - simply remove this argument. This tutorial supports that as well.
+:::
 
 ## Hosts {#hosts}
 Create a `hosts` directory, and within it, create a subdirectory with the name of your host, for example, `desktop`.
@@ -104,7 +73,9 @@ delib.host {
 The `default.nix` file will be modified later after adding modules and rices, so you can keep it open.
 
 ## Rices {#rices}
+::: info
 Skip this section if you do not wish to use rices.
+:::
 
 Create a `rices` directory, and within it, create a subdirectory with the name of your rice, for example, `dark`.
 
@@ -139,6 +110,10 @@ delib.module {
 This file is optional, as are any of its options, which are only used by you, but it is recommended as good practice.
 
 ### Hosts {#modules-hosts}
+::: info
+If you are using the `base` extension, do not create the `hosts.nix` file described below.
+:::
+
 Also, create a `hosts.nix` file in this same directory (`modules/config`), and write any example from [Hosts - Examples](/hosts/examples).
 
 For example, we will take ["With the `type` Option"](/hosts/examples#type-option):
@@ -172,6 +147,9 @@ delib.module {
 If you added an example with new options (`type`, `displays`, etc.) or made your own options, don't forget to add values for these options in the hosts.
 
 In our example, we added the `type` option, so open the `default.nix` file in your host's directory and add the attribute `type` to the `delib.host` function:
+::: tip
+By default, the `base` extension also adds the `type` option, so you need to set it.
+:::
 ```nix
 {delib, ...}:
 delib.host {
@@ -184,7 +162,12 @@ delib.host {
 ```
 
 ### Rices {#modules-rices}
+::: info
 Skip this section if you are not using rices.
+:::
+::: info
+If you are using the `base` extension, do not create the `rices.nix` file described below.
+:::
 
 In the `modules/config` directory, create a `rices.nix` file, and write any example from [Rices - Examples](/rices/examples).
 
@@ -331,10 +314,10 @@ modules
 - config
   - constants.nix
   - home.nix
-  - hosts.nix
-  - rices.nix
+  - hosts.nix (if you have not used the `base` extension)
+  - rices.nix (if you have not used the `base` extension)
   - user.nix
-rices
+rices (if you have used rices)
 - dark
   - default.nix
 flake.nix

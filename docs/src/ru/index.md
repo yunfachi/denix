@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Denix Документация"
   text: "Библиотека Nix для конфигураций"
-  tagline: Denix предоставляет инструменты для создания масштабируемых конфигураций NixOS, Home Manager и Nix-Darwin с модулями, хостами и райсами
+  tagline: Denix предоставляет расширяемые инструменты для создания масштабируемых конфигураций NixOS, Home Manager и Nix-Darwin с модулями, хостами и райсами
   image:
     light: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_light.svg
     dark: https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg
@@ -24,5 +24,7 @@ features:
     details: Хосты - это уникальные конфигурации для каждой машины, а райсы - это кастомизация, применимая ко всем хостам
   - title: NixOS, Home Manager и Nix-Darwin
     details: Конфигурацию NixOS, Home Manager и Nix-Darwin можно писать даже в одном файле, а Denix автоматически разделит их при сборке
+  - title: Расширения
+    details: Используйте готовые расширения для Denix с предопределёнными модулями и функциями либо создавайте собственные
 
 ---

@@ -110,7 +110,7 @@ in {
       };
 
     mkConfigurations = moduleSystem:
-      nixpkgs-unstable.lib.attrsets.mergeAttrsList 
+      nixpkgs-unstable.lib.attrsets.mergeAttrsList
       (map (f: f moduleSystem) [
         (_mkConfigurations nixpkgs-stable home-manager-stable nix-darwin-stable [./hosts/stable])
         (_mkConfigurations nixpkgs-unstable home-manager-unstable nix-darwin-unstable [./hosts/unstable])
