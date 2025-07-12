@@ -13,49 +13,9 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 
 ## Флейк {#flake}
 Первым делом создайте директорию под вашу конфигурацию и файл `flake.nix` со следующим содержанием:
-```nix
-{
-  description = "Modular configuration of NixOS, Home Manager, and Nix-Darwin with Denix";
-
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    denix = {
-      url = "github:yunfachi/denix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.nix-darwin.follows = "nix-darwin";
-    };
-  };
-
-  outputs = {denix, ...} @ inputs: let
-    mkConfigurations = moduleSystem:
-      denix.lib.configurations {
-        inherit moduleSystem;
-        homeManagerUser = "sjohn"; #!!! REPLACEME
-
-        paths = [./hosts ./modules ./rices];
-
-        specialArgs = {
-          inherit inputs;
-        };
-      };
-  in {
-    # Если вы не используете NixOS, Home Manager или Nix-Darwin,
-    # можете спокойно удалить соответствующие строки ниже.
-    nixosConfigurations = mkConfigurations "nixos";
-    homeConfigurations = mkConfigurations "home";
-    darwinConfigurations = mkConfigurations "darwin";
-  };
-}
-```
+::: code-group
+<<< @/../../templates/minimal/flake.nix {26,30-35 nix:line-numbers}
+:::
 
 Если вы не знаете про `inputs` и `outputs`, то прочитайте [NixOS Wiki Flakes](https://nixos.wiki/wiki/Flakes).
 
@@ -63,6 +23,15 @@ nix flake init -t github:yunfachi/denix#minimal-no-rices
 - `mkConfigurations` - функция для сокращения кода, которая принимает `moduleSystem` и передает его в `denix.lib.configurations`.
 - `denix.lib.configurations` - [Конфигурации (флейки) - Вступление](/ru/configurations/introduction).
 - `paths = [./hosts ./modules ./rices];` - пути, которые будут рекурсивно импортированы Denix как модули. Удалите `./rices`, если не планируете использовать райсы.
+- `extensions` - расширения Denix, которые могут добавлять новые функции, модули и прочее (см. [Расширения - Вступление](/ru/extensions/introduction)). Например, `args` упрощает добавление аргументов в модули, а `base` сам создаёт шаблонные модули для опций хостов и райсов. Полный список официальных расширений и их настроек - в разделе [Все расширения](/ru/extensions/all-extensions).
+
+::: info
+Если вы не планируете использовать райсы, добавьте `rices.enable = false;` в конфигурацию расширения `base` (после 37 строки).
+:::
+
+::: tip
+Вы можете вовсе не использовать расширения - просто удалите этот аргумент. Этот туториал рассчитан и на такой случай.
+:::
 
 ## Хосты {#hosts}
 Создайте директорию `hosts`, а в ней поддиректорию с названием вашего хоста, например, `desktop`.
@@ -104,7 +73,9 @@ delib.host {
 Файл `default.nix` ещё будет изменяться после добавления модулей и райсов, поэтому его можно не закрывать.
 
 ## Райсы {#rices}
+::: info
 Пропустите этот пункт, если не хотите использовать райсы.
+:::
 
 Создайте директорию `rices`, а в ней поддиректорию с названием вашего райса, например, `dark`.
 
@@ -139,6 +110,10 @@ delib.module {
 Этот файл необязателен, так же как и любая из его опций, которые используются лишь вами, но он рекомендуется как хорошая практика.
 
 ### Хосты {#modules-hosts}
+::: info
+Не создавайте описанный файл `hosts.nix`, если вы используете расширение `base`.
+:::
+
 Также создайте файл `hosts.nix` в этой же директории (`modules/config`), а в него запишите любой пример из [Хосты - Примеры](/ru/hosts/examples).
 
 Для примера мы возьмём ["С опцией `type`"](/ru/hosts/examples#type-option):
@@ -172,6 +147,9 @@ delib.module {
 Если вы добавили пример с новыми опциями (`type`, `displays` и т.д.) или сами сделали свои опции, то не забудьте добавить значения этим опциям в самих хостах.
 
 В нашем примере мы добавили опцию `type`, поэтому откройте файл `default.nix` в директории вашего хоста и в функцию `delib.host` добавляем атрибут `type`:
+::: tip
+По умолчанию расширение `base` также добавляет опцию `type`, поэтому её необходимо задать.
+:::
 ```nix
 {delib, ...}:
 delib.host {
@@ -184,7 +162,12 @@ delib.host {
 ```
 
 ### Райсы {#modules-rices}
-Пропустите этой пункт, если вы не используете райсы.
+::: info
+Пропустите этот пункт, если вы не используете райсы.
+:::
+::: info
+Не создавайте описанный файл `rices.nix`, если вы используете расширение `base`.
+:::
 
 В директории `modules/config` создайте файл `rices.nix`, а в него запишите любой пример из [Райсы - Примеры](/ru/rices/examples).
 
@@ -331,10 +314,10 @@ modules
 - config
   - constants.nix
   - home.nix
-  - hosts.nix
-  - rices.nix
+  - hosts.nix (если вы не использовали расширение `base`)
+  - rices.nix (если вы не использовали расширение `base`)
   - user.nix
-rices
+rices (если вы использовали райсы)
 - dark
   - default.nix
 flake.nix

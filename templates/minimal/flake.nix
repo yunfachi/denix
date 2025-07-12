@@ -27,6 +27,13 @@
 
         paths = [./hosts ./modules ./rices];
 
+        extensions = with denix.lib.extensions; [
+          args
+          (base.withConfig {
+            args.enable = true;
+          })
+        ];
+
         specialArgs = {
           inherit inputs;
         };
