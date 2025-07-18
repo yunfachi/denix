@@ -23,7 +23,7 @@ Code explanation:
 - `mkConfigurations` - a function to reduce code repetition, which takes `moduleSystem` and passes it to `denix.lib.configurations`.
 - `denix.lib.configurations` - [Configurations (flakes) - Introduction](/configurations/introduction).
 - `paths = [./hosts ./modules ./rices];` - paths that will be recursively imported by Denix as modules. Remove `./rices` if you don't plan to use rices.
-- `extensions` - Denix extensions that can add new functions, modules, and more (see [Extensions - Introduction](/extensions/introduction)). For example, `args` simplifies adding arguments to modules, while `base` automatically generates template modules for host and rice options. The full list of official extensions and their configuration options can be found in [All Extensions](/en/extensions/all-extensions).
+- `extensions` - Denix extensions that can add new functions, modules, and more (see [Extensions - Introduction](/extensions/introduction)). For example, `args` simplifies adding arguments to modules, while `base` automatically generates template modules for host and rice options. The full list of official extensions and their configuration options can be found in [All Extensions](/extensions/all-extensions).
 
 ::: info
 If you do not plan to use rices, add `rices.enable = false;` to the `base` extension configuration (after line 37).
