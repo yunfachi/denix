@@ -3,6 +3,7 @@
 ## Аргументы функции {#function-arguments}
 - `myconfigName` (string): категория для всех опций модулей Denix, хостов и райсов. По умолчанию `myconfig`; изменять не рекомендуется.
 - `denixLibName` (string): имя библиотеки Denix в `specialArgs` (`{denixLibName, ...}: denixLibName.module { ... }`). По умолчанию `delib`; изменять не рекомендуется.
+- `extensions` (listOf delib.extension): список расширений, которые будут применены к конфигурации. По умолчанию `[]`.
 - `nixpkgs` (nixpkgs): используется для переопределения nixpkgs в вашей конфигурации, аналогично `inputs.denix.inputs.nixpkgs.follows`. По умолчанию `inputs.nixpkgs`.
 - `home-manager` (home-manager): используется для переопределения home-manager в вашей конфигурации, аналогично `inputs.denix.inputs.home-manager.follows`. По умолчанию `inputs.home-manager`.
 - `nix-darwin` (nix-darwin): используется для переопределения nix-darwin в вашей конфигурации, аналогично `inputs.denix.inputs.nix-darwin.follows`. По умолчанию `inputs.nix-darwin`.
@@ -21,6 +22,7 @@
 delib.configurations rec {
   myconfigName = "myconfig";
   denixLibName = "delib";
+  extensions = with delib.extensions; [];
   nixpkgs = inputs.nixpkgs;
   home-manager = inputs.home-manager;
   nix-darwin = inputs.nix-darwin;

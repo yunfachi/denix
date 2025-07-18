@@ -153,3 +153,6 @@ html:not(.dark) {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+.vp-doc .extension-table tr:nth-child(2n) {
+  background-color: var(--vp-c-bg) !important;
+}
