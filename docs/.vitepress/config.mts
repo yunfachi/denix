@@ -116,7 +116,7 @@ function themeConfigEnglish() {
           ],
         },
         { text: "Common Errors", link: "/troubleshooting" },
-        { text: "Real Configurations", link: "/showcase" },
+        { text: "Showcase", link: "/showcase" },
       ],
     }
   }
