@@ -116,7 +116,7 @@ function themeConfigEnglish() {
           ],
         },
         { text: "Common Errors", link: "/troubleshooting" },
-        { text: "Real Configurations", link: "/real-configurations" },
+        { text: "Showcase", link: "/showcase" },
       ],
     }
   }
@@ -199,7 +199,7 @@ function themeConfigRussian() {
           ],
         },
         { text: "Распространённые ошибки", link: "/ru/troubleshooting" },
-        { text: "Реальные конфигурации", link: "/ru/real-configurations" },
+        { text: "Реальные конфигурации", link: "/ru/showcase" },
       ],
     }
   }
