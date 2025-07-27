@@ -102,7 +102,7 @@ in {
   in
     lib.mapAttrs delib.mergeExtensions groupedByName;
 
-  withExtensions = lib.foldl (acc: extension: delib.recursivelyExtend extension.libExtension) delib;
+  withExtensions = lib.foldl (acc: extension: acc.recursivelyExtend extension.libExtension) delib;
 
   mergeExtensions = name: extensions: let
     totalExtensions = builtins.length extensions;
