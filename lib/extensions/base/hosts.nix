@@ -35,8 +35,8 @@ delib.extension {
     };
   };
 
-  libExtension = config:
-    with delib; {
+  libExtension = config: final: prev:
+    with final; {
       generateHostType = {
         hostConfig,
         generateIsType ? config.hosts.type.generateIsType,
