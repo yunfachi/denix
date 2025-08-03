@@ -62,7 +62,7 @@ delib.module {
   name = "example";
 
   options.example = with delib; {
-    enable = enableOption true;
+    enable = boolOption true;
     hostnames = listOfOption str [];
   };
 
