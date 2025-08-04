@@ -26,6 +26,7 @@
     # Home Manager
     homeManagerNixpkgs ? nixpkgs,
     homeManagerUser ? null, # not default value!
+    useHomeManagerModule ? true,
     isHomeManager ? null, # TODO: DEPRECATED since 2025/05/05
     # Dev
     mkConfigurationsSystemExtraModule ? {
@@ -66,6 +67,7 @@
           config,
           moduleSystem,
           useHomeManagerModule,
+          homeManagerUser,
           currentHostName ? null,
         }: let
           extendedDelib = delib.recursivelyExtend (
@@ -81,6 +83,8 @@
                     config
                     myconfigName
                     currentHostName
+                    useHomeManagerModule
+                    homeManagerUser
                     ;
                 };
 
@@ -111,13 +115,24 @@
         mkSystem = {
           moduleSystem,
           useHomeManagerModule,
+          homeManagerUser,
           homeManagerSystem,
           currentHostName,
+          isInternal ? false,
           internalExtraModules ? (moduleSystem_: []),
-        }:
-          if !topArgs ? homeManagerUser && useHomeManagerModule
-          then abort "Please specify 'delib.configurations :: useHomeManagerModule'. Valid values are true and false."
+        } @ args:
+          if homeManagerUser == null && (useHomeManagerModule || moduleSystem == "home")
+          then abort "Please specify 'delib.configurations :: homeManagerUser' or 'delib.host :: homeManagerUser'."
           else let
+            useHomeManagerModule =
+              if isInternal
+              then topArgs.useHomeManagerModule or true
+              else args.useHomeManagerModule;
+            homeManagerUser =
+              if isInternal
+              then topArgs.homeManagerUser or null
+              else args.homeManagerUser;
+
             extensionsModules = builtins.concatMap (extension: extension.modules) extensions;
             nixosSystem = nixpkgs.lib.nixosSystem {
               specialArgs =
@@ -126,9 +141,9 @@
                   ${denixLibName} = mkDenixLib {
                     config = nixosSystem.config;
                     moduleSystem = "nixos";
-                    inherit currentHostName useHomeManagerModule;
+                    inherit currentHostName useHomeManagerModule homeManagerUser;
                   };
-                  inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
+                  inherit useHomeManagerModule homeManagerUser; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
                 };
               modules =
                 (internalExtraModules "nixos")
@@ -144,9 +159,9 @@
                   ${denixLibName} = mkDenixLib {
                     config = homeSystem.config;
                     moduleSystem = "home";
-                    inherit currentHostName useHomeManagerModule;
+                    inherit currentHostName useHomeManagerModule homeManagerUser;
                   };
-                  inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
+                  inherit useHomeManagerModule homeManagerUser; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
                 };
               pkgs = homeManagerNixpkgs.legacyPackages.${homeManagerSystem};
               modules = (internalExtraModules "home") ++ extraModules ++ files ++ extensionsModules;
@@ -158,9 +173,9 @@
                   ${denixLibName} = mkDenixLib {
                     config = darwinSystem.config;
                     moduleSystem = "darwin";
-                    inherit currentHostName useHomeManagerModule;
+                    inherit currentHostName useHomeManagerModule homeManagerUser;
                   };
-                  inherit useHomeManagerModule; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
+                  inherit useHomeManagerModule homeManagerUser; # otherwise it's impossible to make config.home-manager optional when not useHomeManagerModule.
                 };
               # FIXME: is this really necessary?
               # pkgs = ...;
@@ -189,9 +204,11 @@
             // (mkSystem {
               # TODO: maybe add moduleSystem = "empty", which "apply" would skip entirely*?
               moduleSystem = "nixos";
-              useHomeManagerModule = true; # FIXME
+              useHomeManagerModule = topArgs.useHomeManagerModule; # FIXME
+              homeManagerUser = "user";
               homeManagerSystem = "x86_64-linux"; # just a plug; FIXME
               currentHostName = null;
+              isInternal = true;
               internalExtraModules = _: [mkConfigurationsSystemExtraModule];
             }).config.${
               myconfigName
@@ -209,7 +226,7 @@
 
           system = mkSystem {
             inherit moduleSystem;
-            inherit (host) useHomeManagerModule homeManagerSystem;
+            inherit (host) useHomeManagerModule homeManagerUser homeManagerSystem;
             currentHostName = host.name;
             internalExtraModules = moduleSystem: let
               apply = mkApply moduleSystem host.useHomeManagerModule;
@@ -240,7 +257,7 @@
         configurations = let
           mkHostAttrs = riceName: rice: hostName: host:
             lib.optionalAttrs (!rice.inheritanceOnly or false) {
-              "${lib.optionalString (moduleSystem == "home") "${homeManagerUser}@"}${hostName}${
+              "${lib.optionalString (moduleSystem == "home") "${host.homeManagerUser}@"}${hostName}${
                 lib.optionalString (riceName != null) "-${riceName}"
               }" = mkHost {
                 inherit host;
