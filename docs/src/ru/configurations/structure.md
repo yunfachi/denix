@@ -8,7 +8,8 @@
 - `home-manager` (home-manager): используется для переопределения home-manager в вашей конфигурации, аналогично `inputs.denix.inputs.home-manager.follows`. По умолчанию `inputs.home-manager`.
 - `nix-darwin` (nix-darwin): используется для переопределения nix-darwin в вашей конфигурации, аналогично `inputs.denix.inputs.nix-darwin.follows`. По умолчанию `inputs.nix-darwin`.
 - `homeManagerNixpkgs` (nixpkgs): используется в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration` в формате: `homeManagerNixpkgs.legacyPackages.${host :: homeManagerSystem}`. По умолчанию используется `nixpkgs` из аргументов этой функции.
-- `homeManagerUser` (string): имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager.
+- `useHomeManagerModule` (boolean): добавлять ли модуль Home Manager в конфигурации NixOS и Nix-Darwin. По умолчанию `true`; значение можно переопределить в каждом хосте через `delib.host :: useHomeManagerModule`.
+- `homeManagerUser` (string): имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager. Значение можно переопределить в каждом хосте через `delib.host :: homeManagerUser`.
 - `moduleSystem` (`"nixos"`, `"home"` и `"darwin"`): указывает, для какой модульной системы должен быть создан список конфигураций - NixOS, Home Manager или Nix-Darwin.
 - `paths` (listOf string): пути, которые будут импортированы; добавьте сюда хосты, райсы и модули. По умолчанию `[]`.
 - `exclude` (listOf string): пути, которые будут исключены из импортирования. По умолчанию `[]`.
@@ -27,6 +28,7 @@ delib.configurations rec {
   home-manager = inputs.home-manager;
   nix-darwin = inputs.nix-darwin;
   homeManagerNixpkgs = nixpkgs;
+  useHomeManagerModule = true;
   homeManagerUser = "sjohn";
   moduleSystem = "nixos";
   paths = [./modules ./hosts ./rices];
