@@ -2,7 +2,8 @@
 
 ## Function Arguments {#function-arguments}
 - `name`: a string representing the host name.
-- `useHomeManagerModule`: whether to include the Home Manager module in the NixOS and Nix-Darwin configurations of this host. Defaults to `true`.
+- `useHomeManagerModule`: whether to include the Home Manager module in the NixOS and Nix-Darwin configurations of this host. Defaults to the value of `delib.configurations :: useHomeManagerModule`, which itself defaults to `true`.
+- `homeManagerUser`: the username, used in `home-manager.users.${homeManagerUser}` and for generating the Home Manager configuration list. Defaults to `delib.configurations :: homeManagerUser`.
 - `homeManagerSystem`: a string used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function, which is used in the [`delib.configurations`](/configurations/introduction) function as `homeManagerNixpkgs.legacyPackages.${homeManagerSystem}`.
 - `myconfig`: sets its value to `config.${myconfigName}` if `config.${myconfigName}.host` matches the current host.
 - `nixos`: sets its value to `config` if `moduleSystem` is `nixos` and `config.${myconfigName}.host` matches the current host.
@@ -26,6 +27,7 @@ delib.host {
   name = "";
 
   useHomeManagerModule = true;
+  homeManagerUser = "sjohn";
 
   # homeManagerNixpkgs.legacyPackages.${homeManagerSystem}
   homeManagerSystem = "x86_64-linux";

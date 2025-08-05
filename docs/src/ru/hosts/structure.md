@@ -2,7 +2,8 @@
 
 ## Аргументы функции {#function-arguments}
 - `name`: строка, представляющая имя хоста.
-- `useHomeManagerModule`: добавлять ли модуль Home Manager в конфигурации NixOS и Nix-Darwin этого хоста. По умолчанию `true`.
+- `useHomeManagerModule`: добавлять ли модуль Home Manager в конфигурации NixOS и Nix-Darwin этого хоста. По умолчанию `delib.configurations :: useHomeManagerModule`, который, в свою очередь, по умолчанию `true`.
+- `homeManagerUser`: имя пользователя, используется в `home-manager.users.${homeManagerUser}` и для генерации списка конфигураций Home Manager. По умолчанию `delib.configurations :: homeManagerUser`.
 - `homeManagerSystem`: строка, используемая в атрибуте `pkgs` функции `home-manager.lib.homeManagerConfiguration`, которая используется в функции [`delib.configurations`](/ru/configurations/introduction) в виде `homeManagerNixpkgs.legacyPackages.${homeManagerSystem}`.
 - `myconfig`: устанавливает её значение в `config.${myconfigName}`, если `config.${myconfigName}.host` соответствует текущему хосту.
 - `nixos`: устанавливает её значение в `config`, если `moduleSystem` равен `nixos` и `config.${myconfigName}.host` соответствует текущему хосту.
@@ -26,6 +27,7 @@ delib.host {
   name = "";
 
   useHomeManagerModule = true;
+  homeManagerUser = "sjohn";
 
   # homeManagerNixpkgs.legacyPackages.${homeManagerSystem}
   homeManagerSystem = "x86_64-linux";
