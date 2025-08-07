@@ -67,6 +67,7 @@ This section describes all official Denix extensions.
 | Name | Default Value | Description |
 | - | - | - |
 | `enable` | [`enableAll`](#base-settings-enableAll) | Whether to create the hosts module |
+| `extraSubmodules` | `[]` | Additional submodules used to define custom options within the host type. Example value: `[ ({ config, ... }:  { options.coolName = "cool " + config.name; }) ]` |
 
 `hosts.args`
 | Name | Default Value | Description |
@@ -108,6 +109,7 @@ This section describes all official Denix extensions.
 | Name | Default Value | Description |
 | - | - | - |
 | `enable` | [`enableAll`](#base-settings-enableAll) | Whether to create the rices module |
+| `extraSubmodules` | `[]` | Additional submodules used to define custom options within the rice type. Example value: `[ ({ config, ... }:  { options.coolName = "cool " + config.name; }) ]` |
 
 `rices.args`
 | Name | Default Value | Description |
