@@ -10,11 +10,13 @@ delib.extension {
     rices = {
       enable = final.enableAll;
       inherit (final) args assertions;
+
+      extraSubmodules = [];
     };
   };
 
-  modules = config:
-    lib.optionals config.rices.enable [
+  modules = extensionConfig:
+    lib.optionals extensionConfig.rices.enable [
       (
         {delib, ...}: let
           assertionsConfig = {myconfig, ...}: {
@@ -27,35 +29,37 @@ delib.extension {
               nix-darwin = "darwin";
             }
             .${
-              config.rices.assertions.moduleSystem
-            } or config.rices.assertions.moduleSystem;
+              extensionConfig.rices.assertions.moduleSystem
+            } or extensionConfig.rices.assertions.moduleSystem;
         in
           delib.module (
             {
               name = "rices";
 
               options = with delib; let
-                rice = {
-                  options = riceSubmoduleOptions;
-                };
+                rice =
+                  lib.singleton {
+                    options = riceSubmoduleOptions;
+                  }
+                  ++ extensionConfig.rices.extraSubmodules;
               in {
                 rice = riceOption rice;
                 rices = ricesOption rice;
               };
 
               myconfig.always = {myconfig, ...}:
-                lib.optionalAttrs config.rices.args.enable (
-                  delib.setAttrByStrPath config.rices.args.path {
+                lib.optionalAttrs extensionConfig.rices.args.enable (
+                  delib.setAttrByStrPath extensionConfig.rices.args.path {
                     shared = {inherit (myconfig) rice rices;};
                   }
                 )
                 // lib.optionalAttrs (assertionsModuleSystem == "myconfig") (
-                  lib.optionalAttrs config.rices.assertions.enable assertionsConfig
+                  lib.optionalAttrs extensionConfig.rices.assertions.enable assertionsConfig
                 );
             }
             // (lib.optionalAttrs (assertionsModuleSystem != "myconfig") {
               ${assertionsModuleSystem}.always =
-                lib.optionalAttrs config.rices.assertions.enable assertionsConfig;
+                lib.optionalAttrs extensionConfig.rices.assertions.enable assertionsConfig;
             })
           )
       )

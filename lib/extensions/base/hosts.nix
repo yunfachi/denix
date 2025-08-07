@@ -32,15 +32,17 @@ delib.extension {
         enable = true;
         # TODO: hyprland = {enable = false; moduleSystem = "home";}; ...
       };
+
+      extraSubmodules = [];
     };
   };
 
-  libExtension = config: final: prev:
+  libExtension = extensionConfig: final: prev:
     with final; {
       generateHostType = {
         hostConfig,
-        generateIsType ? config.hosts.type.generateIsType,
-        types ? config.hosts.type.types,
+        generateIsType ? extensionConfig.hosts.type.generateIsType,
+        types ? extensionConfig.hosts.type.types,
       }:
         {
           type = noDefault (enumOption types null);
@@ -59,10 +61,10 @@ delib.extension {
 
       generateHostFeatures = {
         hostConfig,
-        generateIsFeatured ? config.hosts.features.generateIsFeatured,
-        features ? config.hosts.features.features,
-        default ? config.hosts.features.default,
-        defaultByHostType ? config.hosts.features.defaultByHostType,
+        generateIsFeatured ? extensionConfig.hosts.features.generateIsFeatured,
+        features ? extensionConfig.hosts.features.features,
+        default ? extensionConfig.hosts.features.default,
+        defaultByHostType ? extensionConfig.hosts.features.defaultByHostType,
       }:
         {
           defaultFeatures = listOfOption (enum features) (
@@ -99,8 +101,8 @@ delib.extension {
       };
     };
 
-  modules = config:
-    lib.optionals config.hosts.enable [
+  modules = extensionConfig:
+    lib.optionals extensionConfig.hosts.enable [
       (
         {delib, ...}: let
           assertionsConfig = {myconfig, ...}: {
@@ -113,39 +115,43 @@ delib.extension {
               nix-darwin = "darwin";
             }
             .${
-              config.hosts.assertions.moduleSystem
-            } or config.hosts.assertions.moduleSystem;
+              extensionConfig.hosts.assertions.moduleSystem
+            } or extensionConfig.hosts.assertions.moduleSystem;
         in
           delib.module (
             {
               name = "hosts";
 
               options = with delib; let
-                host = {config, ...}: {
-                  options =
-                    hostSubmoduleOptions
-                    // delib.generateHostType {hostConfig = config;}
-                    // delib.generateHostFeatures {hostConfig = config;}
-                    // delib.generateHostDisplays {hostConfig = config;};
-                };
+                host =
+                  lib.singleton (
+                    {config, ...}: {
+                      options =
+                        hostSubmoduleOptions
+                        // delib.generateHostType {hostConfig = config;}
+                        // delib.generateHostFeatures {hostConfig = config;}
+                        // delib.generateHostDisplays {hostConfig = config;};
+                    }
+                  )
+                  ++ extensionConfig.hosts.extraSubmodules;
               in {
                 host = hostOption host;
                 hosts = hostsOption host;
               };
 
               myconfig.always = {myconfig, ...}:
-                lib.optionalAttrs config.hosts.args.enable (
-                  delib.setAttrByStrPath config.hosts.args.path {
+                lib.optionalAttrs extensionConfig.hosts.args.enable (
+                  delib.setAttrByStrPath extensionConfig.hosts.args.path {
                     shared = {inherit (myconfig) host hosts;};
                   }
                 )
                 // lib.optionalAttrs (assertionsModuleSystem == "myconfig") (
-                  lib.optionalAttrs config.hosts.assertions.enable assertionsConfig
+                  lib.optionalAttrs extensionConfig.hosts.assertions.enable assertionsConfig
                 );
             }
             // (lib.optionalAttrs (assertionsModuleSystem != "myconfig") {
               ${assertionsModuleSystem}.always =
-                lib.optionalAttrs config.hosts.assertions.enable assertionsConfig;
+                lib.optionalAttrs extensionConfig.hosts.assertions.enable assertionsConfig;
             })
           )
       )
