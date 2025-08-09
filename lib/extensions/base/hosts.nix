@@ -28,6 +28,10 @@ delib.extension {
         defaultByHostType = { };
       };
 
+      system = {
+        enable = true;
+      };
+
       displays = {
         enable = true;
         # TODO: hyprland = {enable = false; moduleSystem = "home";}; ...
@@ -39,60 +43,65 @@ delib.extension {
 
   libExtension =
     extensionConfig: final: prev: with final; {
-      generateHostType =
+      generateHostTypeSubmodule =
         {
-          hostConfig,
           generateIsType ? extensionConfig.hosts.type.generateIsType,
           types ? extensionConfig.hosts.type.types,
         }:
+        { config, ... }:
         {
-          type = noDefault (enumOption types null);
-        }
-        // lib.optionalAttrs generateIsType (
-          builtins.listToAttrs (
-            map (type: {
-              name =
-                let
-                  chars = lib.stringToCharacters type;
-                in
-                "is${lib.toUpper (lib.head chars) + lib.concatStrings (lib.tail chars)}";
-              value = boolOption (hostConfig.type == type);
-            }) types
-          )
-        );
+          options = {
+            type = noDefault (enumOption types null);
+          }
+          // lib.optionalAttrs generateIsType (
+            builtins.listToAttrs (
+              map (type: {
+                name =
+                  let
+                    chars = lib.stringToCharacters type;
+                  in
+                  "is${lib.toUpper (lib.head chars) + lib.concatStrings (lib.tail chars)}";
+                value = boolOption (config.type == type);
+              }) types
+            )
+          );
+        };
 
-      generateHostFeatures =
+      generateHostFeaturesSubmodule =
         {
-          hostConfig,
           generateIsFeatured ? extensionConfig.hosts.features.generateIsFeatured,
           features ? extensionConfig.hosts.features.features,
           default ? extensionConfig.hosts.features.default,
           defaultByHostType ? extensionConfig.hosts.features.defaultByHostType,
         }:
+        { config, ... }:
         {
-          defaultFeatures = listOfOption (enum features) (
-            default ++ (defaultByHostType.${hostConfig.type} or [ ])
+          options = {
+            defaultFeatures = listOfOption (enum features) (
+              default ++ (defaultByHostType.${config.type} or [ ])
+            );
+            features = listOfOption (enum features) [ ];
+          }
+          // lib.optionalAttrs generateIsFeatured (
+            builtins.listToAttrs (
+              map (feature: {
+                name = "${feature}Featured";
+                value = boolOption (builtins.elem feature (config.features ++ config.defaultFeatures));
+              }) features
+            )
           );
-          features = listOfOption (enum features) [ ];
-        }
-        // lib.optionalAttrs generateIsFeatured (
-          builtins.listToAttrs (
-            map (feature: {
-              name = "${feature}Featured";
-              value = boolOption (builtins.elem feature (hostConfig.features ++ hostConfig.defaultFeatures));
-            }) features
-          )
-        );
+        };
 
-      generateHostDisplays =
-        { hostConfig }:
+      generateHostDisplaysSubmodule =
+        _:
+        { config, ... }:
         {
-          displays = listOfOption (submodule {
+          options.displays = listOfOption (submodule {
             options = {
               enable = boolOption true;
 
               name = noDefault (strOption null);
-              primary = boolOption (builtins.length hostConfig.displays == 1);
+              primary = boolOption (builtins.length config.displays == 1);
               touchscreen = boolOption false;
 
               refreshRate = intOption 60;
@@ -102,6 +111,15 @@ delib.extension {
               y = intOption 0;
             };
           }) [ ];
+        };
+
+      generateHostSystemSubmodule =
+        _:
+        { config, ... }:
+        {
+          options.system = strOption null;
+
+          config.homeManagerSystem = config.system;
         };
     };
 
@@ -131,22 +149,34 @@ delib.extension {
             options =
               with delib;
               let
-                host =
-                  lib.singleton (
-                    { config, ... }:
-                    {
-                      options =
-                        hostSubmoduleOptions
-                        // delib.generateHostType { hostConfig = config; }
-                        // delib.generateHostFeatures { hostConfig = config; }
-                        // delib.generateHostDisplays { hostConfig = config; };
-                    }
-                  )
-                  ++ extensionConfig.hosts.extraSubmodules;
+                host = [
+                  { options = hostSubmoduleOptions; }
+                ]
+                ++ lib.optionals extensionConfig.hosts.type.enable [ (delib.generateHostTypeSubmodule { }) ]
+                ++ lib.optionals extensionConfig.hosts.features.enable [ (delib.generateHostFeaturesSubmodule { }) ]
+                ++ lib.optionals extensionConfig.hosts.displays.enable [ (delib.generateHostDisplaysSubmodule { }) ]
+                ++ lib.optionals extensionConfig.hosts.system.enable [ (delib.generateHostSystemSubmodule { }) ]
+                ++ extensionConfig.hosts.extraSubmodules;
               in
               {
                 host = hostOption host;
                 hosts = hostsOption host;
+              };
+
+            nixos.always =
+              { myconfig, ... }:
+              lib.optionalAttrs extensionConfig.hosts.system.enable {
+                nixpkgs.hostPlatform = lib.mkIf (
+                  delib._callLibArgs.currentHostName != null
+                ) myconfig.hosts.${delib._callLibArgs.currentHostName}.system;
+              };
+
+            darwin.always =
+              { myconfig, ... }:
+              lib.optionalAttrs extensionConfig.hosts.system.enable {
+                nixpkgs.hostPlatform = lib.mkIf (
+                  delib._callLibArgs.currentHostName != null
+                ) myconfig.hosts.${delib._callLibArgs.currentHostName}.system;
               };
 
             myconfig.always =
