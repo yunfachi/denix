@@ -1,4 +1,4 @@
-{delib, ...}:
+{ delib, ... }:
 delib.host {
   name = "desktop";
 

@@ -3,9 +3,11 @@
 
   inputs.denix.url = "github:yunfachi/denix";
 
-  outputs = {denix, ...}: {
-    denixExtensions = denix.lib.callExtensions {
-      paths = [./extensions];
+  outputs =
+    { denix, ... }:
+    {
+      denixExtensions = denix.lib.callExtensions {
+        paths = [ ./extensions ];
+      };
     };
-  };
 }

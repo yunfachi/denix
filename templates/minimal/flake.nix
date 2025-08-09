@@ -19,30 +19,38 @@
     };
   };
 
-  outputs = {denix, ...} @ inputs: let
-    mkConfigurations = moduleSystem:
-      denix.lib.configurations {
-        inherit moduleSystem;
-        homeManagerUser = "sjohn"; #!!! REPLACEME
+  outputs =
+    { denix, ... }@inputs:
+    let
+      mkConfigurations =
+        moduleSystem:
+        denix.lib.configurations {
+          inherit moduleSystem;
+          homeManagerUser = "sjohn"; # !!! REPLACEME
 
-        paths = [./hosts ./modules ./rices];
+          paths = [
+            ./hosts
+            ./modules
+            ./rices
+          ];
 
-        extensions = with denix.lib.extensions; [
-          args
-          (base.withConfig {
-            args.enable = true;
-          })
-        ];
+          extensions = with denix.lib.extensions; [
+            args
+            (base.withConfig {
+              args.enable = true;
+            })
+          ];
 
-        specialArgs = {
-          inherit inputs;
+          specialArgs = {
+            inherit inputs;
+          };
         };
-      };
-  in {
-    # If you're not using NixOS, Home Manager, or Nix-Darwin,
-    # you can safely remove the corresponding lines below.
-    nixosConfigurations = mkConfigurations "nixos";
-    homeConfigurations = mkConfigurations "home";
-    darwinConfigurations = mkConfigurations "darwin";
-  };
+    in
+    {
+      # If you're not using NixOS, Home Manager, or Nix-Darwin,
+      # you can safely remove the corresponding lines below.
+      nixosConfigurations = mkConfigurations "nixos";
+      homeConfigurations = mkConfigurations "home";
+      darwinConfigurations = mkConfigurations "darwin";
+    };
 }

@@ -1,4 +1,4 @@
-{delib, ...}:
+{ delib, ... }:
 delib.rice {
   name = "dark";
 }

@@ -4,40 +4,52 @@
   moduleSystem,
   myconfigName,
   ...
-}: rec {
-  configForModuleSystem = {
-    nixos ? {},
-    home ? {},
-    darwin ? {},
-  }:
-    {inherit nixos home darwin;}.${moduleSystem};
+}:
+rec {
+  configForModuleSystem =
+    {
+      nixos ? { },
+      home ? { },
+      darwin ? { },
+    }:
+    {
+      inherit nixos home darwin;
+    }
+    .${moduleSystem};
 
-  myconfig = _myconfig: {
-    ${myconfigName} = _myconfig;
-  };
+  myconfig = _myconfig: { ${myconfigName} = _myconfig; };
 
-  nixos = _nixos:
+  nixos =
+    _nixos:
     configForModuleSystem {
       nixos = _nixos;
-      home = {};
-      darwin = {};
+      home = { };
+      darwin = { };
     };
-  home = _home:
+  home =
+    _home:
     configForModuleSystem {
       nixos =
-        if useHomeManagerModule
-        then {home-manager.users.${homeManagerUser} = _home;}
-        else {};
+        if useHomeManagerModule then
+          {
+            home-manager.users.${homeManagerUser} = _home;
+          }
+        else
+          { };
       home = _home;
       darwin =
-        if useHomeManagerModule
-        then {home-manager.users.${homeManagerUser} = _home;}
-        else {};
+        if useHomeManagerModule then
+          {
+            home-manager.users.${homeManagerUser} = _home;
+          }
+        else
+          { };
     };
-  darwin = _darwin:
+  darwin =
+    _darwin:
     configForModuleSystem {
-      nixos = {};
-      home = {};
+      nixos = { };
+      home = { };
       darwin = _darwin;
     };
 
