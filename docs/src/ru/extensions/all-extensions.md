@@ -75,6 +75,11 @@
 | `enable` | [`args.enable`](#base-settings-args-enable) | Создавать ли аргументы `host` и `hosts` с расширением [`args`](#args) |
 | `path` | [`args.path`](#base-settings-args-path) | Путь к опциям расширения [`args`](#args) |
 
+`hosts.system`
+| Название | Значение по умолчанию | Описание |
+| - | - | - |
+| `enable` | [`args.enable`](#base-settings-args-enable) | Создавать ли string-опцию `system` в подмодуле хоста, которая задает значения опциям `homeManagerSystem`, `nixos.nixpkgs.hostPlatform` и `darwin.nixpkgs.hostPlatform` |
+
 `hosts.assertions`
 | Название | Значение по умолчанию | Описание |
 | - | - | - |
