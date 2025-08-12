@@ -115,11 +115,11 @@ delib.extension {
 
       generateHostSystemSubmodule =
         _:
-        { config, ... }:
+        { config, lib, ... }:
         {
-          options.system = strOption null;
+          options.system = allowNull (strOption null);
 
-          config.homeManagerSystem = config.system;
+          config.homeManagerSystem = lib.mkIf (config.system != null) config.system;
         };
     };
 
@@ -127,7 +127,7 @@ delib.extension {
     extensionConfig:
     lib.optionals extensionConfig.hosts.enable [
       (
-        { delib, ... }:
+        { delib, lib, ... }:
         let
           assertionsConfig =
             { myconfig, ... }:
@@ -168,6 +168,7 @@ delib.extension {
               lib.optionalAttrs extensionConfig.hosts.system.enable {
                 nixpkgs.hostPlatform = lib.mkIf (
                   delib._callLibArgs.currentHostName != null
+                  && myconfig.hosts.${delib._callLibArgs.currentHostName}.system != null
                 ) myconfig.hosts.${delib._callLibArgs.currentHostName}.system;
               };
 
@@ -176,6 +177,7 @@ delib.extension {
               lib.optionalAttrs extensionConfig.hosts.system.enable {
                 nixpkgs.hostPlatform = lib.mkIf (
                   delib._callLibArgs.currentHostName != null
+                  && myconfig.hosts.${delib._callLibArgs.currentHostName}.system != null
                 ) myconfig.hosts.${delib._callLibArgs.currentHostName}.system;
               };
 
