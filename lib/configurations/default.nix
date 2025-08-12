@@ -54,7 +54,7 @@
           files = delib.umport { inherit paths exclude recursive; };
 
           mkApply =
-            moduleSystem: useHomeManagerModule:
+            moduleSystem: homeManagerUser: useHomeManagerModule:
             import ./apply.nix {
               inherit
                 useHomeManagerModule
@@ -75,7 +75,7 @@
               extendedDelib = delib.recursivelyExtend (
                 final: prev:
                 let
-                  apply = mkApply moduleSystem useHomeManagerModule;
+                  apply = mkApply moduleSystem homeManagerUser useHomeManagerModule;
                   inherit (final) _callLib;
                 in
                 {
@@ -220,7 +220,7 @@
                 internalExtraModules =
                   moduleSystem:
                   let
-                    apply = mkApply moduleSystem host.useHomeManagerModule;
+                    apply = mkApply moduleSystem host.homeManagerUser host.useHomeManagerModule;
                   in
                   [
                     (
