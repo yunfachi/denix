@@ -75,6 +75,11 @@ This section describes all official Denix extensions.
 | `enable` | [`args.enable`](#base-settings-args-enable) | Whether to create `host` and `hosts` arguments with the [`args`](#args) extension |
 | `path` | [`args.path`](#base-settings-args-path) | Path to options of the [`args`](#args) extension |
 
+`hosts.system`
+| Name | Default Мalue | Description |
+| - | - | - |
+| `enable` | [`args.enable`](#base-settings-args-enable) | Whether to create a string option `system` in the host submodule, which sets the values for the `homeManagerSystem`, `nixos.nixpkgs.hostPlatform`, and `darwin.nixpkgs.hostPlatform` options |
+
 `hosts.assertions`
 | Name | Default Value | Description |
 | - | - | - |
