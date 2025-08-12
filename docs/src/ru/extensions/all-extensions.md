@@ -78,7 +78,7 @@
 `hosts.system`
 | Название | Значение по умолчанию | Описание |
 | - | - | - |
-| `enable` | [`args.enable`](#base-settings-args-enable) | Создавать ли string-опцию `system` в подмодуле хоста, которая задает значения опциям `homeManagerSystem`, `nixos.nixpkgs.hostPlatform` и `darwin.nixpkgs.hostPlatform` |
+| `enable` | `true` | Создавать ли string-опцию `system` в подмодуле хоста, которая задает значения опциям `homeManagerSystem`, `nixos.nixpkgs.hostPlatform` и `darwin.nixpkgs.hostPlatform` |
 
 `hosts.assertions`
 | Название | Значение по умолчанию | Описание |
