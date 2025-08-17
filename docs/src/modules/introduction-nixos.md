@@ -110,11 +110,11 @@ An example of a NixOS module for simple git configuration:
 
 ```nix
 {lib, config, ...}: {
-  options.programs.git = {
+  options.myconfig.programs.git = {
     enable = lib.mkEnableOption "git" // {default = true;};
   };
 
-  config = lib.mkIf config.programs.git.enable {
+  config = lib.mkIf config.myconfig.programs.git.enable {
     programs.git = {
       enable = true;
       lfs.enable = true;
