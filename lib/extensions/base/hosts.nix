@@ -16,6 +16,7 @@ delib.extension {
         generateIsType = true;
         types = [
           "desktop"
+          "laptop"
           "server"
         ];
       };
@@ -54,7 +55,15 @@ delib.extension {
             type = noDefault (enumOption types null);
           }
           // lib.optionalAttrs generateIsType (
-            builtins.listToAttrs (
+            {
+              isPC = boolOption (
+                lib.any (t: t == config.type) [
+                  "desktop"
+                  "laptop"
+                ]
+              );
+            }
+            // builtins.listToAttrs (
               map (type: {
                 name =
                   let
