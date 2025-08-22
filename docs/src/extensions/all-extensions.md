@@ -90,7 +90,7 @@ This section describes all official Denix extensions.
 | Name | Default Value | Description |
 | - | - | - |
 | `enable` | `true` | Whether to create an enum option `type` in the host submodule |
-| `generateIsType` | `true` | Whether to generate a boolean option for each value in `hosts.type.types`, formatted as `"is{Type}"`. Also creates `"isPC"`, with a value of `isDesktop || isLaptop` |
+| `generateIsType` | `true` | Whether to generate a boolean option for each value in `hosts.type.types`, formatted as `"is{Type}"`. Also creates `"isPC"`, with a value of `isDesktop \|\| isLaptop` |
 | `types` | `["desktop" "laptop" "server"]` | All allowed values for the `type` option in the host submodule. Note: to append to the list rather than overwrite it, use: `types = prev.types ++ ["newType"];` |
 
 `hosts.features`
