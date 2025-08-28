@@ -27,7 +27,7 @@
 
             inherit (params) cfg;
 
-            wrap = object: if builtins.typeOf object == "lambda" then object params else object;
+            wrap = x: if builtins.typeOf x == "lambda" then x params else x;
 
             defaults =
               {
