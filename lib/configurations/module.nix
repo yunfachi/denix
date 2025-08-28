@@ -20,17 +20,14 @@
         (
           { config, ... }:
           let
-            cfg = delib.attrset.getAttrByStrPath name config.${myconfigName} { };
+            params = delib.attrset.mkModuleArgs {
+              inherit name;
+              myconfig = config.${myconfigName};
+            };
 
-            wrap =
-              object:
-              if builtins.typeOf object == "lambda" then
-                object {
-                  inherit name cfg;
-                  myconfig = config.${myconfigName};
-                }
-              else
-                object;
+            inherit (params) cfg;
+
+            wrap = object: if builtins.typeOf object == "lambda" then object params else object;
 
             defaults =
               {

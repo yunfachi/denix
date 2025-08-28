@@ -20,18 +20,16 @@
         (
           { config, ... }:
           let
-            wrap =
-              x:
-              if builtins.typeOf x == "lambda" then
-                x {
-                  inherit name;
-                  cfg = config.${myconfigName}.rices.${name};
-                  myconfig = config.${myconfigName};
-                }
-              else
-                x;
+            params = delib.attrset.mkModuleArgs {
+              inherit name;
+              category = "rices";
+              myconfig = config.${myconfigName};
+            };
+
+            wrap = x: if builtins.typeOf x == "lambda" then x params else x;
           in
           {
+            # NOTE: using ${params.cfg} here is infinite recursion
             config.${myconfigName}.rices.${name} = args // {
               myconfig = wrap myconfig;
               nixos = wrap nixos;
