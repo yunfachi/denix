@@ -55,7 +55,7 @@
             wrap = x: if builtins.typeOf x == "lambda" then x params else x;
           in
           {
-            # TODO: using ${params.cfg} here is infinite recursion
+            # NOTE: using ${params.cfg} here is infinite recursion
             config.${myconfigName}.hosts.${name} = args // {
               myconfig = wrap myconfig;
               nixos = wrap nixos;
