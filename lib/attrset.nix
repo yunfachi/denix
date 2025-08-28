@@ -1,10 +1,13 @@
 { lib, ... }:
+let
+  splitStrPath = lib.splitString ".";
+in
 {
   getAttrByStrPath =
     strPath: attrset: default:
-    lib.attrByPath (lib.splitString "." strPath) default attrset;
+    lib.attrByPath (splitStrPath strPath) default attrset;
 
-  setAttrByStrPath = strPath: value: lib.setAttrByPath (lib.splitString "." strPath) value;
+  setAttrByStrPath = strPath: value: lib.setAttrByPath (splitStrPath strPath) value;
 
   hasAttrs =
     attrs: attrset:
