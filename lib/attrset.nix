@@ -6,7 +6,7 @@
     strPath: attrset: default:
     lib.attrByPath (delib.splitStrPath strPath) default attrset;
 
-  setAttrByStrPath = strPath: value: lib.setAttrByPath (splitStrPath strPath) value;
+  setAttrByStrPath = strPath: value: lib.setAttrByPath (delib.splitStrPath strPath) value;
 
   hasAttrs =
     attrs: attrset:
