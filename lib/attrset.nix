@@ -1,7 +1,4 @@
 { lib, ... }:
-let
-  splitStrPath = lib.splitString ".";
-in
 {
   splitStrPath = lib.splitString ".";
 
