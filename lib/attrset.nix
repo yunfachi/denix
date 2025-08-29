@@ -3,7 +3,7 @@ let
   splitStrPath = lib.splitString ".";
 in
 {
-  inherit splitStrPath;
+  splitStrPath = lib.splitString ".";
 
   getAttrByStrPath =
     strPath: attrset: default:
