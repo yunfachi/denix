@@ -17,7 +17,8 @@
 Список аргументов, которые передаются в `options` и `[myconfig|nixos|home|darwin].[ifEnabled|ifDisabled|always]`, если их тип - это `lambda`:
 - `name`: тот же [name](#function-arguments-name) из аргументов `delib.module`.
 - `myconfig`: равен `config.${myConfigName}`.
-- `cfg`{#passed-arguments-cfg}: равен результату выражения `delib.getAttrByStrPath name config.${myConfigName} {}`, где `name` - это [аргумент](#function-arguments-name) `delib.module`, а `{}` - значение, которое возвращается, если атрибут не найден.
+- `cfg`{#passed-arguments-cfg}: по сути, значения (присвоенные) из конфигурации текущего модуля. Другими словами, равняется `config.${myConfigName}.${name}`, где `name` это [аргумент](#function-arguments-name) из `delib.module`, "раскрывающийся" (конвертируется в валидный путь как атрибут) при этом.
+- `parent`: равняется модулю-"родителю" (набору атрибутов) `cfg`. Пример: `parent` это `config.${myConfigName}.programs`, если `cfg` это `config.${myConfigName}.programs.example`.
 
 ## Псевдокод {#pseudocode}
 ```nix
@@ -25,32 +26,32 @@ delib.module {
   name = "";
 
   # options.${myConfigName} = ...
-  options = {name, cfg, myconfig, ...}: {};
+  options = {name, cfg, parent, myconfig, ...}: {};
 
   # config.${myConfigName} = ...
-  myconfig.ifEnabled = {name, cfg, myconfig, ...}: {};
-  myconfig.ifDisabled = {name, cfg, myconfig, ...}: {};
-  myconfig.always = {name, cfg, myconfig, ...}: {};
+  myconfig.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  myconfig.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  myconfig.always = {name, cfg, parent, myconfig, ...}: {};
 
   # если moduleSystem == "nixos"
   # то {config = ...;}
   # иначе {}
-  nixos.ifEnabled = {name, cfg, myconfig, ...}: {};
-  nixos.ifDisabled = {name, cfg, myconfig, ...}: {};
-  nixos.always = {name, cfg, myconfig, ...}: {};
+  nixos.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  nixos.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  nixos.always = {name, cfg, parent, myconfig, ...}: {};
 
   # если moduleSystem == "home"
   # то {config = ...;}
   # иначе {config.home-manager.users.${homeManagerUser} = ...;}
-  home.ifEnabled = {name, cfg, myconfig, ...}: {};
-  home.ifDisabled = {name, cfg, myconfig, ...}: {};
-  home.always = {name, cfg, myconfig, ...}: {};
+  home.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  home.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  home.always = {name, cfg, parent, myconfig, ...}: {};
 
   # если moduleSystem == "darwin"
   # то {config = ...;}
   # иначе {}
-  darwin.ifEnabled = {name, cfg, myconfig, ...}: {};
-  darwin.ifDisabled = {name, cfg, myconfig, ...}: {};
-  darwin.always = {name, cfg, myconfig, ...}: {};
+  darwin.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  darwin.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  darwin.always = {name, cfg, parent, myconfig, ...}: {};
 }
 ```
