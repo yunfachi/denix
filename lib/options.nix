@@ -1,117 +1,152 @@
-{
-  delib,
-  lib,
-  ...
-}:
+{ delib, lib, ... }:
 let
-  mkOption =
-    default: types:
-    lib.mkOption {
-      type = lib.types.oneOf (lib.toList types);
-      inherit default;
-    };
+  genOptions = f: lib.listToAttrs (map f (lib.attrsToList types));
 
-  addTypeToOption =
-    type: option:
+  types = {
+    inherit (lib.types)
+      anything
+      attrsOf
+      bool
+      coercedTo
+      enum
+      float
+      int
+      oneOf
+      listOf
+      number
+      package
+      path
+      port
+      singleLineStr
+      str
+      submodule
+      submoduleWith
+      lazyAttrsOf
+      ;
+    attrs = delib.options.attrsOf delib.options.anything;
+    attrsLegacy = lib.types.attrs;
+    lazyAttrs = delib.options.lazyAttrsOf delib.options.anything;
+    # FIX https://github.com/NixOS/nixpkgs/issues/438933
+    functionTo =
+      elemType:
+      lib.mkOptionType {
+        name = "functionTo";
+        description = "function that evaluates to a(n) ${
+          lib.types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+        }";
+        descriptionClass = "composite";
+        check = lib.isFunction;
+        merge = loc: defs: {
+          # An argument attribute has a default when it has a default in all definitions
+          __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
+            lib.map (fn: lib.functionArgs fn.value) defs
+          );
+          __functor =
+            _: callerArgs:
+            (lib.mergeDefinitions loc elemType (
+              map (fn: {
+                inherit (fn) file;
+                value = fn.value callerArgs;
+              }) defs
+            )).mergedValue;
+        };
+        getSubOptions = prefix: elemType.getSubOptions prefix;
+        getSubModules = elemType.getSubModules;
+        substSubModules = m: delib.options.functionTo (elemType.substSubModules m);
+        functor = lib.defaultFunctor "functionTo" // {
+          type = payload: types.functionTo payload.elemType;
+          payload.elemType = elemType;
+          binOp =
+            a: b:
+            let
+              merged = a.elemType.typeMerge b.elemType.functor;
+            in
+            if merged == null then null else { elemType = merged; };
+        };
+        nestedTypes.elemType = elemType;
+      };
+    function = delib.options.functionTo delib.options.anything;
+    list = delib.options.listOf delib.options.anything;
+    intBetween = lib.types.ints.between;
+    null = lib.mkOptionType {
+      name = "null";
+      description = "null";
+      descriptionClass = "noun";
+      check = x: x == null;
+      merge = lib.mergeEqualOption;
+      emptyValue = {
+        value = null;
+      };
+    };
+  };
+
+  functorForType = type: {
+    __functor =
+      option:
+      if lib.isFunction type then
+        typeArg: option // { type = type typeArg; } // functorForType (type typeArg)
+      else
+        default: option // { inherit default; };
+  };
+
+  typeOptions = genOptions (
+    { name, value }:
+    {
+      name = "${name}Option";
+      value =
+        lib.mkOption {
+          type = value;
+        }
+        // functorForType value;
+    }
+  );
+
+  allowTypeOptions = genOptions (
+    { name, value }:
+    {
+      name = "allow${
+        lib.toUpper (builtins.substring 0 1 name) + (builtins.substring 1 (builtins.stringLength name) name)
+      }";
+      value =
+        option:
+        option
+        // {
+          type = lib.types.oneOf [
+            value
+            option.type
+          ];
+        };
+    }
+  );
+in
+types
+// typeOptions
+// allowTypeOptions
+// {
+  readOnly =
+    option:
     option
     // {
-      type = lib.types.oneOf [
-        option.type
-        type
-      ];
+      readOnly = true;
+      __functor = self: readOnly: self // { inherit readOnly; };
     };
-  addTypeWithParameterToOption =
-    type: elemType: option:
-    addTypeToOption (type elemType) option;
+  internal =
+    option:
+    option
+    // {
+      internal = true;
+      __functor = self: internal: self // { inherit internal; };
+    };
+  visible =
+    option: visible:
+    option
+    // {
+      inherit visible;
+    };
 
-  simpleOption = type: default: mkOption default type;
-  simpleOptionWithParameter =
-    type: elemType: default:
-    simpleOption (type elemType) default;
-in
-rec {
-  # Types
-  inherit (lib.types)
-    anything
-    attrsOf
-    bool
-    coercedTo
-    enum
-    float
-    int
-    listOf
-    number
-    package
-    path
-    port
-    singleLineStr
-    str
-    submodule
-    ;
-  attrs = attrsOf anything;
-  attrsLegacy = lib.types.attrs;
-  lambda = lib.types.functionTo anything;
-  lambdaTo = lib.types.functionTo;
-  list = listOf anything;
-
-  # Options
-  anythingOption = simpleOption anything;
-  attrsLegacyOption = simpleOption attrsLegacy;
-  attrsOfOption = simpleOptionWithParameter attrsOf;
-  attrsOption = simpleOption attrs;
-  boolOption = simpleOption bool;
-  coercedToOption =
-    coercedType: coerceFunc: finalType:
-    simpleOption (coercedTo coercedType coerceFunc finalType);
-  enumOption = simpleOptionWithParameter enum;
-  floatOption = simpleOption float;
-  intOption = simpleOption int;
-  lambdaOption = simpleOption lambda;
-  lambdaToOption = simpleOptionWithParameter lambdaTo;
-  listOfOption = simpleOptionWithParameter listOf;
-  listOption = simpleOption list;
-  numberOption = simpleOption number;
-  packageOption = simpleOption package;
-  pathOption = simpleOption path;
-  portOption = simpleOption port;
-  singleLineStrOption = simpleOption singleLineStr;
-  strOption = simpleOption str;
-  submoduleOption = simpleOptionWithParameter submodule;
-
-  # Option type extensions
-  allowAnything = addTypeToOption anything;
-  allowAttrs = addTypeToOption attrs;
-  allowAttrsLegacy = addTypeToOption attrsLegacy;
-  allowAttrsOf = addTypeWithParameterToOption attrsOf;
-  allowBool = addTypeToOption bool;
-  allowCoercedToOption =
-    coercedType: coerceFunc: finalType:
-    addTypeToOption (coercedTo coercedType coerceFunc finalType);
-  allowEnum = addTypeWithParameterToOption enum;
-  allowFloat = addTypeToOption float;
-  allowInt = addTypeToOption int;
-  allowLambda = addTypeToOption lambda;
-  allowLambdaTo = addTypeWithParameterToOption lambdaTo;
-  allowList = addTypeToOption list;
-  allowListOf = addTypeWithParameterToOption listOf;
-  allowNull = option: option // { type = lib.types.nullOr option.type; };
-  allowNumber = addTypeToOption number;
-  allowPackage = addTypeToOption package;
-  allowPath = addTypeToOption path;
-  allowPortOption = addTypeToOption port;
-  allowSingleLineStrOption = addTypeToOption singleLineStr;
-  allowStr = addTypeToOption str;
-
-  # Option modifiers
-  noDefault = option: builtins.removeAttrs option [ "default" ];
-  # This is a more convenient way to handle the presence of a default value in the option based on the condition (#18)
-  noNullDefault =
-    option: if option.default == null then builtins.removeAttrs option [ "default" ] else option;
-  readOnly = option: option // { readOnly = true; };
-  apply = option: apply: option // { inherit apply; };
+  defaultText = option: defaultText: option // { inherit defaultText; };
+  example = option: example: option // { inherit example; };
   description = option: description: option // { inherit description; };
-
-  # Predefined option patterns
-  singleEnableOption =
-    default: { name, ... }: delib.attrset.setAttrByStrPath "${name}.enable" (boolOption default);
+  relatedPackages = option: relatedPackages: option // { inherit relatedPackages; };
+  apply = option: apply: option // { inherit apply; };
 }

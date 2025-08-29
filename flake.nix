@@ -2,12 +2,21 @@
   description = "Nix library for creating scalable NixOS, Home Manager, and Nix-Darwin configurations with modules, hosts, and rices.";
 
   inputs = {
-    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    #nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    nixpkgs-lib.url = "github:yunfachi/nixpkgs/patch-2?dir=lib";
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
     };
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    /**
+      The reason for separating nixpkgs and nixpkgs-lib is that nixpkgs, home-manager,
+      and nix-darwin are inputs used exclusively for creating the system configuration
+      (e.g., lib.nixosSystem, ...). nixpkgs is an input, which implies user overrides
+      to their own channel, while nixpkgs-lib is a library used by Denix, and it should
+      not be overridden by the user without a special reason.
+    */
+    #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:yunfachi/nixpkgs/patch-2";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,29 +51,6 @@
       lib = import ./lib {
         inherit (nixpkgs-lib) lib;
         inherit home-manager nix-darwin nixpkgs;
-      };
-
-      templates = {
-        minimal = {
-          description = ''
-            Minimal configuration with hosts, rices, constants, home manager, and user config.
-            It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
-          '';
-          path = ./templates/minimal;
-        };
-        minimal-no-rices = {
-          description = ''
-            Minimal configuration with hosts, constants, home manager, and user config.
-            It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
-          '';
-          path = ./templates/minimal-no-rices;
-        };
-        extensions-collection = {
-          description = ''
-            Flake for creating your own collection of Denix extensions.
-          '';
-          path = ./templates/extensions-collection;
-        };
       };
 
       checks = forAllSystems (system: {

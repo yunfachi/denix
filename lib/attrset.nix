@@ -1,12 +1,11 @@
 { lib, ... }:
 {
   getAttrByStrPath =
-    strPath: attrset: default:
-    lib.attrByPath (lib.splitString "." strPath) default attrset;
+    set: strPath: default:
+    lib.attrByPath (lib.splitString "." strPath) default set;
 
-  setAttrByStrPath = strPath: value: lib.setAttrByPath (lib.splitString "." strPath) value;
+  setAttrByStrPath = value: strPath: lib.setAttrByPath (lib.splitString "." strPath) value;
 
   hasAttrs =
-    attrs: attrset:
-    if attrs != [ ] then builtins.any (attr: builtins.hasAttr attr attrset) attrs else true;
+    set: attrs: if attrs != [ ] then builtins.any (attr: builtins.hasAttr attr set) attrs else true;
 }

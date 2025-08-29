@@ -1,9 +1,8 @@
 {
-  delib,
   lib,
   ...
 }:
-{
+lib.fix (delib: {
   fix =
     f:
     let
@@ -42,6 +41,23 @@
     final: prev: { }
   );
 
+  toExtensionWithFinalFirst =
+    f:
+    if lib.isFunction f then
+      final: prev:
+      let
+        fFinal = f final;
+      in
+      if lib.isFunction fFinal then
+        # f is (final: prev: { ... })
+        fFinal prev
+      else
+        # f is (final: { ... })
+        fFinal
+    else
+      # f is not a function; probably { ... }
+      final: prev: f;
+
   makeRecursivelyExtensible = delib.makeRecursivelyExtensibleWithCustomName "recursivelyExtend";
 
   makeRecursivelyExtensibleWithCustomName =
@@ -56,4 +72,4 @@
         }
       )
     );
-}
+})
