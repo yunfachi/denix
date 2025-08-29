@@ -20,17 +20,31 @@
         (
           { config, ... }:
           let
-            cfg = delib.attrset.getAttrByStrPath name config.${myconfigName} { };
+            args =
+              let
+                # instance of the user's config attrset, not the
+                # same as myconfig in the outer scope
+                myconfig = config.${myconfigName};
 
-            wrap =
-              object:
-              if builtins.typeOf object == "lambda" then
-                object {
-                  inherit name cfg;
-                  myconfig = config.${myconfigName};
-                }
-              else
-                object;
+                cfgPath = delib.attrset.splitStrPath name;
+
+                fromPath = with lib; path: if (length path) > 0 then attrByPath path { } myconfig else myconfig;
+
+                cfg = fromPath cfgPath;
+                parent = fromPath (lib.dropEnd 1 cfgPath);
+              in
+              {
+                inherit
+                  name
+                  myconfig
+                  cfg
+                  parent
+                  ;
+              };
+
+            inherit (args) cfg;
+
+            wrap = x: if builtins.typeOf x == "lambda" then x args else x;
 
             defaults =
               {
