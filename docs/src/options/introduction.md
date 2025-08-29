@@ -37,10 +37,19 @@ Functions related to options are divided into four main types:
 - `description <option> <description>` - adds the `description` attribute with the given value.
 
 ### Generating Specific Options
-- `singleEnableOption <default> {name, ...}` - creates an attribute set using the expression `delib.setAttrByStrPath "${name}.enable" (boolOption default)`. This is commonly used in `delib.module :: options` with its [passed arguments](/modules/structure#passed-arguments), so you can simply write:
+- `singleEnableOption <default> { name, ... }` - creates an attribute set using the expression `delib.setAttrByStrPath "${name}.enable" (boolOption default)`. This is commonly used in `delib.module :: options` with its [passed arguments](/modules/structure#passed-arguments), so you can simply write:
 
 ```nix
 options = delib.singleEnableOption <default>;
+```
+
+- `singleCascadeEnableOption { parent, ... }` - creates an attribute set via `singleEnableOption` above, but uses `parent.enable` as the `<default>`. See the example:
+
+```nix
+# if current module's name is "programs.example",
+# enable it by default if "programs" is enabled.
+# will error if "programs.enable" is missing.
+options = delib.singleCascadeEnableOption;
 ```
 
 The list of current options can be found in the source code: [github:yunfachi/denix?path=lib/options.nix](https://github.com/yunfachi/denix/blob/master/lib/options.nix)
