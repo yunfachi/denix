@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "denix": {
+      "inputs": {
+        "git-hooks": "git-hooks",
+        "home-manager": "home-manager",
+        "nix-darwin": "nix-darwin",
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "path": "../../.",
+        "type": "path"
+      },
+      "original": {
+        "path": "../../.",
+        "type": "path"
+      },
+      "parent": []
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -39,6 +57,7 @@
     "gitignore": {
       "inputs": {
         "nixpkgs": [
+          "denix",
           "git-hooks",
           "nixpkgs"
         ]
@@ -60,6 +79,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
+          "denix",
           "nixpkgs"
         ]
       },
@@ -81,6 +101,7 @@
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
+          "denix",
           "nixpkgs"
         ]
       },
@@ -116,58 +137,31 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1762650614,
-        "narHash": "sha256-tPIUJjNeNs3LMWH8w2nHLx0trZJdOJ54mN2UQhcjZ9g=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "91ea24e62ff55f95939f32432fa5def2d6d24d2a",
-        "type": "github"
+        "lastModified": 1759652833,
+        "narHash": "sha256-wTPGkIxVbJrZobKNCNhC5a0XB8Lknuta340ShA00LV4=",
+        "path": "/home/yunfachi/files/desktop/git/nixpkgs/lib",
+        "type": "path"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
+        "path": "/home/yunfachi/files/desktop/git/nixpkgs/lib",
+        "type": "path"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1761114652,
-        "narHash": "sha256-f/QCJM/YhrV/lavyCVz8iU3rlZun6d+dAiC3H+CDle4=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "01f116e4df6a15f4ccdffb1bcd41096869fb385c",
-        "type": "github"
+        "lastModified": 1759652833,
+        "narHash": "sha256-GUDAlrlI/3RXDqIrwI2JFzczNNOpsxvKTIECS+OE/0I=",
+        "path": "/home/yunfachi/files/desktop/git/nixpkgs",
+        "type": "path"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "path": "/home/yunfachi/files/desktop/git/nixpkgs",
+        "type": "path"
       }
     },
     "root": {
       "inputs": {
-        "git-hooks": "git-hooks",
-        "home-manager": "home-manager",
-        "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs_2",
-        "nixpkgs-lib": "nixpkgs-lib",
-        "systems": "systems"
-      }
-    },
-    "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
+        "denix": "denix"
       }
     }
   },

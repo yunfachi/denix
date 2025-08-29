@@ -1,63 +1,205 @@
 {
   lib,
-  nixpkgs,
-  home-manager,
-  nix-darwin,
+  inputs,
+  denixModules,
   ...
 }:
 let
-  inherit (lib.fix (delib: import ./fixed-points.nix { inherit delib lib; }))
-    makeRecursivelyExtensible
-    ;
+  inherit (import ./toplevel/lib.nix { inherit lib; }) mkLib;
 in
-makeRecursivelyExtensible (
-  delib:
-  let
-    inherit (delib) _callLib;
-  in
-  {
-    _callLib = file: import file delib._callLibArgs;
+mkLib "delib" (delib: {
+  _callLibArgs = {
+    inherit inputs denixModules;
+  };
 
-    _callLibArgs = {
-      inherit
-        delib
-        lib
-        nixpkgs
-        home-manager
-        nix-darwin
-        ;
-    };
+  fixedPoints = delib._callLib ./toplevel/fixed-points.nix;
+  inherit (delib.fixedPoints)
+    fix
+    fixWithUnfix
+    recursivelyExtends
+    recursivelyComposeExtensions
+    recursivelyComposeManyExtensions
+    makeRecursivelyExtensible
+    makeRecursivelyExtensibleWithCustomName
+    ;
 
-    attrset = _callLib ./attrset.nix;
-    inherit (delib.attrset) getAttrByStrPath setAttrByStrPath hasAttrs;
+  inherit (delib._callLib ./toplevel/lib.nix) mkLib;
 
-    inherit (_callLib ./configurations) configurations;
+  modules = delib._callLib ./modules;
+  inherit (delib.modules)
+    denixConfiguration
+    genModule
+    genModules
+    genSystem
+    genSystems
+    module
+    host
+    toDenixArgs
+    isDenixArgs
+    callIfDenixArgs
+    callWithMocksIfDenixArgs
+    processModule
+    processModuleWithDenixArgs
+    setDefaultModuleLocation
+    setDefaultModuleLocationWithDenixArgs
+    processModuleAndGenerateDenixArgs
+    ;
 
-    inherit (_callLib ./fixed-points.nix)
-      fix
-      fixWithUnfix
-      recursivelyExtends
-      recursivelyComposeExtensions
-      recursivelyComposeManyExtensions
-      makeRecursivelyExtensible
-      makeRecursivelyExtensibleWithCustomName
-      ;
+  attrset = delib._callLib ./attrset.nix;
+  inherit (delib.attrset)
+    getAttrByStrPath
+    setAttrByStrPath
+    hasAttrs
+    keepAttrs
+    strictMergeAttrs
+    removeAttrs
+    ;
 
-    inherit (_callLib ./maintainers.nix) maintainers;
+  functions = delib._callLib ./functions.nix;
+  inherit (delib.functions)
+    functionArgs
+    setFunctionArgs
+    mirrorFunctionArgs
+    inheritFunctionArgs
+    callWithMocks
+    ;
 
-    options = _callLib ./options.nix;
+  options = delib._callLib ./options.nix;
 
-    inherit (_callLib ./extension.nix)
-      extension
-      extensions
-      callExtension
-      callExtensions
-      withExtensions
-      mergeExtensions
-      ;
+  types = delib._callLib ./types.nix;
 
-    inherit (_callLib ./umport.nix) umport;
-  }
-  // (import ./options.nix { inherit delib lib; })
-  # After implementing https://github.com/NixOS/nix/issues/4090 it will be possible to use `// callLib` (to inherit all)
-)
+  inherit (delib._callLib ./umport.nix) umport;
+
+  # Generated inherits.
+  # After implementing https://github.com/NixOS/nix/issues/4090 it will be possible to use `// delib.options` (to inherit all)
+
+  #[[[cog
+  #  groups = ["options", "types"]
+  #
+  #  import cog
+  #  import subprocess
+  #  import json
+  #  import os
+  #
+  #  def nix_attr_names(attr):
+  #    try:
+  #      out = subprocess.run(
+  #        ["nix", "eval", f".#lib.{attr}",
+  #         "--apply", "builtins.attrNames",
+  #         "--quiet", "--json", "--no-pretty"],
+  #        capture_output=True, text=True, check=True
+  #      ).stdout
+  #    except subprocess.CalledProcessError:
+  #      out = os.environ[f"pre_evaled_{attr}"]
+  #    return json.loads(out)
+  #
+  #  for group in groups:
+  #    cog.outl(f"inherit (delib.{group})")
+  #    for name in nix_attr_names(group):
+  #      cog.outl(f"  {name}")
+  #    cog.outl("  ;")
+  #]]]
+  inherit (delib.options)
+    allowAnything
+    allowAttrs
+    allowAttrsLegacy
+    allowAttrsOf
+    allowBool
+    allowCoercedTo
+    allowEither
+    allowEnum
+    allowFloat
+    allowFunction
+    allowFunctionTo
+    allowInt
+    allowIntBetween
+    allowLazyAttrs
+    allowLazyAttrsOf
+    allowList
+    allowListOf
+    allowNull
+    allowNumber
+    allowOneOf
+    allowPackage
+    allowPath
+    allowPort
+    allowSingleLineStr
+    allowSteppedInt
+    allowSteppedIntBetween
+    allowStr
+    allowSubmodule
+    allowSubmoduleWith
+    allowUnspecified
+    anythingOption
+    apply
+    attrsLegacyOption
+    attrsOfOption
+    attrsOption
+    boolOption
+    coercedToOption
+    defaultText
+    description
+    eitherOption
+    enumOption
+    example
+    floatOption
+    functionOption
+    functionToOption
+    intBetweenOption
+    intOption
+    internal
+    lazyAttrsOfOption
+    lazyAttrsOption
+    listOfOption
+    listOption
+    nullOption
+    numberOption
+    oneOfOption
+    packageOption
+    pathOption
+    portOption
+    readOnly
+    relatedPackages
+    singleLineStrOption
+    steppedIntBetweenOption
+    steppedIntOption
+    strOption
+    submoduleOption
+    submoduleWithOption
+    unspecifiedOption
+    visible
+    ;
+  inherit (delib.types)
+    anything
+    attrs
+    attrsLegacy
+    attrsOf
+    bool
+    coercedTo
+    either
+    enum
+    float
+    function
+    functionTo
+    int
+    intBetween
+    lazyAttrs
+    lazyAttrsOf
+    list
+    listOf
+    null
+    number
+    oneOf
+    package
+    path
+    port
+    singleLineStr
+    steppedInt
+    steppedIntBetween
+    str
+    submodule
+    submoduleWith
+    unspecified
+    ;
+  #[[[end]]]
+})

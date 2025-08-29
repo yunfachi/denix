@@ -1,12 +1,18 @@
 {
-  description = "Nix library for creating scalable NixOS, Home Manager, and Nix-Darwin configurations with modules, hosts, and rices.";
+  description = "Nix framework for creating scalable configurations, modules, and libraries.";
 
   inputs = {
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix";
-    };
+    git-hooks.url = "github:cachix/git-hooks.nix";
+    systems.url = "github:nix-systems/default";
 
+    /**
+      The reason for separating nixpkgs and nixpkgs-lib is that nixpkgs, home-manager,
+      and nix-darwin are inputs used exclusively for creating the system configuration
+      (e.g., lib.nixosSystem, ...). nixpkgs is an input, which implies user overrides
+      to their own channel, while nixpkgs-lib is a library used by Denix, and it should
+      not be overridden by the user without a special reason.
+    */
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -22,55 +28,62 @@
     {
       self,
       nixpkgs-lib,
-      pre-commit-hooks,
       nixpkgs,
-      home-manager,
-      nix-darwin,
+      git-hooks,
+      systems,
       ...
     }:
     let
-      supportedSystems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-
-      forAllSystems = nixpkgs-lib.lib.genAttrs supportedSystems;
+      forAllSystems = nixpkgs-lib.lib.genAttrs (import systems);
     in
     {
+      denixModules = {
+        default = self.denixModules.denix;
+        denix = ./modules/denix;
+
+        betterHosts = ./modules/betterHosts;
+      };
       lib = import ./lib {
         inherit (nixpkgs-lib) lib;
-        inherit home-manager nix-darwin nixpkgs;
+        inherit (self) inputs denixModules;
       };
 
-      templates = {
-        minimal = {
-          description = ''
-            Minimal configuration with hosts, rices, constants, home manager, and user config.
-            It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
-          '';
-          path = ./templates/minimal;
-        };
-        minimal-no-rices = {
-          description = ''
-            Minimal configuration with hosts, constants, home manager, and user config.
-            It is not recommended to use if this is your first time or if you haven't read or don't plan to read the documentation.
-          '';
-          path = ./templates/minimal-no-rices;
-        };
-        extensions-collection = {
-          description = ''
-            Flake for creating your own collection of Denix extensions.
-          '';
-          path = ./templates/extensions-collection;
-        };
-      };
+      flakeModules.default = import ./flake-module.nix self;
+      flakeModule = self.flakeModules.default;
 
       checks = forAllSystems (system: {
-        pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        pre-commit-check = git-hooks.lib.${system}.run {
           src = ./.;
-          hooks.nixfmt-rfc-style.enable = true;
+          hooks = {
+            nixfmt-rfc-style.enable = true;
+            keep-sorted = {
+              enable = true;
+              name = "keep-sorted";
+              language = "system";
+              entry = "${nixpkgs.legacyPackages.${system}.keep-sorted}/bin/keep-sorted";
+            };
+            cog = {
+              enable = true;
+              name = "cog";
+              language = "system";
+              entry = nixpkgs.lib.getExe (
+                nixpkgs.legacyPackages.${system}.writeShellApplication {
+                  name = "denix-cog";
+
+                  runtimeInputs = with nixpkgs.legacyPackages.${system}; [
+                    python313Packages.cogapp
+                    nix
+                  ];
+
+                  text = ''
+                    export pre_evaled_options='${builtins.toJSON (builtins.attrNames self.lib.options)}'
+                    export pre_evaled_types='${builtins.toJSON (builtins.attrNames self.lib.types)}'
+                    cog -r "$@"
+                  '';
+                }
+              );
+            };
+          };
         };
       });
 

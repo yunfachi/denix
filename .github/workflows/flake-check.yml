@@ -1,0 +1,24 @@
+name: Nix Flake Check
+
+on:
+  pull_request:
+  push:
+    branches: master
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  nix-flake-check:
+    name: Nix Flake Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Check Flake
+        run: nix flake check
+
