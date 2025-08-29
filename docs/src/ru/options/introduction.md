@@ -37,11 +37,20 @@ delib.listOfOption delib.str []
 - `description <option> <description>` - добавляет атрибут `description` с переданным значением.
 
 ### Генерация конкретной опции/опций
-- `singleEnableOption <default> {name, ...}` - создаёт attribute set с помощью выражения `delib.setAttrByStrPath "${name}.enable" (boolOption default)`. Обычно это используется в `delib.module :: options`, с её [передаваемыми аргументами](/ru/modules/structure#passed-arguments), поэтому достаточно написать:
+- `singleEnableOption <default> { name, ... }` - создаёт attribute set с помощью выражения `delib.setAttrByStrPath "${name}.enable" (boolOption default)`. Обычно это используется в `delib.module :: options`, с её [передаваемыми аргументами](/ru/modules/structure#passed-arguments), поэтому достаточно написать:
 
-  ```nix
-  options = delib.singleEnableOption <default>;
-  ```
+```nix
+options = delib.singleEnableOption <default>;
+```
+
+- `singleCascadeEnableOption { parent, ... }` - создаёт attribute set с помощью `singleEnableOption` выше, но использует `parent.enable` для `<default>`. Пример:
+
+```nix
+# если имя (name) текущего модуля это "programs.category.example",
+# то он будет включен по умолчанию если "programs.category" включен.
+# будет ошибка, если "programs.category.enable" не существует.
+options = delib.singleCascadeEnableOption;
+```
 
 Список актуальных опций можно найти в исходном коде: [github:yunfachi/denix?path=lib/options.nix](https://github.com/yunfachi/denix/blob/master/lib/options.nix)
 
