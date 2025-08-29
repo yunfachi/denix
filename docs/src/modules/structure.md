@@ -18,7 +18,7 @@ A list of arguments passed to `options` and `[myconfig|nixos|home|darwin].[ifEna
 - `name`: the same [name](#function-arguments-name) from the `delib.module` arguments.
 - `myconfig`: equals `config.${myConfigName}`.
 - `cfg`{#passed-arguments-cfg}: essentially, the config values (assigned options) of the current module. In other words, equals `config.${myConfigName}.${name}`, where `name` is the [argument](#function-arguments-name) from `delib.module` and is "expanded" (converted to a valid attribute path).
-- `parent`: equals to the "parent" module (attribute set) of `cfg`. Example: `parent` is `config.${myConfigName}.programs` if `cfg` is `config.${myConfigName}.programs.example`.
+- `parent`: equal to the "parent" module (attribute set) of `cfg`. Example: `parent` is `config.${myConfigName}.programs` if `cfg` is `config.${myConfigName}.programs.example`.
 
 ## Pseudocode {#pseudocode}
 ```nix
