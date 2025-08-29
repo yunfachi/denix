@@ -1,7 +1,7 @@
 # Structure {#structure}
 
 ## Function Arguments {#function-arguments}
-- `name`: a string representing the host name.
+- `name`: a string representing the host name. Usage of dot characters (`.`) is discouraged.
 - `useHomeManagerModule`: whether to include the Home Manager module in the NixOS and Nix-Darwin configurations of this host. Defaults to the value of `delib.configurations :: useHomeManagerModule`, which itself defaults to `true`.
 - `homeManagerUser`: the username, used in `home-manager.users.${homeManagerUser}` and for generating the Home Manager configuration list. Defaults to `delib.configurations :: homeManagerUser`.
 - `homeManagerSystem`: a string used in the `pkgs` attribute of the `home-manager.lib.homeManagerConfiguration` function, which is used in the [`delib.configurations`](/configurations/introduction) function as `homeManagerNixpkgs.legacyPackages.${homeManagerSystem}`.
@@ -19,7 +19,8 @@ A list of arguments passed to `?(shared.)[myconfig|nixos|home|darwin]` if their 
 
 - `name`: the same `name` as in the arguments of `delib.host`.
 - `myconfig`: equals `config.${myConfigName}`.
-- `cfg`: equals `config.${myConfigName}.hosts.${delib.host :: name}`.
+- `cfg`: essentially, the config values (assigned options) of the current host. In other words, equals `config.${myConfigName}.hosts.${delib.host :: name}`.
+- `parent`: equal to the "parent" module (attribute set) of `cfg`. In the case of hosts, likely equal to `config.${myConfigName}.hosts`, e.g. `hosts` module.
 
 ## Pseudocode {#pseudocode}
 ```nix
@@ -35,45 +36,45 @@ delib.host {
   # if config.${myconfigName}.host == name
   # then {config.${myConfigName} = ...;}
   # else {}
-  myconfig = {name, cfg, myconfig, ...}: {};
+  myconfig = {name, cfg, parent, myconfig, ...}: {};
 
   # if config.${myconfigName}.host == name, then
   #   if moduleSystem == "nixos"
   #   then {config = ...;}
   #   else {}
   # else {}
-  nixos = {name, cfg, myconfig, ...}: {};
+  nixos = {name, cfg, parent, myconfig, ...}: {};
 
   # if config.${myconfigName}.host == name, then
   #   if moduleSystem == "home"
   #   then {config = ...;}
   #   else {config.home-manager.users.${homeManagerUser} = ...;}
   # else {}
-  home = {name, cfg, myconfig, ...}: {};
+  home = {name, cfg, parent, myconfig, ...}: {};
 
   # if config.${myconfigName}.host == name, then
   #   if moduleSystem == "darwin"
   #   then {config = ...;}
   #   else {}
   # else {}
-  darwin = {name, cfg, myconfig, ...}: {};
+  darwin = {name, cfg, parent, myconfig, ...}: {};
 
   # config.${myConfigName} = ...
-  shared.myconfig = {name, cfg, myconfig, ...}: {};
+  shared.myconfig = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "nixos"
   # then {config = ...;}
   # else {}
-  shared.nixos = {name, cfg, myconfig, ...}: {};
+  shared.nixos = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "home"
   # then {config = ...;}
   # else {config.home-manager.users.${homeManagerUser} = ...;}
-  shared.home = {name, cfg, myconfig, ...}: {};
+  shared.home = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "darwin"
   # then {config = ...;}
   # else {}
-  shared.darwin = {name, cfg, myconfig, ...}: {};
+  shared.darwin = {name, cfg, parent, myconfig, ...}: {};
 }
 ```
