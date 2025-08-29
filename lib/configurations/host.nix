@@ -46,16 +46,18 @@
               };
             _shared = sharedDefaults shared;
 
-            params = delib.attrset.mkModuleArgs {
-              inherit name;
-              category = "hosts";
-              myconfig = config.${myconfigName};
-            };
-
-            wrap = x: if builtins.typeOf x == "lambda" then x params else x;
+            wrap =
+              x:
+              if builtins.typeOf x == "lambda" then
+                x {
+                  inherit name;
+                  cfg = config.${myconfigName}.hosts.${name};
+                  myconfig = config.${myconfigName};
+                }
+              else
+                x;
           in
           {
-            # NOTE: using ${params.cfg} here is infinite recursion
             config.${myconfigName}.hosts.${name} = args // {
               myconfig = wrap myconfig;
               nixos = wrap nixos;
