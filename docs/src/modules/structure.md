@@ -17,7 +17,8 @@ This section uses the variables `myconfigName`, `moduleSystem`, and `homeManager
 A list of arguments passed to `options` and `[myconfig|nixos|home|darwin].[ifEnabled|ifDisabled|always]`, if their type is a `lambda`:
 - `name`: the same [name](#function-arguments-name) from the `delib.module` arguments.
 - `myconfig`: equals `config.${myConfigName}`.
-- `cfg`{#passed-arguments-cfg}: equals the result of the expression `delib.getAttrByStrPath name config.${myConfigName} {}`, where `name` is the [argument](#function-arguments-name) from `delib.module`, and `{}` is the value returned if the attribute is not found.
+- `cfg`{#passed-arguments-cfg}: essentially, the config values (assigned options) of the current module. In other words, equals `config.${myConfigName}.${name}`, where `name` is the [argument](#function-arguments-name) from `delib.module` and is "expanded" (converted to a valid attribute path).
+- `parent`: equals to the "parent" module (attribute set) of `cfg`. Example: `parent` is `config.${myConfigName}.programs` if `cfg` is `config.${myConfigName}.programs.example`.
 
 ## Pseudocode {#pseudocode}
 ```nix
@@ -25,32 +26,32 @@ delib.module {
   name = "";
 
   # options.${myConfigName} = ...
-  options = {name, cfg, myconfig, ...}: {};
+  options = {name, cfg, parent, myconfig, ...}: {};
 
   # config.${myConfigName} = ...
-  myconfig.ifEnabled = {name, cfg, myconfig, ...}: {};
-  myconfig.ifDisabled = {name, cfg, myconfig, ...}: {};
-  myconfig.always = {name, cfg, myconfig, ...}: {};
+  myconfig.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  myconfig.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  myconfig.always = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "nixos"
   # then {config = ...;}
   # else {}
-  nixos.ifEnabled = {name, cfg, myconfig, ...}: {};
-  nixos.ifDisabled = {name, cfg, myconfig, ...}: {};
-  nixos.always = {name, cfg, myconfig, ...}: {};
+  nixos.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  nixos.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  nixos.always = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "home"
   # then {config = ...;}
   # else {config.home-manager.users.${homeManagerUser} = ...;}
-  home.ifEnabled = {name, cfg, myconfig, ...}: {};
-  home.ifDisabled = {name, cfg, myconfig, ...}: {};
-  home.always = {name, cfg, myconfig, ...}: {};
+  home.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  home.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  home.always = {name, cfg, parent, myconfig, ...}: {};
 
   # if moduleSystem == "darwin"
   # then {config = ...;}
   # else {}
-  darwin.ifEnabled = {name, cfg, myconfig, ...}: {};
-  darwin.ifDisabled = {name, cfg, myconfig, ...}: {};
-  darwin.always = {name, cfg, myconfig, ...}: {};
+  darwin.ifEnabled = {name, cfg, parent, myconfig, ...}: {};
+  darwin.ifDisabled = {name, cfg, parent, myconfig, ...}: {};
+  darwin.always = {name, cfg, parent, myconfig, ...}: {};
 }
 ```
