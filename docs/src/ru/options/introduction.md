@@ -46,9 +46,9 @@ options = delib.singleEnableOption <default>;
 - `singleCascadeEnableOption { parent, ... }` - создаёт attribute set с помощью `singleEnableOption` выше, но использует `parent.enable` для `<default>`. Пример:
 
 ```nix
-# если имя (name) текущего модуля это "programs.example",
-# то он будет включен по умолчанию если "programs" включен.
-# будет ошибка, если "programs.enable" не существует.
+# если имя (name) текущего модуля это "programs.category.example",
+# то он будет включен по умолчанию если "programs.category" включен.
+# будет ошибка, если "programs.category.enable" не существует.
 options = delib.singleCascadeEnableOption;
 ```
 
