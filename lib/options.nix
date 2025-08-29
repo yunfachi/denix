@@ -117,4 +117,6 @@ rec {
     default: { name, ... }: delib.attrset.setAttrByStrPath "${name}.enable" (boolOption default);
 
   singleCascadeEnableOption = args: delib.singleEnableOption args.parent.enable args;
+
+  moduleOptions = opts: args: delib.attrset.setAttrByStrPath args.name opts;
 }
