@@ -3,18 +3,20 @@
 
 ## Args {#args}
 <table class="extension-table">
-  <tr>
-    <th>Название</th>
-    <td><code>args</code></td>
-  </tr>
-  <tr>
-    <th>Описание</th>
-    <td>Более удобный способ задавать значение <code>_module.args</code> с помощью <code>myconfig</code></td>
-  </tr>
-  <tr>
-    <th>Ответственные</th>
-    <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Название</th>
+      <td><code>args</code></td>
+    </tr>
+    <tr>
+      <th>Описание</th>
+      <td>Более удобный способ задавать значение <code>_module.args</code> с помощью <code>myconfig</code></td>
+    </tr>
+    <tr>
+      <th>Ответственные</th>
+      <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Настройки {#args-settings}
@@ -24,18 +26,20 @@
 
 ## Base {#base}
 <table class="extension-table">
-  <tr>
-    <th>Название</th>
-    <td><code>base</code></td>
-  </tr>
-  <tr>
-    <th>Описание</th>
-    <td>Создаёт функциональные и тонко настраиваемые модули для хостов и райсов с минимальными усилиями</td>
-  </tr>
-  <tr>
-    <th>Ответственные</th>
-    <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Название</th>
+      <td><code>base</code></td>
+    </tr>
+    <tr>
+      <th>Описание</th>
+      <td>Создаёт функциональные и тонко настраиваемые модули для хостов и райсов с минимальными усилиями</td>
+    </tr>
+    <tr>
+      <th>Ответственные</th>
+      <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Настройки {#base-settings}
