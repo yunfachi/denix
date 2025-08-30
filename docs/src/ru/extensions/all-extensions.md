@@ -135,3 +135,42 @@
 
 ## User {#user}
 WIP
+
+## Overlays {#overlays}
+<table class="extension-table">
+  <tbody>
+    <tr>
+      <th>Имя</th>
+      <td><code>overlays</code></td>
+    </tr>
+    <tr>
+      <th>Описание</th>
+      <td>Модуль упрощённой конфигурация оверлеев</td>
+    </tr>
+    <tr>
+      <th>Ответственные</th>
+      <td>Zonni (<a href='https://github.com/mzonski'>GitHub</a>)</td>
+    </tr>
+  </tbody>
+</table>
+
+### Настройки {#overlays-settings}
+| Имя | Значение по умолчанию | Описание |
+| - | - | - |
+| `defaultTargets` | `["nixos" "home"]` | Цели по умолчанию, к которым будут применяться оверлеи |
+| `moduleNamePrefix` | `"overlays"` | Префикс, добавляемый к именам модулей, когда `withPrefix` равняется true |
+
+### Библиотека {#overlays-library}
+
+#### `overlayModule` {#overlays-library-overlayModule}
+Создаёт модуль, который применяет оверлеи к указанным целям. Если `withPrefix` равен true, создаётся опция `${moduleNamePrefix}.${name}.enable` со значением `delib.overlayModule :: enabled`; в противном случае то же самое создаётся в `${name}.enable`.
+
+**Аргументы:**
+| Имя | Тип | Значение по умолчанию | Описание |
+| - | - | - | - |
+| `name` | string | *обязательный* | Имя модуля этого оверлея |
+| `overlay` | overlay function | `null` | Применяемый оверлей |
+| `overlays` | list of overlay functions | `[]` | Список применяемых оверлеев |
+| `targets` | list of strings | [`defaultTargets`](#overlays-settings) | Целевые системы, к которым будут применены оверлеи. Разрешённые значения: `"nixos"`, `"home"`, `"darwin"` |
+| `withPrefix` | boolean | `true` | Добавлять ли `moduleNamePrefix` перед именем модуля этого оверлея |
+| `enabled` | boolean | `true` | Включать ли этот оверлей по умолчанию |

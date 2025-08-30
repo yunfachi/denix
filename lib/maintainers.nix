@@ -26,5 +26,10 @@ in
       telegram = "yunfachi";
       telegramId = 1349897307;
     };
+    zonni = maintainer {
+      name = "Zonni";
+      github = "mzonski";
+      githubId = 20989477;
+    };
   };
 }

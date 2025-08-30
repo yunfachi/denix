@@ -135,3 +135,42 @@ This section describes all official Denix extensions.
 
 ## User {#user}
 WIP
+
+## Overlays {#overlays}
+<table class="extension-table">
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>overlays</code></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>Simplified overlay configuration module</td>
+    </tr>
+    <tr>
+      <th>Maintainers</th>
+      <td>Zonni (<a href='https://github.com/mzonski'>GitHub</a>)</td>
+    </tr>
+  </tbody>
+</table>
+
+### Settings {#overlays-settings}
+| Name | Default Value | Description |
+| - | - | - |
+| `defaultTargets` | `["nixos" "home"]` | Default targets to apply overlays |
+| `moduleNamePrefix` | `"overlays"` | Prefix added to module names when `withPrefix` is true |
+
+### Library {#overlays-library}
+
+#### `overlayModule` {#overlays-library-overlayModule}
+Creates a module that applies overlays for specified targets. If `withPrefix` is true, it creates the option `${moduleNamePrefix}.${name}.enable` with the value `delib.overlayModule :: enabled`; otherwise, it does the same but in `${name}.enable`.
+
+**Arguments:**
+| Name | Type | Default Value | Description |
+| - | - | - | - |
+| `name` | string | *required* | Name of the overlay module |
+| `overlay` | overlay function | `null` | Single overlay function to apply |
+| `overlays` | list of overlay functions | `[]` | List of overlay functions to apply |
+| `targets` | list of strings | [`defaultTargets`](#overlays-settings) | Target systems to apply overlays to. Valid values: `"nixos"`, `"home"`, `"darwin"` |
+| `withPrefix` | boolean | `true` | Whether to add `moduleNamePrefix` to the module name |
+| `enabled` | boolean | `true` | Whether overlay should be enabled by default |
