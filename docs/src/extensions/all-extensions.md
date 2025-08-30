@@ -3,18 +3,20 @@ This section describes all official Denix extensions.
 
 ## Args {#args}
 <table class="extension-table">
-  <tr>
-    <th>Name</th>
-    <td><code>args</code></td>
-  </tr>
-  <tr>
-    <th>Description</th>
-    <td>More convenient way to configure <code>_module.args</code> via <code>myconfig</code></td>
-  </tr>
-  <tr>
-    <th>Maintainers</th>
-    <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>args</code></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>More convenient way to configure <code>_module.args</code> via <code>myconfig</code></td>
+    </tr>
+    <tr>
+      <th>Maintainers</th>
+      <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Settings {#args-settings}
@@ -24,18 +26,20 @@ This section describes all official Denix extensions.
 
 ## Base {#base}
 <table class="extension-table">
-  <tr>
-    <th>Name</th>
-    <td><code>base</code></td>
-  </tr>
-  <tr>
-    <th>Description</th>
-    <td>Creates feature-rich and fine-tunable modules for hosts and rices with minimal effort</td>
-  </tr>
-  <tr>
-    <th>Maintainers</th>
-    <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td><code>base</code></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>Creates feature-rich and fine-tunable modules for hosts and rices with minimal effort</td>
+    </tr>
+    <tr>
+      <th>Maintainers</th>
+      <td>yunfachi (<a href='https://github.com/yunfachi'>GitHub</a>, <a href='https://t.me/yunfachi'>Telegram</a>)</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Settings {#base-settings}
