@@ -67,7 +67,7 @@ options = with delib; moduleOptions {
 options.programs.category.example = with delib; {
     enable = boolOption true;
     device = strOption "desktop";
-}
+};
 
 # but if `singleCascadeEnableOption` is not enough:
 options = with delib; moduleOptions ({ parent, ... }: {
