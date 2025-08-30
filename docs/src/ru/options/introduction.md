@@ -76,9 +76,11 @@ options = with delib; moduleOptions ({ parent, ... }: {
 }); # обратите внимание на скобки
 
 # снова, блок опций выше эквивалентен блоку ниже:
-options.programs.category.example = with delib; { parent, ... }: {
-    enable = boolOption parent.enable;
-    device = strOption "desktop";
+options = with delib; { parent, ... }: {
+    programs.category.example = {
+        enable = boolOption parent.enable;
+        device = strOption "desktop";
+    };
 };
 ```
 

@@ -76,9 +76,11 @@ options = with delib; moduleOptions ({ parent, ... }: {
 }); # notice the parentheses
 
 # once again, `options` block above is the same as:
-options.programs.category.example = with delib; { parent, ... }: {
-    enable = boolOption parent.enable;
-    device = strOption "desktop";
+options = with delib; { parent, ... }: {
+    programs.category.example = {
+        enable = boolOption parent.enable;
+        device = strOption "desktop";
+    };
 };
 ```
 
