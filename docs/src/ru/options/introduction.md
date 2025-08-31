@@ -59,28 +59,28 @@ options = delib.singleCascadeEnableOption;
 
 # если не хватает `singleEnableOption`:
 options = with delib; moduleOptions {
-    enable = boolOption true;
-    device = strOption "desktop";
+  enable = boolOption true;
+  device = strOption "desktop";
 };
 
 # блок опций выше эквивалентен блоку ниже:
 options.programs.category.example = with delib; {
-    enable = boolOption true;
-    device = strOption "desktop";
+  enable = boolOption true;
+  device = strOption "desktop";
 };
 
 # а если не хватает `singleCascadeEnableOption`:
 options = with delib; moduleOptions ({ parent, ... }: {
-    enable = boolOption parent.enable;
-    device = strOption "desktop";
+  enable = boolOption parent.enable;
+  device = strOption "desktop";
 }); # обратите внимание на скобки
 
 # снова, блок опций выше эквивалентен блоку ниже:
 options = with delib; { parent, ... }: {
-    programs.category.example = {
-        enable = boolOption parent.enable;
-        device = strOption "desktop";
-    };
+  programs.category.example = {
+    enable = boolOption parent.enable;
+    device = strOption "desktop";
+  };
 };
 ```
 

@@ -59,28 +59,28 @@ options = delib.singleCascadeEnableOption;
 
 # if `singleEnableOption` is not enough:
 options = with delib; moduleOptions {
-    enable = boolOption true;
-    device = strOption "desktop";
+  enable = boolOption true;
+  device = strOption "desktop";
 };
 
 # `options` block above is the same as:
 options.programs.category.example = with delib; {
-    enable = boolOption true;
-    device = strOption "desktop";
+  enable = boolOption true;
+  device = strOption "desktop";
 };
 
 # but if `singleCascadeEnableOption` is not enough:
 options = with delib; moduleOptions ({ parent, ... }: {
-    enable = boolOption parent.enable;
-    device = strOption "desktop";
+  enable = boolOption parent.enable;
+  device = strOption "desktop";
 }); # notice the parentheses
 
 # once again, `options` block above is the same as:
 options = with delib; { parent, ... }: {
-    programs.category.example = {
-        enable = boolOption parent.enable;
-        device = strOption "desktop";
-    };
+  programs.category.example = {
+    enable = boolOption parent.enable;
+    device = strOption "desktop";
+  };
 };
 ```
 
