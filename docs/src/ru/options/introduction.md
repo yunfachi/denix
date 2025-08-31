@@ -52,6 +52,38 @@ options = delib.singleEnableOption <default>;
 options = delib.singleCascadeEnableOption;
 ```
 
+- `moduleOptions <opts> <args>` - создаёт attribute set с `<opts>` для пути текущего модуля. Обычно, необходимо использовать `name` ещё раз, чтобы обозначить опции, но эта функция делает это автоматически. `<args>` это набор [передаваемых аргументов](/ru/modules/structure#passed-arguments). Если `<opts>` это функция, тогда `<args>` является её аргументом. Пример:
+
+```nix
+# имя текущего модуля это "programs.category.example".
+
+# если не хватает `singleEnableOption`:
+options = with delib; moduleOptions {
+  enable = boolOption true;
+  device = strOption "desktop";
+};
+
+# блок опций выше эквивалентен блоку ниже:
+options.programs.category.example = with delib; {
+  enable = boolOption true;
+  device = strOption "desktop";
+};
+
+# а если не хватает `singleCascadeEnableOption`:
+options = with delib; moduleOptions ({ parent, ... }: {
+  enable = boolOption parent.enable;
+  device = strOption "desktop";
+}); # обратите внимание на скобки
+
+# снова, блок опций выше эквивалентен блоку ниже:
+options = with delib; { parent, ... }: {
+  programs.category.example = {
+    enable = boolOption parent.enable;
+    device = strOption "desktop";
+  };
+};
+```
+
 Список актуальных опций можно найти в исходном коде: [github:yunfachi/denix?path=lib/options.nix](https://github.com/yunfachi/denix/blob/master/lib/options.nix)
 
 ## Примеры {#examples}

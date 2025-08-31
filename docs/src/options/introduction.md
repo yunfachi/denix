@@ -52,6 +52,38 @@ options = delib.singleEnableOption <default>;
 options = delib.singleCascadeEnableOption;
 ```
 
+- `moduleOptions <opts> <args>` - creates an attribute set with `<opts>` for the current module path. Usually, you need to use the module `name` once again to define all options, but this wrapper does this automatically. `<args>` is a set with [passed arguments](/modules/structure#passed-arguments). If `<opts>` is a function, then `<args>` set is automatically passed to it. See the example:
+
+```nix
+# current module's name is "programs.category.example".
+
+# if `singleEnableOption` is not enough:
+options = with delib; moduleOptions {
+  enable = boolOption true;
+  device = strOption "desktop";
+};
+
+# `options` block above is the same as:
+options.programs.category.example = with delib; {
+  enable = boolOption true;
+  device = strOption "desktop";
+};
+
+# but if `singleCascadeEnableOption` is not enough:
+options = with delib; moduleOptions ({ parent, ... }: {
+  enable = boolOption parent.enable;
+  device = strOption "desktop";
+}); # notice the parentheses
+
+# once again, `options` block above is the same as:
+options = with delib; { parent, ... }: {
+  programs.category.example = {
+    enable = boolOption parent.enable;
+    device = strOption "desktop";
+  };
+};
+```
+
 The list of current options can be found in the source code: [github:yunfachi/denix?path=lib/options.nix](https://github.com/yunfachi/denix/blob/master/lib/options.nix)
 
 ## Examples {#examples}
