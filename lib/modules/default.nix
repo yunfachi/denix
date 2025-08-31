@@ -1,57 +1,80 @@
-{ delib, lib, ... }:
+{
+  delib,
+  lib,
+  nixpkgs,
+  home-manager,
+  nix-darwin,
+  ...
+}:
 {
   denixConfiguration =
     {
       modules ? [ ],
+      specialArgs ? { },
     }:
     lib.evalModules {
       modules = [ ./config/denix.nix ] ++ modules;
 
       specialArgs = {
+        inherit nixpkgs home-manager nix-darwin;
+      }
+      // lib.recursiveUpdate {
         inherit delib;
-      };
+      } specialArgs;
     };
+
+  callDenixModule =
+    { module, myconfigPrefix }:
+    { config, options, ... }:
+    delib.fix (
+      self:
+      let
+        modulePath = lib.optionalString (myconfigPrefix != null) "${myconfigPrefix}." + self.name;
+      in
+      module {
+        inherit (self) name;
+        cfg = delib.getAttrByStrPath config modulePath { };
+        opt = delib.getAttrByStrPath options modulePath { };
+      }
+    );
 
   compileModule =
     {
       configuration,
       moduleSystem,
+      myconfigPrefix ? configuration.config.moduleSystems.${moduleSystem}.myconfigPrefix,
+      applyModuleSystemsConfig ?
+        configuration.config.moduleSystems.${moduleSystem}.applyModuleSystemsConfig,
+      applyOptions ? configuration.config.moduleSystems.${moduleSystem}.applyOptions,
       applyMyConfig ? configuration.config.moduleSystems.${moduleSystem}.applyMyConfig,
     }:
+    let
+      allModules = lib.attrValues configuration.config.modules;
+      allModuleSystems = lib.attrValues configuration.config.moduleSystems;
+    in
+    { config, options, ... }@args:
     {
-      imports =
+      imports = lib.concatMap (
+        module:
         let
-          inherit (configuration) config;
-
-          modules = lib.attrsToList config.modules;
-          moduleSystems = lib.attrsToList config.moduleSystems;
-
-          x =
-            lib.concatLists (
-              lib.map (
-                m:
-                let
-                  mEnabled = delib.getAttrByStrPath config.myconfig "${m.name}.enable" false;
-                  mDisabled = !(delib.getAttrByStrPath config.myconfig "${m.name}.enable" true);
-                in
-                lib.concatLists (
-                  lib.map (
-                    ms:
-                    ms.value.apply {
-                      inherit moduleSystem;
-                      modules =
-                        m.value.${ms.name}.always or [ ]
-                        ++ lib.optionals mEnabled m.value.${ms.name}.ifEnabled or [ ]
-                        ++ lib.optionals mDisabled m.value.${ms.name}.disabled or [ ];
-                    }
-                  ) moduleSystems
-                )
-              ) modules
-            )
-            ++ [
-              (applyMyConfig { inherit (configuration.options) myconfig; })
-            ];
+          moduleName = module.name;
         in
-        x;
+        applyOptions {
+          inherit moduleName;
+          inherit (module) options;
+        }
+        ++ applyMyConfig {
+          inherit moduleName;
+          inherit (module) myconfig;
+        }
+        ++ lib.concatMap (
+          moduleSystem':
+          applyModuleSystemsConfig {
+            inherit moduleName;
+            moduleSystem = moduleSystem'.name;
+            module = module.${moduleSystem'.name};
+          }
+        ) allModuleSystems
+      ) (map (module: delib.callDenixModule { inherit module myconfigPrefix; } args) allModules);
     };
 }

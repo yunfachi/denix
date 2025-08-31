@@ -2,7 +2,6 @@
   delib,
   lib,
   config,
-  options,
   ...
 }:
 {
@@ -16,67 +15,37 @@
       foo = apply (anythingOption [ ]) lib.toList;
     in
     {
-      myconfig = submoduleWithOption {
-        modules = builtins.concatLists (
-          builtins.attrValues (
-            builtins.mapAttrs (
-              mName: m:
-              map (x: { options = delib.setAttrByStrPath x mName; }) m.options
-              ++ m.myconfig.always
-              ++ map (
-                x:
-                { config, ... }:
-                {
-                  config = lib.mkIf (delib.getAttrByStrPath config "${mName}.enable" false) x;
-                }
-              ) m.myconfig.ifEnabled
-              ++ map (
-                x:
-                { config, ... }:
-                {
-                  config = lib.mkIf (!(delib.getAttrByStrPath config "${mName}.enable" true)) x;
-                }
-              ) m.myconfig.ifDisabled
-            ) config.modules
-          )
-        );
-      } { };
+      myconfigPrefix = allowNull (strOption "myconfig");
 
-      modules = attrsOfOption (submoduleWith {
-        # NOTE: requires https://github.com/NixOS/nixpkgs/pull/437972
-        onlyDefinesConfig = true;
-        modules = [
-          (
-            { name, ... }:
-            {
-              options = {
-                options = apply (allowAttrs (listOfOption attrs [ ])) lib.toList;
-                myconfig = {
+      modules = attrsOfOption (
+        # FIXME: https://github.com/NixOS/nixpkgs/issues/438933
+        functionTo (submoduleWith {
+          # NOTE: requires https://github.com/NixOS/nixpkgs/pull/437972
+          onlyDefinesConfig = true;
+          modules = [
+            (
+              { name, ... }:
+              {
+                options = {
+                  name = readOnly (strOption name) true;
+
+                  options = foo;
+
+                  myconfig = {
+                    ifEnabled = foo;
+                    ifDisabled = foo;
+                    always = foo;
+                  };
+                }
+                // builtins.mapAttrs (name: value: {
                   ifEnabled = foo;
                   ifDisabled = foo;
                   always = foo;
-                };
+                }) config.moduleSystems;
               }
-              // builtins.mapAttrs (name: value: {
-                ifEnabled = foo;
-                ifDisabled = foo;
-                always = foo;
-              }) config.moduleSystems;
-
-            }
-          )
-          (
-            { name, ... }:
-            {
-              config = {
-                _module.args = {
-                  cfg = delib.getAttrByStrPath config.myconfig name { };
-                  opt = delib.getAttrByStrPath options.myconfig.type.getSubOptions name { };
-                };
-              };
-            }
-          )
-        ];
-      });
+            )
+          ];
+        })
+      );
     };
 }

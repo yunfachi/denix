@@ -22,9 +22,11 @@ let
       str
       submodule
       submoduleWith
+      lazyAttrsOf
       ;
     attrs = delib.options.attrsOf delib.options.anything;
     attrsLegacy = lib.types.attrs;
+    lazyAttrs = delib.options.lazyAttrsOf delib.options.anything;
     function = delib.options.functionTo delib.options.anything;
     list = delib.options.listOf delib.options.anything;
     intBetween = lib.types.ints.between;

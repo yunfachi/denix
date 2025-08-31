@@ -1,8 +1,18 @@
-{ lib, ... }:
+{
+  lib,
+  nixpkgs,
+  home-manager,
+  nix-darwin,
+  ...
+}:
 let
   inherit (import ./toplevel/lib.nix { inherit lib; }) mkLib;
 in
 mkLib "delib" (delib: {
+  _callLibArgs = {
+    inherit nixpkgs home-manager nix-darwin;
+  };
+
   fixedPoints = delib._callLib ./toplevel/fixed-points.nix;
   inherit (delib.fixedPoints)
     fix
@@ -17,7 +27,7 @@ mkLib "delib" (delib: {
   inherit (delib._callLib ./toplevel/lib.nix) mkLib;
 
   modules = delib._callLib ./modules;
-  inherit (delib.modules) denixConfiguration compileModule;
+  inherit (delib.modules) denixConfiguration callDenixModule compileModule;
 
   attrset = delib._callLib ./attrset.nix;
   inherit (delib.attrset) getAttrByStrPath setAttrByStrPath hasAttrs;
@@ -37,6 +47,8 @@ mkLib "delib" (delib: {
     allowFunctionTo
     allowInt
     allowIntBetween
+    allowLazyAttrs
+    allowLazyAttrsOf
     allowList
     allowListOf
     allowNull
@@ -78,6 +90,10 @@ mkLib "delib" (delib: {
     intBetweenOption
     intOption
     internal
+    lazyAttrs
+    lazyAttrsOf
+    lazyAttrsOfOption
+    lazyAttrsOption
     list
     listOf
     listOfOption

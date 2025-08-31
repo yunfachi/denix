@@ -97,11 +97,11 @@
     "nixpkgs-lib": {
       "locked": {
         "dir": "lib",
-        "lastModified": 1756410287,
-        "narHash": "sha256-X7KtENXtzWShJwynb4jk14Sg+9yhRS/zbE5qh+ZgMt0=",
+        "lastModified": 1756478791,
+        "narHash": "sha256-F2fHTBUA/S99Kwv99k51Xb990LIihlK2Ys29rrTfMoE=",
         "owner": "yunfachi",
         "repo": "nixpkgs",
-        "rev": "f222f92233a60bc85e7eb7af81380da61073597d",
+        "rev": "da2a71835653a4d11bbe3738830d90f048ae9d30",
         "type": "github"
       },
       "original": {
