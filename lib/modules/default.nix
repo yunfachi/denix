@@ -48,33 +48,72 @@
       applyOptions ? configuration.config.moduleSystems.${moduleSystem}.applyOptions,
       applyMyConfig ? configuration.config.moduleSystems.${moduleSystem}.applyMyConfig,
     }:
-    let
-      allModules = lib.attrValues configuration.config.modules;
-      allModuleSystems = lib.attrValues configuration.config.moduleSystems;
-    in
-    { config, options, ... }@args:
-    {
-      imports = lib.concatMap (
-        module:
-        let
-          moduleName = module.name;
-        in
-        applyOptions {
-          inherit moduleName;
-          inherit (module) options;
-        }
-        ++ applyMyConfig {
-          inherit moduleName;
-          inherit (module) myconfig;
-        }
-        ++ lib.concatMap (
-          moduleSystem':
-          applyModuleSystemsConfig {
-            inherit moduleName;
-            moduleSystem = moduleSystem'.name;
-            module = module.${moduleSystem'.name};
-          }
-        ) allModuleSystems
-      ) (map (module: delib.callDenixModule { inherit module myconfigPrefix; } args) allModules);
-    };
+    (
+      let
+        allModules = lib.attrValues configuration.config.modules;
+        allModuleSystems = lib.attrNames configuration.config.moduleSystems;
+      in
+      {
+        imports = lib.concatMap (
+          module:
+          let
+            fakeCalled = delib.callDenixModule { inherit module myconfigPrefix; } {
+              config = { };
+              options = { };
+            };
+            genModulesWithCalled =
+              y:
+              lib.genList (
+                index:
+                { config, options, ... }@args:
+                let
+                  called = delib.callDenixModule { inherit module myconfigPrefix; } args;
+                in
+                y index called
+              );
+          in
+          genModulesWithCalled (
+            index: called:
+            applyOptions {
+              inherit myconfigPrefix;
+              moduleName = called.name;
+              value = lib.elemAt called.options index;
+            }
+          ) (lib.length fakeCalled.options)
+          ++ lib.concatMap (
+            moduleSystem':
+            genModulesWithCalled (
+              index: called:
+              applyModuleSystemsConfig {
+                inherit myconfigPrefix;
+                moduleSystem = moduleSystem';
+                moduleName = called.name;
+                value = lib.elemAt called.${moduleSystem'}.always index;
+                type = "always";
+              }
+            ) (lib.length fakeCalled.${moduleSystem'}.always)
+            ++ genModulesWithCalled (
+              index: called:
+              applyModuleSystemsConfig {
+                inherit myconfigPrefix;
+                moduleSystem = moduleSystem';
+                moduleName = called.name;
+                value = lib.elemAt called.${moduleSystem'}.ifEnabled index;
+                type = "ifEnabled";
+              }
+            ) (lib.length fakeCalled.${moduleSystem'}.ifEnabled)
+            ++ genModulesWithCalled (
+              index: called:
+              applyModuleSystemsConfig {
+                inherit myconfigPrefix;
+                moduleSystem = moduleSystem';
+                moduleName = called.name;
+                value = lib.elemAt called.${moduleSystem'}.ifDisabled index;
+                type = "ifDisabled";
+              }
+            ) (lib.length fakeCalled.${moduleSystem'}.ifDisabled)
+          ) allModuleSystems
+        ) allModules;
+      }
+    );
 }

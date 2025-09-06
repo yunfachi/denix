@@ -10,7 +10,6 @@ let
       coercedTo
       enum
       float
-      functionTo
       int
       oneOf
       listOf
@@ -27,6 +26,45 @@ let
     attrs = delib.options.attrsOf delib.options.anything;
     attrsLegacy = lib.types.attrs;
     lazyAttrs = delib.options.lazyAttrsOf delib.options.anything;
+    # FIX https://github.com/NixOS/nixpkgs/issues/438933
+    functionTo =
+      elemType:
+      lib.mkOptionType {
+        name = "functionTo";
+        description = "function that evaluates to a(n) ${
+          lib.types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+        }";
+        descriptionClass = "composite";
+        check = lib.isFunction;
+        merge = loc: defs: {
+          # An argument attribute has a default when it has a default in all definitions
+          __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
+            lib.map (fn: lib.functionArgs fn.value) defs
+          );
+          __functor =
+            _: callerArgs:
+            (lib.mergeDefinitions loc elemType (
+              map (fn: {
+                inherit (fn) file;
+                value = fn.value callerArgs;
+              }) defs
+            )).mergedValue;
+        };
+        getSubOptions = prefix: elemType.getSubOptions prefix;
+        getSubModules = elemType.getSubModules;
+        substSubModules = m: delib.options.functionTo (elemType.substSubModules m);
+        functor = lib.defaultFunctor "functionTo" // {
+          type = payload: types.functionTo payload.elemType;
+          payload.elemType = elemType;
+          binOp =
+            a: b:
+            let
+              merged = a.elemType.typeMerge b.elemType.functor;
+            in
+            if merged == null then null else { elemType = merged; };
+        };
+        nestedTypes.elemType = elemType;
+      };
     function = delib.options.functionTo delib.options.anything;
     list = delib.options.listOf delib.options.anything;
     intBetween = lib.types.ints.between;

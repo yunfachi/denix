@@ -20,7 +20,7 @@ in
         (
           { config, name, ... }:
           let
-            myconfigPrefix = lib.optionalString (config.myconfigPrefix != null) "${config.myconfigPrefix}.";
+            mkMyConfigPrefix = myconfigPrefix: lib.optionalString (myconfigPrefix != null) "${myconfigPrefix}.";
           in
           {
             options = {
@@ -28,81 +28,49 @@ in
 
               myconfigPrefix = allowNull (strOption myconfigPrefixDefault);
 
-              applyModuleSystemsConfig = functionToOption list (
+              applyOptions = functionToOption attrs (
                 {
+                  myconfigPrefix,
+                  moduleName,
+                  value,
+                }:
+                {
+                  imports = [
+                    (lib.setFunctionArgs (args: {
+                      options = delib.setAttrByStrPath (value args) ((mkMyConfigPrefix myconfigPrefix) + moduleName);
+                    }) (lib.functionArgs value))
+                  ];
+                }
+              );
+
+              applyModuleSystemsConfig = functionToOption attrs (
+                {
+                  myconfigPrefix,
                   moduleSystem,
                   moduleName,
-                  module,
+                  value,
+                  type,
                 }:
-                lib.optionals (moduleSystem == name) (
-                  module.always
-                  ++ map (
-                    m: { config, ... }: lib.mkIf (delib.getAttrByStrPath config "${moduleName}.enable" false) m
-                  ) module.ifEnabled
-                  ++ map (
-                    m: { config, ... }: lib.mkIf (!(delib.getAttrByStrPath config "${moduleName}.enable" true)) m
-                  ) module.ifDisabled
-                )
-              );
-
-              applyOptions = functionToOption list (
-                {
-                  moduleName,
-                  options,
-                }:
-                map (module: args: {
-                  options = delib.setAttrByStrPath (lib.applyModuleArgsIfFunction "somekey" module args) (
-                    myconfigPrefix + (builtins.trace moduleName moduleName)
-                  );
-                }) options
-              );
-
-              applyMyConfig = functionToOption list (
-                {
-                  moduleName,
-                  myconfig,
-                }:
-                map (
-                  module: args:
-                  let
-                    applied = lib.applyModuleArgsIfFunction "somekey" module args;
-                    unified = lib.unifyModuleSyntax ./default.nix "somekey" applied;
-                  in
-                  {
-                    config = delib.setAttrByStrPath unified.config myconfigPrefix;
-                    options = delib.setAttrByStrPath unified.options myconfigPrefix;
-                  }
-                ) myconfig.always
-                ++ map (
-                  module: args:
-                  let
-                    applied = lib.applyModuleArgsIfFunction "somekey" module args;
-                    unified = lib.unifyModuleSyntax ./default.nix "somekey" applied;
-                  in
-                  {
-                    config = lib.mkIf (delib.getAttrByStrPath config "${moduleName}.enable" false) (
-                      delib.setAttrByStrPath unified.config myconfigPrefix
-                    );
-                    options = lib.mkIf (delib.getAttrByStrPath config "${moduleName}.enable" false) (
-                      delib.setAttrByStrPath unified.options myconfigPrefix
-                    );
-                  }
-                ) myconfig.ifEnabled
-                ++ map (
-                  module: args:
-                  let
-                    applied = lib.applyModuleArgsIfFunction "somekey" module args;
-                    unified = lib.unifyModuleSyntax ./default.nix "somekey" applied;
-                  in
-                  {
-                    config = lib.mkIf (!(delib.getAttrByStrPath config "${moduleName}.enable" true)) (
-                      delib.setAttrByStrPath unified.config myconfigPrefix
-                    );
-                    options = lib.mkIf (!(delib.getAttrByStrPath config "${moduleName}.enable" true)) (
-                      delib.setAttrByStrPath unified.options myconfigPrefix
-                    );
-                  }
-                ) myconfig.ifDisabled
+                lib.optionalAttrs (moduleSystem == name) {
+                  imports = [
+                    {
+                      always = value;
+                      ifEnabled = lib.setFunctionArgs (
+                        { config, ... }@args:
+                        lib.mkIf (delib.getAttrByStrPath config "${mkMyConfigPrefix myconfigPrefix}${moduleName}.enable"
+                          false
+                        ) (value args)
+                      ) ({ config = false; } // (lib.functionArgs value));
+                      ifDisabled = lib.setFunctionArgs (
+                        { config, ... }@args:
+                        lib.mkIf (
+                          !(delib.getAttrByStrPath config "${mkMyConfigPrefix myconfigPrefix}${moduleName}.enable" true)
+                        ) (value args)
+                      ) ({ config = false; } // (lib.functionArgs value));
+                    }
+                    .${type}
+                  ];
+                }
               );
             };
           }

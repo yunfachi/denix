@@ -12,13 +12,31 @@
   options =
     with delib;
     let
-      foo = apply (anythingOption [ ]) lib.toList;
+      modulesOption = lib.mkOption {
+        type = lib.mkOptionType {
+          name = "modules";
+          check = with lib; x: !(isFunction x && isPath x && isAttrs x && isList x);
+          merge =
+            loc: defs:
+            lib.concatLists (
+              map (
+                def:
+                lib.toList (
+                  if lib.isFunction def.value then
+                    lib.setFunctionArgs def.value (lib.functionArgs def.value)
+                  else
+                    def.value
+                )
+              ) defs
+            );
+        };
+        default = [ ];
+      };
     in
     {
       myconfigPrefix = allowNull (strOption "myconfig");
 
       modules = attrsOfOption (
-        # FIXME: https://github.com/NixOS/nixpkgs/issues/438933
         functionTo (submoduleWith {
           # NOTE: requires https://github.com/NixOS/nixpkgs/pull/437972
           onlyDefinesConfig = true;
@@ -29,18 +47,12 @@
                 options = {
                   name = readOnly (strOption name) true;
 
-                  options = foo;
-
-                  myconfig = {
-                    ifEnabled = foo;
-                    ifDisabled = foo;
-                    always = foo;
-                  };
+                  options = modulesOption;
                 }
                 // builtins.mapAttrs (name: value: {
-                  ifEnabled = foo;
-                  ifDisabled = foo;
-                  always = foo;
+                  always = modulesOption;
+                  ifEnabled = modulesOption;
+                  ifDisabled = modulesOption;
                 }) config.moduleSystems;
               }
             )
