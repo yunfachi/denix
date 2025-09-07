@@ -4,9 +4,8 @@
   inputs = {
     #nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     nixpkgs-lib.url = "github:yunfachi/nixpkgs/patch-2?dir=lib";
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix";
-    };
+    #git-hooks.url = "github:cachix/git-hooks.nix";
+    git-hooks.url = "github:yunfachi/git-hooks.nix";
 
     /**
       The reason for separating nixpkgs and nixpkgs-lib is that nixpkgs, home-manager,
@@ -31,7 +30,7 @@
     {
       self,
       nixpkgs-lib,
-      pre-commit-hooks,
+      git-hooks,
       nixpkgs,
       home-manager,
       nix-darwin,
@@ -54,9 +53,38 @@
       };
 
       checks = forAllSystems (system: {
-        pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        pre-commit-check = git-hooks.lib.${system}.run {
           src = ./.;
-          hooks.nixfmt-rfc-style.enable = true;
+          hooks = {
+            nixfmt-rfc-style.enable = true;
+            keep-sorted = {
+              enable = true;
+              name = "keep-sorted";
+              language = "system";
+              entry = "${nixpkgs.legacyPackages.${system}.keep-sorted}/bin/keep-sorted";
+            };
+            cog = {
+              enable = true;
+              name = "cog";
+              language = "system";
+              entry = nixpkgs.lib.getExe (
+                nixpkgs.legacyPackages.${system}.writeShellApplication {
+                  name = "denix-cog";
+
+                  runtimeInputs = with nixpkgs.legacyPackages.${system}; [
+                    python313Packages.cogapp
+                    nix
+                  ];
+
+                  text = ''
+                    export pre_evaled_options='${builtins.toJSON (builtins.attrNames self.lib.options)}'
+                    export pre_evaled_types='${builtins.toJSON (builtins.attrNames self.lib.types)}'
+                    cog -r "$1"
+                  '';
+                }
+              );
+            };
+          };
         };
       });
 

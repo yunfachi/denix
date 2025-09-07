@@ -18,8 +18,8 @@
               { config, ... }@args:
               let
                 mkMyConfigPrefix = myconfigPrefix: lib.optionalString (myconfigPrefix != null) "${myconfigPrefix}.";
-                applied = value args;
-                unified = lib.unifyModuleSyntax ./default.nix "somekey" applied;
+                called = value args;
+                unified = lib.unifyModuleSyntax ./default.nix "somekey" called;
               in
               {
                 always = {
