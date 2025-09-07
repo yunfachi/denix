@@ -20,6 +20,7 @@
     str
     submodule
     submoduleWith
+    unspecified
     # keep-sorted end
     ;
 

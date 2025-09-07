@@ -50,12 +50,15 @@ mkLib "delib" (delib: {
   #  import os
   #
   #  def nix_attr_names(attr):
-  #    out = subprocess.run(
-  #      ["nix", "eval", f".#lib.{attr}",
-  #       "--apply", "builtins.attrNames",
-  #       "--quiet", "--json", "--no-pretty"],
-  #      capture_output=True, text=True, check=False
-  #    ).stdout or os.environ[f"pre_evaled_{attr}"]
+  #    try:
+  #      out = subprocess.run(
+  #        ["nix", "eval", f".#lib.{attr}",
+  #         "--apply", "builtins.attrNames",
+  #         "--quiet", "--json", "--no-pretty"],
+  #        capture_output=True, text=True, check=True
+  #      ).stdout
+  #    except subprocess.CalledProcessError:
+  #      out = os.environ[f"pre_evaled_{attr}"]
   #    return json.loads(out)
   #
   #  for group in ["options", "types"]:
@@ -91,6 +94,7 @@ mkLib "delib" (delib: {
     allowStr
     allowSubmodule
     allowSubmoduleWith
+    allowUnspecified
     anythingOption
     apply
     attrsLegacyOption
@@ -124,6 +128,7 @@ mkLib "delib" (delib: {
     strOption
     submoduleOption
     submoduleWithOption
+    unspecifiedOption
     visible
     ;
   inherit (delib.types)
@@ -153,6 +158,7 @@ mkLib "delib" (delib: {
     str
     submodule
     submoduleWith
+    unspecified
     ;
   #[[[end]]]
 })

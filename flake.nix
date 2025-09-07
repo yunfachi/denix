@@ -79,7 +79,7 @@
                   text = ''
                     export pre_evaled_options='${builtins.toJSON (builtins.attrNames self.lib.options)}'
                     export pre_evaled_types='${builtins.toJSON (builtins.attrNames self.lib.types)}'
-                    cog -r "$1"
+                    cog -r "$@"
                   '';
                 }
               );
