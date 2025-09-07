@@ -4,8 +4,7 @@
   inputs = {
     #nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     nixpkgs-lib.url = "github:yunfachi/nixpkgs/patch-2?dir=lib";
-    #git-hooks.url = "github:cachix/git-hooks.nix";
-    git-hooks.url = "github:yunfachi/git-hooks.nix";
+    git-hooks.url = "github:cachix/git-hooks.nix";
 
     /**
       The reason for separating nixpkgs and nixpkgs-lib is that nixpkgs, home-manager,
