@@ -91,6 +91,8 @@ mkLib "delib" (delib: {
     allowPath
     allowPort
     allowSingleLineStr
+    allowSteppedInt
+    allowSteppedIntBetween
     allowStr
     allowSubmodule
     allowSubmoduleWith
@@ -125,6 +127,8 @@ mkLib "delib" (delib: {
     readOnly
     relatedPackages
     singleLineStrOption
+    steppedIntBetweenOption
+    steppedIntOption
     strOption
     submoduleOption
     submoduleWithOption
@@ -155,6 +159,8 @@ mkLib "delib" (delib: {
     path
     port
     singleLineStr
+    steppedInt
+    steppedIntBetween
     str
     submodule
     submoduleWith

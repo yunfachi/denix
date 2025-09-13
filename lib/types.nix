@@ -25,11 +25,11 @@
     ;
 
   # keep-sorted start case=no block=yes newline_separated=yes
-  attrs = delib.types.attrsOf delib.types.anything;
+  attrs = delib.types.attrsOf delib.types.unspecified;
 
   attrsLegacy = lib.types.attrs;
 
-  function = delib.types.functionTo delib.types.anything;
+  function = delib.types.functionTo delib.types.unspecified;
 
   # FIX https://github.com/NixOS/nixpkgs/issues/438933
   functionTo =
@@ -71,11 +71,18 @@
       nestedTypes.elemType = elemType;
     };
 
-  intBetween = lib.types.ints.between;
+  intBetween =
+    lowest: highest:
+    assert lib.assertMsg (lowest <= highest) "intBetween: lowest must be smaller than highest";
+    lib.types.addCheck delib.types.int (x: x >= lowest && x <= highest)
+    // {
+      name = "intBetween";
+      description = "integer between ${toString lowest} and ${toString highest} (both inclusive)";
+    };
 
-  lazyAttrs = delib.types.lazyAttrsOf delib.types.anything;
+  lazyAttrs = delib.types.lazyAttrsOf delib.types.unspecified;
 
-  list = delib.types.listOf delib.types.anything;
+  list = delib.types.listOf delib.types.unspecified;
 
   null = lib.mkOptionType {
     name = "null";
@@ -87,5 +94,24 @@
       value = null;
     };
   };
+
+  steppedInt =
+    step:
+    assert lib.assertMsg (builtins.isInt step) "steppedInt: step must be an integer";
+    lib.types.addCheck delib.types.int (x: x == x / step * step)
+    // {
+      name = "steppedInt";
+      description = "integer that is a multiple of ${step}";
+    };
+
+  steppedIntBetween =
+    lowest: highest: step:
+    assert lib.assertMsg (builtins.isInt step) "steppedInt: step must be an integer";
+    assert lib.assertMsg (lowest <= highest) "intBetween: lowest must be smaller than highest";
+    lib.types.addCheck delib.types.int (x: x >= lowest && x <= highest && x == x / step * step)
+    // {
+      name = "steppedIntBetween";
+      description = "integer between ${toString lowest} and ${toString highest} (inclusive) that is a multiple of ${step}";
+    };
   # keep-sorted end
 }
