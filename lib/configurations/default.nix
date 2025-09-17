@@ -31,9 +31,12 @@
       useHomeManagerModule ? true,
       isHomeManager ? null, # TODO: DEPRECATED since 2025/05/05
       # Dev
-      mkConfigurationsSystemExtraModule ? {
-        nixpkgs.hostPlatform = "x86_64-linux";
-      }, # just a plug; FIXME
+      mkConfigurationsSystemExtraModule ?
+        { config, ... }:
+        {
+          nixpkgs.hostPlatform = "x86_64-linux";
+          ${myconfigName}.host = builtins.elemAt (builtins.attrValues config.${myconfigName}.hosts) 0;
+        }, # just a plug; FIXME
     }@topArgs:
     (
       if topArgs ? isHomeManager then
