@@ -31,10 +31,19 @@
     f: m:
     delib.mirrorFunctionArgs m (delib.toDenixArgs (denixArgs: delib.processModule f (m denixArgs)));
 
-  setDefaultModuleLocation = file: m: delib.processModule (module: { _file = file; } // module) m;
+  setDefaultModuleLocation =
+    file: m':
+    let
+      m = if builtins.isPath m' then import m' else m';
+    in
+    delib.processModule (module: { _file = file; } // module) m;
 
   setDefaultModuleLocationWithDenixArgs =
-    file: m: delib.processModuleWithDenixArgs (module: { _file = file; } // module) m;
+    file: m':
+    let
+      m = if builtins.isPath m' then import m' else m';
+    in
+    delib.processModuleWithDenixArgs (module: { _file = file; } // module) m;
 
   addPrefixToModule =
     prefix: m:
