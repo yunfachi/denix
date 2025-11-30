@@ -42,7 +42,9 @@
         denix = ./modules/denix;
 
         betterHosts = ./modules/betterHosts;
+        nixDarwin = ./modules/nixDarwin;
       };
+
       lib = import ./lib {
         inherit (nixpkgs-lib) lib;
         inherit (self) inputs denixModules;

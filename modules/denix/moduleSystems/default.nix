@@ -11,7 +11,6 @@ in
 {
   # TODO: system-manager, nvf, nix on droid
   imports = [
-    ./darwin.nix
     ./home.nix
     ./myconfig.nix
     ./nixos.nix
