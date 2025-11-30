@@ -50,13 +50,13 @@ delib._callLib ./denixArgs.nix
 
       moduleSystem ? null,
       host ? null,
-    }:
+    }@args:
     let
       configurationWithModules = configuration.extendModules {
         modules = lib.singleton {
-          config = {
-            inherit moduleSystem host;
-          };
+          config =
+            lib.optionalAttrs (args ? moduleSystem) { inherit moduleSystem; }
+            // lib.optionalAttrs (args ? host) { inherit host; };
         };
       };
     in
@@ -82,9 +82,18 @@ delib._callLib ./denixArgs.nix
 
       extraArgs ? { },
       extraModules ? [ ],
-    }:
+    }@args:
     let
-      makeSystem = configuration.config.moduleSystems.${moduleSystem}.makeSystem;
+      configurationWithModules = configuration.extendModules {
+        modules = lib.singleton {
+          config = {
+            inherit moduleSystem;
+          }
+          // lib.optionalAttrs (args ? host) { inherit host; };
+        };
+      };
+
+      makeSystem = configurationWithModules.config.moduleSystems.${moduleSystem}.makeSystem;
     in
     assert lib.assertMsg (makeSystem != null)
       "The selected module system '${moduleSystem}' does not support making systems. See its 'makeSystem' option.";
@@ -92,11 +101,7 @@ delib._callLib ./denixArgs.nix
       inherit extraArgs;
       modules = extraModules ++ [
         (delib.modules.genModule {
-          inherit
-            configuration
-            moduleSystem
-            host
-            ;
+          configuration = configurationWithModules;
         })
       ];
     };
