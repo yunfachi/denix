@@ -48,6 +48,8 @@ in
               applyConfigForModuleSystem = functionToOption list (
                 value: lib.optional (selectedModuleSystem.name == config.name) value
               );
+
+              processHosts = functionOption ({configuration, forEachHost, hosts, host, fn}: if forEachHost then lib.genAttrs hosts (fn configuration) else fn configuration host);
             };
           }
         )

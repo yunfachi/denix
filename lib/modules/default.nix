@@ -123,7 +123,7 @@ delib._callLib ./denixArgs.nix
     ) "'forEachHost' must not be true when 'host' is set.";
     let
       genSingle =
-        moduleSystem: host:
+        moduleSystem: configuration: host:
         delib.modules.genModule {
           inherit
             configuration
@@ -149,7 +149,15 @@ delib._callLib ./denixArgs.nix
 
       processHosts =
         moduleSystem:
-        if forEachHost then lib.genAttrs hosts (genSingle moduleSystem) else genSingle moduleSystem host;
+        configuration.config.moduleSystems.${moduleSystem}.processHosts {
+          inherit
+            configuration
+            forEachHost
+            hosts
+            host
+            ;
+          fn = genSingle moduleSystem;
+        };
     in
     processModuleSystems;
 
@@ -182,7 +190,7 @@ delib._callLib ./denixArgs.nix
     ) "'forEachHost' must not be true when 'host' is set.";
     let
       genSingle =
-        moduleSystem: host:
+        moduleSystem: configuration: host:
         delib.modules.genSystem {
           inherit
             configuration
@@ -210,7 +218,15 @@ delib._callLib ./denixArgs.nix
 
       processHosts =
         moduleSystem:
-        if forEachHost then lib.genAttrs hosts (genSingle moduleSystem) else genSingle moduleSystem host;
+        configuration.config.moduleSystems.${moduleSystem}.processHosts {
+          inherit
+            configuration
+            forEachHost
+            hosts
+            host
+            ;
+          fn = genSingle moduleSystem;
+        };
     in
     processModuleSystems;
 }
