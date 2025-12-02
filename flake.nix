@@ -43,6 +43,7 @@
 
         betterHosts = ./modules/betterHosts;
         nixDarwin = ./modules/nixDarwin;
+        homeManager = ./modules/homeManager;
       };
 
       lib = import ./lib {

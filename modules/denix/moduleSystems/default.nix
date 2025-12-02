@@ -11,7 +11,6 @@ in
 {
   # TODO: system-manager, nvf, nix on droid
   imports = [
-    ./home.nix
     ./myconfig.nix
     ./nixos.nix
   ];
@@ -48,7 +47,16 @@ in
                 value: lib.optional (selectedModuleSystem.name == config.name) value
               );
 
-              processHosts = functionOption ({configuration, forEachHost, hosts, host, fn}: if forEachHost then lib.genAttrs hosts (fn configuration) else fn configuration host);
+              processHosts = functionOption (
+                {
+                  configuration,
+                  forEachHost,
+                  hosts,
+                  host,
+                  fn,
+                }:
+                if forEachHost then lib.genAttrs hosts (fn configuration) else fn configuration host
+              );
             };
           }
         )
