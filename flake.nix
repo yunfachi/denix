@@ -14,14 +14,8 @@
       not be overridden by the user without a special reason.
     */
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = ./missingFlake/home-manager;
+    nix-darwin.url = ./missingFlake/nix-darwin;
   };
 
   outputs =
