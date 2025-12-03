@@ -126,6 +126,17 @@
         "type": "github"
       }
     },
+    "robotnix": {
+      "locked": {
+        "path": "missingFlake/robotnix",
+        "type": "path"
+      },
+      "original": {
+        "path": "missingFlake/robotnix",
+        "type": "path"
+      },
+      "parent": []
+    },
     "root": {
       "inputs": {
         "git-hooks": "git-hooks",
@@ -133,6 +144,7 @@
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-lib": "nixpkgs-lib",
+        "robotnix": "robotnix",
         "systems": "systems"
       }
     },

@@ -16,6 +16,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = ./missingFlake/home-manager;
     nix-darwin.url = ./missingFlake/nix-darwin;
+    robotnix.url = ./missingFlake/robotnix;
   };
 
   outputs =
@@ -38,6 +39,7 @@
         betterHosts = ./modules/betterHosts;
         nixDarwin = ./modules/nixDarwin;
         homeManager = ./modules/homeManager;
+        robotnix = ./modules/robotnix;
       };
 
       lib = import ./lib {
