@@ -63,7 +63,7 @@
     lib.types.addCheck delib.types.int (x: x == x / step * step)
     // {
       name = "steppedInt";
-      description = "integer that is a multiple of ${step}";
+      description = "integer that is a multiple of ${toString step}";
     };
 
   steppedIntBetween =
@@ -73,7 +73,7 @@
     lib.types.addCheck delib.types.int (x: x >= lowest && x <= highest && x == x / step * step)
     // {
       name = "steppedIntBetween";
-      description = "integer between ${toString lowest} and ${toString highest} (inclusive) that is a multiple of ${step}";
+      description = "integer between ${toString lowest} and ${toString highest} (inclusive) that is a multiple of ${toString step}";
     };
   # keep-sorted end
 }
