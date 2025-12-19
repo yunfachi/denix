@@ -7,9 +7,9 @@
       loc: defs:
       lib.concatMap (
         def:
-        map (delib.setDefaultModuleLocation "${def.file}, via option ${lib.showOption loc}") (
-          lib.toList def.value
-        )
+        map (delib.setDefaultModuleLocation def.file
+          #"${def.file}, via option ${lib.showOption loc}"
+        ) (lib.toList def.value)
       ) defs;
     emptyValue.value = [ ];
   };
@@ -28,7 +28,8 @@
             else
               delib.setDefaultModuleLocation
           )
-          "${def.file}, via option ${lib.showOption loc}"
+          def.file
+          #"${def.file}, via option ${lib.showOption loc}"
         ) (lib.toList def.value)
       ) defs;
     emptyValue.value = [ ];
