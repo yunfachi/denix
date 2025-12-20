@@ -57,6 +57,15 @@
     };
   };
 
+  numberBetween =
+    lowest: highest:
+    assert lib.assertMsg (lowest <= highest) "numberBetween: lowest must be smaller than highest";
+    lib.types.addCheck delib.types.number (x: x >= lowest && x <= highest)
+    // {
+      name = "numberBetween";
+      description = "integer or floating point number between ${toString lowest} and ${toString highest} (both inclusive)";
+    };
+
   steppedInt =
     step:
     assert lib.assertMsg (builtins.isInt step) "steppedInt: step must be an integer";
@@ -74,6 +83,25 @@
     // {
       name = "steppedIntBetween";
       description = "integer between ${toString lowest} and ${toString highest} (inclusive) that is a multiple of ${toString step}";
+    };
+
+  steppedNumber =
+    step:
+    lib.types.addCheck delib.types.number (x: x == x / step * step)
+    // {
+      name = "steppedNumber";
+      description = "integer or floating point number that is a multiple of ${toString step}";
+    };
+
+  steppedNumberBetween =
+    lowest: highest: step:
+    assert lib.assertMsg (
+      lowest <= highest
+    ) "steppedNumberBetween: lowest must be smaller than highest";
+    lib.types.addCheck delib.types.number (x: x >= lowest && x <= highest && x == x / step * step)
+    // {
+      name = "steppedNumberBetween";
+      description = "integer or floating point number between ${toString lowest} and ${toString highest} (inclusive) that is a multiple of ${toString step}";
     };
   # keep-sorted end
 }

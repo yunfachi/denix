@@ -119,6 +119,7 @@ mkLib "delib" (delib: {
     allowListOf
     allowNull
     allowNumber
+    allowNumberBetween
     allowOneOf
     allowPackage
     allowPath
@@ -126,6 +127,8 @@ mkLib "delib" (delib: {
     allowSingleLineStr
     allowSteppedInt
     allowSteppedIntBetween
+    allowSteppedNumber
+    allowSteppedNumberBetween
     allowStr
     allowSubmodule
     allowSubmoduleWith
@@ -153,6 +156,7 @@ mkLib "delib" (delib: {
     listOfOption
     listOption
     nullOption
+    numberBetweenOption
     numberOption
     oneOfOption
     packageOption
@@ -163,6 +167,8 @@ mkLib "delib" (delib: {
     singleLineStrOption
     steppedIntBetweenOption
     steppedIntOption
+    steppedNumberBetweenOption
+    steppedNumberOption
     strOption
     submoduleOption
     submoduleWithOption
@@ -189,6 +195,7 @@ mkLib "delib" (delib: {
     listOf
     null
     number
+    numberBetween
     oneOf
     package
     path
@@ -196,6 +203,8 @@ mkLib "delib" (delib: {
     singleLineStr
     steppedInt
     steppedIntBetween
+    steppedNumber
+    steppedNumberBetween
     str
     submodule
     submoduleWith
