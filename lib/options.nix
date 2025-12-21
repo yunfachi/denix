@@ -8,7 +8,12 @@ let
       if lib.isFunction type then
         typeArg: option // { type = type typeArg; } // functorForType (type typeArg)
       else
-        default: option // { inherit default; };
+        default:
+        option
+        // {
+          inherit default;
+          __functor = self: extraAttrs: self // extraAttrs;
+        };
   };
 
   typeOptions = genOptions (
