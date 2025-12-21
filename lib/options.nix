@@ -12,7 +12,8 @@ let
         option
         // {
           inherit default;
-          __functor = self: extraAttrs: self // extraAttrs;
+          __functor =
+            self: arg: if builtins.isString arg then self // { description = arg; } else self // arg;
         };
   };
 
