@@ -37,7 +37,7 @@ in
     };
 
     modules."home-manager".home.always =
-      lib.optionals (config.moduleSystem.name == "home" && cfg.standalone.user != null)
+      lib.optionals (config.moduleSystem.name or null == "home" && cfg.standalone.user != null)
         (
           builtins.concatMap (
             moduleSystem: config.rawModules.${moduleSystem}

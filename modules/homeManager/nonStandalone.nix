@@ -14,7 +14,7 @@ let
         lib.optionals (
           # FIXME: does not duplicate rawModules.home for the current user, but duplicates all modules of the current user for all other users.
           # Causes issues in a rather unusual use case: using `rawModules.nixos` or `rawModules.home` when `moduleSystem = "home"` (standalone Home Manager).
-          config.moduleSystem.name != "home" && cfg.standalone.user != user
+          config.moduleSystem.name or null != "home" && cfg.standalone.user != user
         ) moduleSystems
         ++ [ "home" ]
       );
