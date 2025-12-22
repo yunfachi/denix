@@ -8,7 +8,7 @@
 delib._callLib ./denixArgs.nix
 // delib._callLib ./helpers.nix
 // delib._callLib ./options.nix
-// delib._callLib ./helpers.nix
+// delib._callLib ./wrappers.nix
 // {
   denixConfiguration =
     {
