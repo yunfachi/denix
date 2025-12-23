@@ -1,7 +1,10 @@
 { delib, lib, ... }:
 {
   processModule =
-    f: m:
+    f: m':
+    let
+      m = if builtins.isPath m' then import m' else m';
+    in
     if !lib.isFunction m then
       f m
     else if !lib.isFunction (delib.callWithMocks f) then
@@ -12,7 +15,10 @@
       );
 
   processModuleAndGenerateDenixArgs =
-    f: m: denixArgs:
+    f: m': denixArgs:
+    let
+      m = if builtins.isPath m' then import m' else m';
+    in
     if !delib.isDenixArgs m then
       delib.processModule f m
     else
@@ -28,7 +34,10 @@
       );
 
   processModuleWithDenixArgs =
-    f: m:
+    f: m':
+    let
+      m = if builtins.isPath m' then import m' else m';
+    in
     delib.mirrorFunctionArgs m (delib.toDenixArgs (denixArgs: delib.processModule f (m denixArgs)));
 
   setDefaultModuleLocation =
