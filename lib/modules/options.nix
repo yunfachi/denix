@@ -2,7 +2,7 @@
 {
   coercedListOfModules = lib.mkOptionType {
     name = "listOfModules";
-    check = x: lib.isList x || lib.isAttrs x || lib.isFunction x || lib.path.check x;
+    check = x: lib.isList x || lib.isAttrs x || lib.isFunction x || delib.types.path.check x;
     merge =
       loc: defs:
       lib.concatMap (
@@ -16,7 +16,7 @@
 
   coercedListOfModulesWithDenixArgs = lib.mkOptionType {
     name = "listOfModulesWithDenixArgs";
-    check = x: lib.isList x || lib.isAttrs x || lib.isFunction x || lib.path.check x;
+    check = x: lib.isList x || lib.isAttrs x || lib.isFunction x || delib.types.path.check x;
     merge =
       loc: defs:
       lib.concatMap (
@@ -165,7 +165,7 @@
       name = "denixConfiguration";
 
       check = {
-        __functor = _self: x: lib.isAttrs x || lib.isFunction x || lib.path.check x;
+        __functor = _self: x: lib.isAttrs x || lib.isFunction x || delib.types.path.check x;
         isV2MergeCoherent = true;
       };
     in
