@@ -3,15 +3,15 @@
     "flake-compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1761588595,
-        "narHash": "sha256-XKUZz9zewJNUj46b4AJdiRZJAvSZ0Dqj2BNfXvFlJC4=",
-        "owner": "edolstra",
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "NixOS",
         "repo": "flake-compat",
-        "rev": "f387cd2afec9419c8ee37694406ca490c3f34ee5",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
         "type": "github"
       },
       "original": {
-        "owner": "edolstra",
+        "owner": "NixOS",
         "repo": "flake-compat",
         "type": "github"
       }
@@ -23,11 +23,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1763988335,
-        "narHash": "sha256-QlcnByMc8KBjpU37rbq5iP7Cp97HvjRP0ucfdh+M4Qc=",
+        "lastModified": 1769069492,
+        "narHash": "sha256-Efs3VUPelRduf3PpfPP2ovEB4CXT7vHf8W+xc49RL/U=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "50b9238891e388c9fdc6a5c49e49c42533a1b5ce",
+        "rev": "a1ef738813b15cf8ec759bdff5761b027e3e1d23",
         "type": "github"
       },
       "original": {
@@ -59,33 +59,45 @@
     },
     "home-manager": {
       "locked": {
-        "path": "missingFlake/home-manager",
-        "type": "path"
+        "dir": "home-manager",
+        "lastModified": 1769406695,
+        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
+        "type": "github"
       },
       "original": {
-        "path": "missingFlake/home-manager",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "home-manager",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "type": "github"
+      }
     },
     "nix-darwin": {
       "locked": {
-        "path": "missingFlake/nix-darwin",
-        "type": "path"
+        "dir": "nix-darwin",
+        "lastModified": 1769406695,
+        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
+        "type": "github"
       },
       "original": {
-        "path": "missingFlake/nix-darwin",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "nix-darwin",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "type": "github"
+      }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1759417375,
-        "narHash": "sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow=",
+        "lastModified": 1764947035,
+        "narHash": "sha256-EYHSjVM4Ox4lvCXUMiKKs2vETUSL5mx+J2FfutM7T9w=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "dc704e6102e76aad573f63b74c742cd96f8f1e6c",
+        "rev": "a672be65651c80d3f592a89b3945466584a22069",
         "type": "github"
       },
       "original": {
@@ -97,11 +109,11 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1764465291,
-        "narHash": "sha256-jJ/E4B9Hp7U2ZmT3E0tD1LtAfATw/xjVf8sueNyeYmc=",
+        "lastModified": 1769304017,
+        "narHash": "sha256-TE1EHvIAz81IGUKTmKQehbc9hjuxF7pe/QWdQuy/Ijc=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "e9537535ae8f4a2f78dbef0aaa0cbb6af4abd047",
+        "rev": "d4c8053ce1d9ba28bfb69a9f9f23ac24d313d4e8",
         "type": "github"
       },
       "original": {
@@ -112,11 +124,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1764517877,
-        "narHash": "sha256-pp3uT4hHijIC8JUK5MEqeAWmParJrgBVzHLNfJDZxg4=",
+        "lastModified": 1769170682,
+        "narHash": "sha256-oMmN1lVQU0F0W2k6OI3bgdzp2YOHWYUAw79qzDSjenU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+        "rev": "c5296fdd05cfa2c187990dd909864da9658df755",
         "type": "github"
       },
       "original": {
@@ -126,16 +138,25 @@
         "type": "github"
       }
     },
-    "robotnix": {
       "locked": {
-        "path": "missingFlake/robotnix",
-        "type": "path"
       },
       "original": {
-        "path": "missingFlake/robotnix",
-        "type": "path"
+    "robotnix": {
+      "locked": {
+        "dir": "robotnix",
+        "lastModified": 1769406695,
+        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
+        "type": "github"
       },
-      "parent": []
+      "original": {
+        "dir": "robotnix",
+        "owner": "yunfachi",
+        "repo": "missingFlake",
+        "type": "github"
+      }
     },
     "root": {
       "inputs": {
