@@ -25,7 +25,8 @@ with delib;
           {
             features = listOfOption (enum cfg.features) [ ];
             defaultFeatures = listOfOption (enum cfg.features) (
-              cfg.default ++ (if config.type or null != null then cfg.defaultByHostType.${config.type} or [ ] else [ ])
+              cfg.default
+              ++ (if config.type or null != null then cfg.defaultByHostType.${config.type} or [ ] else [ ])
             );
           }
           (
