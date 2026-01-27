@@ -63,14 +63,7 @@ delib._callLib ./denixArgs.nix
     {
       key = "denix.genModule";
 
-      imports = lib.concatLists (
-        lib.mapAttrsToList (
-          moduleSystemName: rawModules:
-          lib.concatMap
-            configurationWithModules.config.moduleSystems.${moduleSystemName}.applyConfigForModuleSystem
-            rawModules
-        ) configurationWithModules.config.rawModules
-      );
+      imports = lib.concatAttrValues configurationWithModules.config.rawModules;
     };
 
   genSystem =

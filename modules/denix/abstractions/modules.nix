@@ -46,54 +46,56 @@ in
 
   config.rawModules = lib.mapAttrs (
     moduleSystemName: moduleSystem:
-    let
-      myconfigPrefixWithDot = lib.optionalString (
-        moduleSystem.myconfigPrefix != null
-      ) "${moduleSystem.myconfigPrefix}.";
-    in
-    lib.concatLists (
-      lib.mapAttrsToList (
-        moduleName: module:
-        let
-          specialAttrs = x: delib.keepAttrs x [ "_file" ];
-          nonSpecialAttrs = x: delib.removeAttrs x [ "_file" ];
-        in
-        let
-          contentOptions =
-            entry:
-            (specialAttrs entry)
-            // {
-              options = delib.setAttrByStrPath (nonSpecialAttrs entry) moduleName;
-            };
-          contentAlways = entry: entry;
-          contentIfEnabled =
-            entry: config:
-            (specialAttrs entry)
-            // lib.mkIf (delib.getAttrByStrPath config "${myconfigPrefixWithDot}${moduleName}.enable" false) (
-              nonSpecialAttrs entry
-            );
-          contentIfDisabled =
-            entry: config:
-            (specialAttrs entry)
-            // lib.mkIf (!delib.getAttrByStrPath config "${myconfigPrefixWithDot}${moduleName}.enable" true) (
-              nonSpecialAttrs entry
-            );
-        in
-        if moduleSystemName == "myconfig" then
-          lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ""
-            contentOptions
-          ) module.options
-        else
-          lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".always"
-            contentAlways
-          ) module.${moduleSystemName}.always
-          ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifEnabled"
-            contentIfEnabled
-          ) module.${moduleSystemName}.ifEnabled
-          ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifDisabled"
-            contentIfDisabled
-          ) module.${moduleSystemName}.ifDisabled
-      ) config.modules
+    builtins.concatMap moduleSystem.applyConfigForModuleSystem (
+      let
+        myconfigPrefixWithDot = lib.optionalString (
+          moduleSystem.myconfigPrefix != null
+        ) "${moduleSystem.myconfigPrefix}.";
+      in
+      lib.concatLists (
+        lib.mapAttrsToList (
+          moduleName: module:
+          let
+            specialAttrs = x: delib.keepAttrs x [ "_file" ];
+            nonSpecialAttrs = x: delib.removeAttrs x [ "_file" ];
+          in
+          let
+            contentOptions =
+              entry:
+              (specialAttrs entry)
+              // {
+                options = delib.setAttrByStrPath (nonSpecialAttrs entry) moduleName;
+              };
+            contentAlways = entry: entry;
+            contentIfEnabled =
+              entry: config:
+              (specialAttrs entry)
+              // lib.mkIf (delib.getAttrByStrPath config "${myconfigPrefixWithDot}${moduleName}.enable" false) (
+                nonSpecialAttrs entry
+              );
+            contentIfDisabled =
+              entry: config:
+              (specialAttrs entry)
+              // lib.mkIf (!delib.getAttrByStrPath config "${myconfigPrefixWithDot}${moduleName}.enable" true) (
+                nonSpecialAttrs entry
+              );
+          in
+          if moduleSystemName == "myconfig" then
+            lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ""
+              contentOptions
+            ) module.options
+          else
+            lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".always"
+              contentAlways
+            ) module.${moduleSystemName}.always
+            ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifEnabled"
+              contentIfEnabled
+            ) module.${moduleSystemName}.ifEnabled
+            ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifDisabled"
+              contentIfDisabled
+            ) module.${moduleSystemName}.ifDisabled
+        ) config.modules
+      )
     )
   ) config.moduleSystems;
 }

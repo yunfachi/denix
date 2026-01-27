@@ -34,17 +34,19 @@ in
 
   config.rawModules = lib.mapAttrs (
     moduleSystemName: moduleSystem:
-    lib.concatLists (
-      lib.mapAttrsToList (
-        hostName: host:
-        lib.imap1 (mapItem hostName moduleSystemName ".always") host.${moduleSystemName}.always
-        ++ lib.optionals (config.host.name or null == hostName) (
-          lib.imap1 (mapItem hostName moduleSystemName ".ifEnabled") host.${moduleSystemName}.ifEnabled
-        )
-        ++ lib.optionals (config.host.name or null != hostName) (
-          lib.imap1 (mapItem hostName moduleSystemName ".ifDisabled") host.${moduleSystemName}.ifDisabled
-        )
-      ) config.hosts
+    builtins.concatMap moduleSystem.applyConfigForModuleSystem (
+      lib.concatLists (
+        lib.mapAttrsToList (
+          hostName: host:
+          lib.imap1 (mapItem hostName moduleSystemName ".always") host.${moduleSystemName}.always
+          ++ lib.optionals (config.host.name or null == hostName) (
+            lib.imap1 (mapItem hostName moduleSystemName ".ifEnabled") host.${moduleSystemName}.ifEnabled
+          )
+          ++ lib.optionals (config.host.name or null != hostName) (
+            lib.imap1 (mapItem hostName moduleSystemName ".ifDisabled") host.${moduleSystemName}.ifDisabled
+          )
+        ) config.hosts
+      )
     )
   ) config.moduleSystems;
 }
