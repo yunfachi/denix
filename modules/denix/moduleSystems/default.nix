@@ -9,7 +9,6 @@ let
   selectedModuleSystem = config.moduleSystem;
 in
 {
-  # TODO: system-manager, nvf, nix on droid
   imports = [
     ./myconfig.nix
     ./nixos.nix
