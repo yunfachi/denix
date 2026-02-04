@@ -6,7 +6,7 @@
 }:
 let
   defaultMyconfigPrefix = config.myconfigPrefix;
-  selectedModuleSystem = config.moduleSystem;
+  activeModuleSystem = config.moduleSystem;
 in
 {
   imports = [
@@ -43,7 +43,7 @@ in
               makeSystem = allowNull (functionOption null);
 
               applyConfigForModuleSystem = functionToOption list (
-                value: lib.optional (selectedModuleSystem.name == config.name) value
+                value: lib.optional (activeModuleSystem.name or null == config.name) value
               );
 
               processHosts = functionOption (
