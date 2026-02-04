@@ -56,6 +56,7 @@ in
         lib.mapAttrsToList (
           moduleName: module:
           let
+            # TODO
             specialAttrs = x: delib.keepAttrs x [ "_file" ];
             nonSpecialAttrs = x: delib.removeAttrs x [ "_file" ];
           in
@@ -80,20 +81,21 @@ in
                 nonSpecialAttrs entry
               );
           in
-          if moduleSystemName == "myconfig" then
-            lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ""
+          # "options" is not a separate module system on its own, but an alias for the options of the myconfig module system.
+          lib.optionals (moduleSystemName == "myconfig") (
+            lib.imap1 (mapItem moduleName "options" moduleSystem.myconfigPrefix ""
               contentOptions
             ) module.options
-          else
-            lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".always"
-              contentAlways
-            ) module.${moduleSystemName}.always
-            ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifEnabled"
-              contentIfEnabled
-            ) module.${moduleSystemName}.ifEnabled
-            ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifDisabled"
-              contentIfDisabled
-            ) module.${moduleSystemName}.ifDisabled
+          )
+          ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".always"
+            contentAlways
+          ) module.${moduleSystemName}.always
+          ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifEnabled"
+            contentIfEnabled
+          ) module.${moduleSystemName}.ifEnabled
+          ++ lib.imap1 (mapItem moduleName moduleSystemName moduleSystem.myconfigPrefix ".ifDisabled"
+            contentIfDisabled
+          ) module.${moduleSystemName}.ifDisabled
         ) config.modules
       )
     )
