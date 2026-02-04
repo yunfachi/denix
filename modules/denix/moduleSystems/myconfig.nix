@@ -19,8 +19,6 @@
             else
               lib.id;
         in
-        [
-          (delib.processModule addPrefixToModule value)
-        ];
+        [ (delib.processModule addPrefixToModule value) ];
     };
 }
