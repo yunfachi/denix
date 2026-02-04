@@ -43,6 +43,7 @@ mkLib "delib" (delib: {
     setDefaultModuleLocation
     setDefaultModuleLocationWithDenixArgs
     processModuleAndGenerateDenixArgs
+    importWithModuleLocation
     ;
 
   attrset = delib._callLib ./attrset.nix;

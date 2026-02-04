@@ -3,7 +3,7 @@
   processModule =
     f: m':
     let
-      m = if builtins.isPath m' then import m' else m';
+      m = if builtins.isPath m' then delib.importWithModuleLocation m' else m';
     in
     if !lib.isFunction m then
       f m
@@ -17,7 +17,7 @@
   processModuleAndGenerateDenixArgs =
     f: m': denixArgs:
     let
-      m = if builtins.isPath m' then import m' else m';
+      m = if builtins.isPath m' then delib.importWithModuleLocation m' else m';
     in
     if !delib.isDenixArgs m then
       delib.processModule f m
@@ -36,23 +36,26 @@
   processModuleWithDenixArgs =
     f: m':
     let
-      m = if builtins.isPath m' then import m' else m';
+      m = if builtins.isPath m' then delib.importWithModuleLocation m' else m';
     in
     delib.mirrorFunctionArgs m (delib.toDenixArgs (denixArgs: delib.processModule f (m denixArgs)));
 
   setDefaultModuleLocation =
     file: m':
     let
-      m = if builtins.isPath m' then import m' else m';
+      m = if builtins.isPath m' then delib.importWithModuleLocation m' else m';
     in
     delib.processModule (module: { _file = file; } // module) m;
 
   setDefaultModuleLocationWithDenixArgs =
     file: m':
     let
-      m = if builtins.isPath m' then import m' else m';
+      m = if builtins.isPath m' then delib.importWithModuleLocation m' else m';
     in
     delib.processModuleWithDenixArgs (module: { _file = file; } // module) m;
+
+  importWithModuleLocation =
+    modulePath: delib.setDefaultModuleLocation modulePath (import modulePath);
 
   addPrefixToModule =
     prefix: m:
