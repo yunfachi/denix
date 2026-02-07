@@ -5,12 +5,11 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   srcDir: './src',
-  base: '/denix/', // github pages
   ignoreDeadLinks: [
     '/TODO'
   ],
   sitemap: {
-    hostname: 'https://yunfachi.github.io/denix/'
+    hostname: 'https://denix.ynf.sh/'
   },
   head: [
     ["link", { rel: "icon", href: "https://raw.githubusercontent.com/yunfachi/denix/master/.github/assets/logo_dark.svg" }],

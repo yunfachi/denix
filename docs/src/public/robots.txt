@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yunfachi.github.io/denix/sitemap.xml
+Sitemap: https://denix.ynf.sh/sitemap.xml
