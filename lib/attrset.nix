@@ -23,7 +23,7 @@
       conflicts = builtins.attrNames (builtins.intersectAttrs left right);
     in
     if conflicts != [ ] then
-      lib.throw "strictMergeAttrs: conflicting keys: ${builtins.concatStringsSep ", " conflicts}"
+      throw "strictMergeAttrs: conflicting keys: ${builtins.concatStringsSep ", " conflicts}"
     else
       left // right;
 }
