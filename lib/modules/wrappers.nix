@@ -16,16 +16,13 @@ let
   mkWrapper =
     field: _obj:
     if lib.isString _obj then
-      delib.strictMergeAttrs (mkWrapper' field { name = _obj; }) {
-        __functor =
-          _: obj:
-          mkWrapper' field (
-            if lib.isFunction obj then
-              delib.mirrorFunctionArgs obj (args: delib.strictMergeAttrs { name = _obj; } (obj args))
-            else
-              delib.strictMergeAttrs { name = _obj; } obj
-          );
-      }
+      obj:
+      mkWrapper' field (
+        if lib.isFunction obj then
+          delib.mirrorFunctionArgs obj (args: delib.strictMergeAttrs { name = _obj; } (obj args))
+        else
+          delib.strictMergeAttrs { name = _obj; } obj
+      )
     else
       mkWrapper' field _obj;
 in
