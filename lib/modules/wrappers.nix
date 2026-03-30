@@ -16,4 +16,5 @@ in
 {
   module = mkWrapper "modules";
   host = mkWrapper "hosts";
+  moduleSystem = mkWrapper "moduleSystems";
 }
