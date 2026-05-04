@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.betterHosts.type;
+  cfg = config.settings.betterHosts.type;
 in
 with delib;
 {
-  options.betterHosts.type = {
+  options.settings.betterHosts.type = {
     enable = boolOption true;
     generateIsType = boolOption true;
     types = listOfOption str [
@@ -18,26 +18,27 @@ with delib;
     ];
   };
 
-  config.extraHostSubmodules = lib.mkIf cfg.enable (
-    { config, ... }:
-    {
-      options =
-        delib.strictMergeAttrs
-          {
-            type = allowNull (enumOption cfg.types null);
-          }
-          (
-            lib.optionalAttrs cfg.generateIsType (
-              lib.genAttrs' cfg.types (type: {
-                name =
-                  let
-                    chars = lib.stringToCharacters type;
-                  in
-                  "is${lib.toUpper (lib.head chars) + lib.concatStrings (lib.tail chars)}";
-                value = boolOption (config.type == type);
-              })
-            )
-          );
-    }
-  );
+  config = lib.mkIf cfg.enable {
+    settings.hosts.extraSubmodules =
+      { config, ... }:
+      {
+        options =
+          delib.strictMergeAttrs
+            {
+              type = allowNull (enumOption cfg.types null);
+            }
+            (
+              lib.optionalAttrs cfg.generateIsType (
+                lib.genAttrs' cfg.types (type: {
+                  name =
+                    let
+                      chars = lib.stringToCharacters type;
+                    in
+                    "is${lib.toUpper (lib.head chars) + lib.concatStrings (lib.tail chars)}";
+                  value = boolOption (config.type == type);
+                })
+              )
+            );
+      };
+  };
 }

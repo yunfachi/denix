@@ -35,12 +35,14 @@ let
 in
 {
   options = with delib; {
-    extraModuleSubmodules = modules.coercedListOfModulesOption;
+    settings.modules = {
+      extraSubmodules = modules.coercedListOfModulesOption;
+    };
 
-    modules = attrsOfOption (delib.modules.denixAbstractionType {
+    modules = attrsOfOption (modules.denixAbstractionType {
       moduleSystems = config.moduleSystems;
       withOptions = true;
-      extraModules = config.extraModuleSubmodules;
+      extraModules = config.settings.modules.extraSubmodules;
     }) { };
   };
 

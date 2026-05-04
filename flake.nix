@@ -14,11 +14,6 @@
       not be overridden by the user without a special reason.
     */
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    # Optional inputs
-    home-manager.url = "github:yunfachi/missingFlake?dir=home-manager";
-    nix-darwin.url = "github:yunfachi/missingFlake?dir=nix-darwin";
-    robotnix.url = "github:yunfachi/missingFlake?dir=robotnix";
   };
 
   outputs =
@@ -41,6 +36,7 @@
         betterHosts = ./modules/betterHosts;
         homeManager = ./modules/homeManager;
         nixDarwin = ./modules/nixDarwin;
+        nvf = ./modules/nvf;
         robotnix = ./modules/robotnix;
       };
 

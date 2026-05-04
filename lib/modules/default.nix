@@ -47,18 +47,20 @@ delib._callLib ./denixArgs.nix
   genModule =
     {
       configuration,
+      configurationExtendModules ?
+        configuration': modules: configuration'.extendModules { inherit modules; },
 
       moduleSystem ? null,
       host ? null,
     }@args:
     let
-      configurationWithModules = configuration.extendModules {
-        modules = lib.singleton {
+      configurationWithModules = configurationExtendModules configuration [
+        {
           config =
             lib.optionalAttrs (args ? moduleSystem) { inherit moduleSystem; }
             // lib.optionalAttrs (args ? host) { inherit host; };
-        };
-      };
+        }
+      ];
     in
     {
       key = "denix.genModule";
@@ -69,6 +71,8 @@ delib._callLib ./denixArgs.nix
   genSystem =
     {
       configuration,
+      configurationExtendModules ?
+        configuration': modules: configuration'.extendModules { inherit modules; },
 
       moduleSystem,
       host ? null,
@@ -77,14 +81,14 @@ delib._callLib ./denixArgs.nix
       extraModules ? [ ],
     }@args:
     let
-      configurationWithModules = configuration.extendModules {
-        modules = lib.singleton {
+      configurationWithModules = configurationExtendModules configuration [
+        {
           config = {
             inherit moduleSystem;
           }
           // lib.optionalAttrs (args ? host) { inherit host; };
-        };
-      };
+        }
+      ];
 
       makeSystem = configurationWithModules.config.moduleSystems.${moduleSystem}.makeSystem;
     in
@@ -102,6 +106,8 @@ delib._callLib ./denixArgs.nix
   genModules =
     {
       configuration,
+      configurationExtendModules ?
+        configuration': modules: configuration'.extendModules { inherit modules; },
 
       moduleSystem ? null,
       host ? null,
@@ -125,6 +131,7 @@ delib._callLib ./denixArgs.nix
         delib.modules.genModule {
           inherit
             configuration
+            configurationExtendModules
             moduleSystem
             host
             ;
@@ -162,6 +169,8 @@ delib._callLib ./denixArgs.nix
   genSystems =
     {
       configuration,
+      configurationExtendModules ?
+        configuration': modules: configuration'.extendModules { inherit modules; },
 
       moduleSystem ? null,
       host ? null,
@@ -192,6 +201,7 @@ delib._callLib ./denixArgs.nix
         delib.modules.genSystem {
           inherit
             configuration
+            configurationExtendModules
             moduleSystem
             host
             ;

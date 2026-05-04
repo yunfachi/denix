@@ -4,14 +4,20 @@ self:
   delib,
   config,
   options,
+  inputs,
+  extendModules,
   ...
 }:
+let
+  cfg = config.denixSettings;
+in
 {
   config._module.args.delib = self.lib;
 
   options = with delib; {
     denixSettings = {
       denixConfigurationExtraArgs = attrsOption { };
+      passInputs = boolOption true;
       generateSystems = boolOption true;
       generateSystemsArgs = attrsOption {
         forEachModuleSystem = true;
@@ -26,15 +32,34 @@ self:
 
     denixConfiguration = attrsOption options.denix.valueMeta.configuration;
     # denixConfiguration.config
-    denix = modules.denixConfigurationSubmoduleOption config.denixSettings.denixConfigurationExtraArgs;
+    denix = modules.denixConfigurationSubmoduleOption (
+      cfg.denixConfigurationExtraArgs
+      // lib.optionalAttrs cfg.passInputs {
+        extraInputs = cfg.denixConfigurationExtraArgs.extraInputs or { } // inputs;
+      }
+    );
   };
 
   config.flake = lib.mkMerge (
-    (lib.optional config.denixSettings.generateModules (
-      config.denixConfiguration.genModules config.denixSettings.generateModulesArgs
+    (lib.optional cfg.generateModules (
+      config.denixConfiguration.genModules (
+        {
+          configurationExtendModules =
+            _configuration: modules:
+            (extendModules { modules = [ { config.denix.imports = modules; } ]; }).config.denixConfiguration;
+        }
+        // cfg.generateSystemsArgs
+      )
     ))
-    ++ (lib.optional config.denixSettings.generateSystems (
-      config.denixConfiguration.genSystems config.denixSettings.generateSystemsArgs
+    ++ (lib.optional cfg.generateSystems (
+      config.denixConfiguration.genSystems (
+        {
+          configurationExtendModules =
+            _configuration: modules:
+            (extendModules { modules = [ { config.denix.imports = modules; } ]; }).config.denixConfiguration;
+        }
+        // cfg.generateSystemsArgs
+      )
     ))
   );
 }
