@@ -108,6 +108,7 @@ mkLib "delib" (delib: {
     allowAttrsOf
     allowBool
     allowCoercedTo
+    allowCommas
     allowEither
     allowEnum
     allowFloat
@@ -117,6 +118,7 @@ mkLib "delib" (delib: {
     allowIntBetween
     allowLazyAttrs
     allowLazyAttrsOf
+    allowLines
     allowList
     allowListOf
     allowNull
@@ -126,6 +128,7 @@ mkLib "delib" (delib: {
     allowPackage
     allowPath
     allowPort
+    allowSeparatedString
     allowSingleLineStr
     allowSteppedInt
     allowSteppedIntBetween
@@ -142,6 +145,7 @@ mkLib "delib" (delib: {
     attrsOption
     boolOption
     coercedToOption
+    commasOption
     defaultText
     description
     eitherOption
@@ -155,6 +159,7 @@ mkLib "delib" (delib: {
     internal
     lazyAttrsOfOption
     lazyAttrsOption
+    linesOption
     listOfOption
     listOption
     nullOption
@@ -166,6 +171,7 @@ mkLib "delib" (delib: {
     portOption
     readOnly
     relatedPackages
+    separatedStringOption
     singleLineStrOption
     steppedIntBetweenOption
     steppedIntOption
@@ -184,6 +190,7 @@ mkLib "delib" (delib: {
     attrsOf
     bool
     coercedTo
+    commas
     either
     enum
     float
@@ -193,6 +200,7 @@ mkLib "delib" (delib: {
     intBetween
     lazyAttrs
     lazyAttrsOf
+    lines
     list
     listOf
     null
@@ -202,6 +210,7 @@ mkLib "delib" (delib: {
     package
     path
     port
+    separatedString
     singleLineStr
     steppedInt
     steppedIntBetween

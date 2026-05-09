@@ -57,40 +57,6 @@
         "type": "github"
       }
     },
-    "home-manager": {
-      "locked": {
-        "dir": "home-manager",
-        "lastModified": 1769406695,
-        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
-        "type": "github"
-      },
-      "original": {
-        "dir": "home-manager",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "type": "github"
-      }
-    },
-    "nix-darwin": {
-      "locked": {
-        "dir": "nix-darwin",
-        "lastModified": 1769406695,
-        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
-        "type": "github"
-      },
-      "original": {
-        "dir": "nix-darwin",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1764947035,
@@ -138,31 +104,11 @@
         "type": "github"
       }
     },
-    "robotnix": {
-      "locked": {
-        "dir": "robotnix",
-        "lastModified": 1769406695,
-        "narHash": "sha256-djao88Yt82Oedn9vVKU6eJSK2xEy0AgWChiZcX/x+NY=",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "rev": "850beb1c6244c41d1fc922adc81e46e870841e8a",
-        "type": "github"
-      },
-      "original": {
-        "dir": "robotnix",
-        "owner": "yunfachi",
-        "repo": "missingFlake",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "git-hooks": "git-hooks",
-        "home-manager": "home-manager",
-        "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-lib": "nixpkgs-lib",
-        "robotnix": "robotnix",
         "systems": "systems"
       }
     },

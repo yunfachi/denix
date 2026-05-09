@@ -6,18 +6,21 @@
     attrsOf
     bool
     coercedTo
+    commas
     either
     enum
     float
     functionTo
     int
     lazyAttrsOf
+    lines
     listOf
     number
     oneOf
     package
     path
     port
+    separatedString
     singleLineStr
     str
     submodule
