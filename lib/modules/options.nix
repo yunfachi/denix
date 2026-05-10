@@ -245,8 +245,12 @@
       };
       functor = lib.defaultFunctor name // {
         type = delib.modules.denixConfigurationSubmodule;
-        payload = attrs;
-        binOp = lhs: rhs: throw "ты долбаеб";
+        payload = {
+          inherit modules;
+        };
+        binOp = lhs: rhs: {
+          modules = lhs.modules ++ rhs.modules;
+        };
       };
     };
 
