@@ -91,7 +91,7 @@
     name = noDefault (strOption null);
 
     useHomeManagerModule = boolOption useHomeManagerModule;
-    homeManagerUser = noNullDefault (strOption homeManagerUser);
+    homeManagerUser = allowNull (strOption homeManagerUser);
     homeManagerSystem = description (noDefault (strOption null)) "Passed to the `homeManagerConfiguration` as `nixpkgs.legacyPackages.<homeManagerSystem>`";
 
     myconfig = attrsOption { };
