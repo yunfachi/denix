@@ -30,4 +30,35 @@ in
   module = mkWrapper "modules";
   host = mkWrapper "hosts";
   moduleSystem = mkWrapper "moduleSystems";
+  overlayModule =
+    {
+      name,
+      overlay ? null,
+      overlays ? [ ],
+      targets ? null,
+      withPrefix ? true,
+      enabled ? true,
+    }@args:
+    {
+      imports = [
+        (
+          { config, ... }:
+          let
+            finalOverlays = overlays ++ (lib.optional (overlay != null) overlay);
+            cfg = config.simpleOvelays or (abort "import `denix.denixModules.simpleOverlays`");
+            targets = args.targets or cfg.defaultTargets;
+          in
+          {
+            config.modules.${if withPrefix then "${cfg.moduleNamePrefix}.${name}" else name} = {
+              options.enable = delib.boolOption enabled;
+            }
+            // lib.genAttrs targets (_target: {
+              ifEnabled = {
+                nixpkgs.overlays = finalOverlays;
+              };
+            });
+          }
+        )
+      ];
+    };
 }

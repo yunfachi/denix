@@ -34,6 +34,7 @@ mkLib "delib" (delib: {
     genSystems
     module
     host
+    overlayModule
     moduleSystem
     toDenixArgs
     isDenixArgs
