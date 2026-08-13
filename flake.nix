@@ -38,6 +38,7 @@
         nixDarwin = ./modules/nixDarwin;
         nvf = ./modules/nvf;
         robotnix = ./modules/robotnix;
+        simpleOvelays = ./modules/simpleOverlays;
       };
 
       lib = import ./lib {
