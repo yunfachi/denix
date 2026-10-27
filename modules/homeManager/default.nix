@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.homeManager;
+  cfg = config.settings.homeManager;
 in
 {
   imports = [
@@ -14,8 +14,10 @@ in
     ./standalone.nix
   ];
 
-  options.homeManager = with delib; {
+  options.settings.homeManager = with delib; {
     users = attrsOfOption (listOf (enum (builtins.attrNames config.moduleSystems))) { };
+
+    shared = listOfOption (enum (builtins.attrNames config.moduleSystems)) ["home"];
   };
 
   config.modules."home-manager".home.always =
